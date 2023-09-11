@@ -6,27 +6,25 @@ public class Fusee {
     private Cargo cargo;
     private Citerne citerne;
     private Moteur moteur;
-    private int hauteur;
     
     public static final double gravite = 9.8;
     public static final double vitesseOrbite = 9700;
     
-    public Fusee(int hauteur, double masseCargo) {
+    public Fusee(double masseCargo) {
         this.cargo = new Cargo(masseCargo);
-        this.citerne = new Citerne();
+        this.citerne = new Citerne(this.calculerMasseCombustible());
         this.moteur = new Moteur();
-        this.hauteur = hauteur; 
     }
     
     public static void main (String[] args) {
-        Fusee fusee = new Fusee(0, 1000);
-        System.out.println(fusee.calculerMasseCombustible());
+        Fusee fusee = new Fusee(0);
+        System.out.println(fusee.dessiner());
     }
 
     private String dessiner() {
         String res;
         res = this.cargo.dessiner();
-        res += this.citerne.dessiner(this.hauteur);
+        res += this.citerne.dessiner();
         res += this.moteur.dessiner();
         
         return res;
@@ -37,10 +35,10 @@ public class Fusee {
         return masseSeche;
     }
 
-    private double calculerMasseCombustible() {
+    public double calculerMasseCombustible() {
         double mf = this.calculerMasseSeche();
         double m0 = mf / Math.exp(-Fusee.vitesseOrbite / (Moteur.ISP * Fusee.gravite));
-        double masseCombustibe = m0 - mf;
-        return masseCombustibe;
+        double masseCombustible = m0 - mf;
+        return masseCombustible;
     }
 }
