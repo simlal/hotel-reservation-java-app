@@ -1,0 +1,132 @@
+<!-- MainBody -->
+<!ELEMENT MainBody (Systems|Organs)*>
+<!ATTLIST MainBody
+    bodyName CDATA #REQUIRED
+    bodyID CDATA #REQUIRED>
+
+<!-- Systems -->
+<!ELEMENT Systems (System)*>
+<!ELEMENT System (Flow)*>
+<!ATTLIST System
+    id CDATA #REQUIRED
+    name CDATA #REQUIRED
+    type CDATA #REQUIRED>
+<!-- Flow -->
+<!ELEMENT Flow (Connectible|Connections)*>
+<!ATTLIST Flow
+    id CDATA #REQUIRED
+    name CDATA #REQUIRED>
+<!-- Connectible and child elements -->
+<!ELEMENT Connectible (Atrium|Ventricle|Artery|Vein|Capillaries|Nose|AirConnectible|Alveoli|DigestiveTract|StomachTract|DuodenumTract|RectumTract|BiDuct|Duct|DuctOverflowableJunction|DeversingDuct|InnerGallbladder|SalivaryDuct)*>
+<!ELEMENT Atrium (#PCDATA)>
+<!ATTLIST Atrium
+    id CDATA #REQUIRED
+    name CDATA #REQUIRED
+    volume CDATA #REQUIRED>
+<!ELEMENT Ventricle (#PCDATA)>
+<!ATTLIST Ventricle
+    id CDATA #REQUIRED
+    name CDATA #REQUIRED
+    volume CDATA #REQUIRED>
+
+<!ELEMENT Artery (#PCDATA)>
+<!ATTLIST Artery
+    endRadius CDATA #IMPLIED
+    id CDATA #REQUIRED
+    length CDATA #REQUIRED
+    name CDATA #REQUIRED
+    startRadius CDATA #REQUIRED>
+<!ELEMENT Vein (#PCDATA)>
+<!ATTLIST Vein
+    endRadius CDATA #IMPLIED
+    id CDATA #REQUIRED
+    length CDATA #REQUIRED
+    name CDATA #REQUIRED
+    startRadius CDATA #REQUIRED>
+<!ELEMENT Capillaries (#PCDATA)>
+<!ATTLIST Capillaries
+    id CDATA #REQUIRED
+    length CDATA #IMPLIED
+    name CDATA #REQUIRED
+    volume CDATA #REQUIRED>
+<!ELEMENT Nose (#PCDATA)>
+<!ATTLIST Nose
+    name CDATA #REQUIRED
+    id CDATA #REQUIRED>
+<!ELEMENT AirConnectible (#PCDATA)>
+<!ATTLIST AirConnectible
+    endRadius CDATA #REQUIRED
+    id CDATA #REQUIRED
+    length CDATA #REQUIRED
+    name CDATA #REQUIRED
+    startRadius CDATA #REQUIRED>
+<!ELEMENT Alveoli (#PCDATA)>
+<!ATTLIST Alveoli
+    id CDATA #REQUIRED
+    name CDATA #REQUIRED
+    volume CDATA #REQUIRED>
+<!ELEMENT DigestiveTract (#PCDATA)>
+<!ATTLIST DigestiveTract
+    id CDATA #REQUIRED
+    length CDATA #REQUIRED
+    name CDATA #REQUIRED
+    volume CDATA #REQUIRED>
+<!ELEMENT StomachTract (#PCDATA)>
+<!ATTLIST StomachTract
+    name CDATA #REQUIRED
+    id CDATA #REQUIRED
+    length CDATA #REQUIRED
+    volume CDATA #REQUIRED>
+<!ELEMENT DuodenumTract (#PCDATA)>
+<!ATTLIST DuodenumTract
+    name CDATA #REQUIRED
+    id CDATA #REQUIRED
+    length CDATA #REQUIRED
+    volume CDATA #REQUIRED>
+<!ELEMENT RectumTract (#PCDATA)>
+<!ATTLIST RectumTract
+    name CDATA #REQUIRED
+    id CDATA #REQUIRED
+    length CDATA #REQUIRED
+    volume CDATA #REQUIRED>
+<!ELEMENT BiDuct (#PCDATA)>
+<!ATTLIST BiDuct
+    name CDATA #REQUIRED
+    id CDATA #REQUIRED>
+<!ELEMENT Duct (#PCDATA)>
+<!ATTLIST Duct
+    id CDATA #REQUIRED
+    name CDATA #REQUIRED>
+<!ELEMENT DuctOverflowableJunction (#PCDATA)>
+<!ATTLIST DuctOverflowableJunction
+    name CDATA #REQUIRED
+    id CDATA #REQUIRED>
+<!ELEMENT DeversingDuct (#PCDATA)>
+<!ATTLIST DeversingDuct
+    name CDATA #REQUIRED
+    id CDATA #REQUIRED>
+<!ELEMENT InnerGallbladder (#PCDATA)>
+<!ATTLIST InnerGallbladder
+    name CDATA #REQUIRED
+    id CDATA #REQUIRED>
+<!ELEMENT SalivaryDuct (#PCDATA)>
+<!ATTLIST SalivaryDuct
+    id CDATA #REQUIRED
+    length CDATA #REQUIRED
+    name CDATA #REQUIRED
+    volume CDATA #REQUIRED>
+
+<!-- Connections and Connection -->
+<!ELEMENT Connections (Connection)*>
+<!ELEMENT Connection (to)*>
+<!ATTLIST Connection id CDATA #REQUIRED>
+<!ELEMENT to (#PCDATA)>
+<!ATTLIST to 
+    id CDATA #REQUIRED>
+<!-- Organs -->
+<!ELEMENT Organs (Organ)*>
+<!ELEMENT Organ (#PCDATA)>
+<!ATTLIST Organ
+    id CDATA #REQUIRED
+    name CDATA #REQUIRED
+    systemID CDATA #REQUIRED>
