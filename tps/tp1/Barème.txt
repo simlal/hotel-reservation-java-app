@@ -1,0 +1,6 @@
+- 10 points pour le DTD
+- 10 points pour le Schéma XML (un type unique pour tous les éléments Connectible différent)
+- 20 points si les programmes fonctionnent (les fichiers produits sont corrects, les attributs non présent dans un fichier ne le sont pas plus dans le second, etc.)
+- 30 points s’ils ont fait leur propre classe pour les BodySystem, les Flow, et les Connectibles (une classe Connectible, avec une variable Name pour avoir le bon « type » réel du XML. Je ne veux pas de classe Artery, Vein, etc.). Les classes contiennent des méthodes toJSON, toXML, et des constructeurs appropriés.
+- 10 points pour le respect de l’énoncé (le programme s’utilise de la bonne façon, l’indentation du Java respecte le fichier de norme du site WEB (il y a un Formatter sur le site WEB pour Eclipse), etc.)
+- 20 points pour avoir utilisé les bonnes technologies (GénérateurJSON, SAXP pour le devoir 1A, DOM et ObjectModel de JSON pour Devoir 1B)
