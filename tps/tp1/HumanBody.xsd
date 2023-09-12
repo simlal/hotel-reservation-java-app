@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="MainBody" type="MainBodyType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[System Template
+  <System name="" id="" type="">    
+    <Flow id="" name="">
+      <Connectible>
+        <TYPE name="" id="" [volume=""] [length=""] [startRadius=""] [endRadius=""]/>
+      </Connectible>
+      <Connections>
+        <Connection id="">
+          <to id=""/>
+        </Connection>
+      </Connections>
+    </Flow>    
+  </System>Organ Template
+  <Organ name="" id="" systemID=""/>]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="AtriumType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name" use="optional"/>
+        <xs:attribute type="xs:string" name="id" use="optional"/>
+        <xs:attribute type="xs:string" name="volume" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="VentricleType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name" use="optional"/>
+        <xs:attribute type="xs:string" name="id" use="optional"/>
+        <xs:attribute type="xs:string" name="volume" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="ConnectibleType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0">
+      <xs:element type="AtriumType" name="Atrium"/>
+      <xs:element type="VentricleType" name="Ventricle"/>
+      <xs:element type="ArteryType" name="Artery"/>
+      <xs:element type="VeinType" name="Vein"/>
+      <xs:element type="CapillariesType" name="Capillaries"/>
+      <xs:element type="NoseType" name="Nose"/>
+      <xs:element type="AirConnectibleType" name="AirConnectible"/>
+      <xs:element type="AlveoliType" name="Alveoli"/>
+      <xs:element type="DigestiveTractType" name="DigestiveTract"/>
+      <xs:element type="StomachTractType" name="StomachTract"/>
+      <xs:element type="DuodenumTractType" name="DuodenumTract"/>
+      <xs:element type="RectumTractType" name="RectumTract"/>
+      <xs:element type="BiDuctType" name="BiDuct"/>
+      <xs:element type="DuctType" name="Duct"/>
+      <xs:element type="DuctOverflowableJunctionType" name="DuctOverflowableJunction"/>
+      <xs:element type="DeversingDuctType" name="DeversingDuct"/>
+      <xs:element type="InnerGallbladderType" name="InnerGallbladder"/>
+      <xs:element type="SalivaryDuctType" name="SalivaryDuct"/>
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="toType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="id" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="ConnectionType">
+    <xs:sequence>
+      <xs:element type="toType" name="to" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="id" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="ConnectionsType" mixed="true">
+    <xs:sequence>
+      <xs:element type="ConnectionType" name="Connection" maxOccurs="unbounded" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>3,4,5,6 are connected to the heart flow49 connect directly to superior vena cava50 connect directly to superior vena cava53 connect direclty to superior vena cava58 connect directly to superior vena cava59 connect directly to superior vena cava12 connect directly to left brachiocephalic12 connect directly to left brachiocephalic1,2 connect directly to the diaphragm capillaries in Head thoracic flow20 connect directly to inf vena cava22,23,24,25 connect directly to inf vena cava32 connect directly to inf vena cava12 connect directly to inferior vena cava12 connect directly to inferior vena cava9 empty outside the body...</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FlowType">
+    <xs:sequence>
+      <xs:element type="ConnectibleType" name="Connectible"/>
+      <xs:element type="ConnectionsType" name="Connections"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="id" use="optional"/>
+    <xs:attribute type="xs:string" name="name" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="ArteryType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name" use="optional"/>
+        <xs:attribute type="xs:string" name="id" use="optional"/>
+        <xs:attribute type="xs:string" name="startRadius" use="optional"/>
+        <xs:attribute type="xs:string" name="endRadius" use="optional"/>
+        <xs:attribute type="xs:string" name="length" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="VeinType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name" use="optional"/>
+        <xs:attribute type="xs:string" name="id" use="optional"/>
+        <xs:attribute type="xs:string" name="startRadius" use="optional"/>
+        <xs:attribute type="xs:string" name="endRadius" use="optional"/>
+        <xs:attribute type="xs:string" name="length" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="CapillariesType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name" use="optional"/>
+        <xs:attribute type="xs:string" name="id" use="optional"/>
+        <xs:attribute type="xs:string" name="volume" use="optional"/>
+        <xs:attribute type="xs:string" name="length" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="SystemType">
+    <xs:sequence>
+      <xs:element type="FlowType" name="Flow" maxOccurs="unbounded" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Heart flowAorta flowCoronary flowPulmonary flowHead and thoracicLeft armRight armAbdominalRight legLeft legVena cava drain</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="name" use="optional"/>
+    <xs:attribute type="xs:string" name="id" use="optional"/>
+    <xs:attribute type="xs:string" name="type" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="NoseType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name"/>
+        <xs:attribute type="xs:string" name="id"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="AirConnectibleType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name" use="optional"/>
+        <xs:attribute type="xs:string" name="id" use="optional"/>
+        <xs:attribute type="xs:string" name="startRadius" use="optional"/>
+        <xs:attribute type="xs:string" name="endRadius" use="optional"/>
+        <xs:attribute type="xs:string" name="length" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="AlveoliType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name" use="optional"/>
+        <xs:attribute type="xs:string" name="id" use="optional"/>
+        <xs:attribute type="xs:string" name="volume" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="DigestiveTractType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name" use="optional"/>
+        <xs:attribute type="xs:string" name="id" use="optional"/>
+        <xs:attribute type="xs:string" name="length" use="optional"/>
+        <xs:attribute type="xs:string" name="volume" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="StomachTractType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name"/>
+        <xs:attribute type="xs:string" name="id"/>
+        <xs:attribute type="xs:string" name="length"/>
+        <xs:attribute type="xs:string" name="volume"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="DuodenumTractType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name" use="optional"/>
+        <xs:attribute type="xs:string" name="id" use="optional"/>
+        <xs:attribute type="xs:string" name="length" use="optional"/>
+        <xs:attribute type="xs:string" name="volume" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="RectumTractType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name"/>
+        <xs:attribute type="xs:string" name="id"/>
+        <xs:attribute type="xs:string" name="length"/>
+        <xs:attribute type="xs:string" name="volume"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="BiDuctType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name"/>
+        <xs:attribute type="xs:string" name="id"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="DuctType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name" use="optional"/>
+        <xs:attribute type="xs:string" name="id" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="DuctOverflowableJunctionType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name" use="optional"/>
+        <xs:attribute type="xs:string" name="id" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="DeversingDuctType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name"/>
+        <xs:attribute type="xs:string" name="id"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="InnerGallbladderType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name"/>
+        <xs:attribute type="xs:string" name="id"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="SalivaryDuctType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name" use="optional"/>
+        <xs:attribute type="xs:string" name="id" use="optional"/>
+        <xs:attribute type="xs:string" name="length" use="optional"/>
+        <xs:attribute type="xs:string" name="volume" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="SystemsType">
+    <xs:sequence>
+      <xs:element type="SystemType" name="System" maxOccurs="unbounded" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Type for system are :
+      0 : Circulatory system
+      1 : Respiratory system
+      2 : Digestive system
+      3 : Urinary system
+      4 : Endocrine system
+      5 : Nervous system
+      6 : Skeletal system
+      7 : Muscular system
+      Circulatory systemRespiratory systemDigestive system</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="OrganType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name" use="optional"/>
+        <xs:attribute type="xs:string" name="id" use="optional"/>
+        <xs:attribute type="xs:string" name="systemID" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="OrgansType">
+    <xs:sequence>
+      <xs:element type="OrganType" name="Organ" maxOccurs="unbounded" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Circulatory system organ Respiratory system organsDigestive system organs</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="MainBodyType">
+    <xs:sequence>
+      <xs:element type="SystemsType" name="Systems"/>
+      <xs:element type="OrgansType" name="Organs">
+        <xs:annotation>
+          <xs:documentation>Organs definition</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="bodyName"/>
+    <xs:attribute type="xs:string" name="bodyID"/>
+  </xs:complexType>
+</xs:schema>
