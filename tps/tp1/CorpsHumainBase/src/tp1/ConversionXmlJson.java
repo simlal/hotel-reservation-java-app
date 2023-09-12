@@ -23,11 +23,14 @@
 
 package tp1;
 
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 public class ConversionXmlJson {
 
     public static void main(String[] args)
     {
-        if (args.length < 2)
+        if (args.length < 2 || args.length > 2)
         {
             System.out.println("Usage: java tp1.Devoir1A <fichierXML> <fichierJSON>");
             return;
@@ -38,9 +41,21 @@ public class ConversionXmlJson {
         
         System.out.println("Debut de la conversion du fichier " + nomFichierXML + " vers le fichier " + nomFichierJSON);
 
-        // Votre code de conversion devrait aller ici
+        // Lecture fichier xml avec SAXP et handler custom
+         try {
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            SAXParser saxParser = factory.newSAXParser();
+            XmlHandler handler = new XmlHandler();
+            
+            saxParser.parse(nomFichierXML, handler);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         
         System.out.println("Conversion terminee.");
     }
+
+    // private void 
     
 }
