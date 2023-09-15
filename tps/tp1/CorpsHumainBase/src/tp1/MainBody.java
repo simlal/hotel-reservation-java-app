@@ -17,10 +17,11 @@ public class MainBody {
      * @param organsList
      */
     public MainBody(
-            String bodyName,
-            int id,
-            ArrayList <SystemEle> systemsList,
-            ArrayList <Organ> organsList) {
+        String bodyName,
+        int id,
+        ArrayList <SystemEle> systemsList,
+        ArrayList <Organ> organsList
+    ) {
         setBodyName(bodyName);
         setId(id);
         setSystemsList(systemsList);
