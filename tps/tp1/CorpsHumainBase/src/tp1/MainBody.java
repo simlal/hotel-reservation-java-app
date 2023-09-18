@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class MainBody {
     private String bodyName;
     private int id;
-    private ArrayList<SystemEle> systemsList;
+    private ArrayList <SystemEle> systemsList;
     private ArrayList <Organ> organsList;
 
     /**
