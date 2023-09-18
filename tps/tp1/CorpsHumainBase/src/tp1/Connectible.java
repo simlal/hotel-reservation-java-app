@@ -16,7 +16,7 @@ public class Connectible {
     private double endRadius;
 
     /**
-     * Constructeur avec attr required et defaut a false pour tous implied
+     * Constructeur attributs de element seulement et set false implied attrs
      * 
      * @param name
      * @param id

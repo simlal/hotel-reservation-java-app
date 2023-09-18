@@ -45,7 +45,7 @@ public class ConversionXmlJson {
          try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser saxParser = factory.newSAXParser();
-            XmlHandler handler = new XmlHandler();
+            XmlHandlerParser handler = new XmlHandlerParser();
             
             saxParser.parse(nomFichierXML, handler);
         } catch (Exception e) {

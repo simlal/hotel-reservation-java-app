@@ -10,23 +10,16 @@ public class Flow {
     private ArrayList <Connection> connectionsList;
 
     /**
-     * Constructeur pour element Flow incluant enfants liste de connectibles et connections
+     * Constructeur attributs de element seulement + listes vides
      * 
      * @param id
      * @param name
-     * @param connectiblesList
-     * @param connectionsList
      */
-    public Flow(
-        int id, 
-        String name, 
-        ArrayList <Connectible> connectiblesList, 
-        ArrayList <Connection> connectionsList
-    ) {
+    public Flow(int id, String name) {
         setId(id);
         setName(name);
-        setConnectiblesList(connectiblesList);
-        setConnectionsList(connectionsList);
+        this.connectiblesList = new ArrayList <Connectible>();
+        this.connectionsList = new ArrayList <Connection>();
     }
 
     /**
@@ -69,14 +62,7 @@ public class Flow {
     public ArrayList<Connectible> getConnectiblesList() {
         return connectiblesList;
     }
-    /**
-     * Set l'attribut connectiblesList
-     * 
-     * @param connectiblesList
-     */
-    public void setConnectiblesList(ArrayList<Connectible> connectiblesList) {
-        this.connectiblesList = connectiblesList;
-    }
+    
     /**
      * Get l'attribut connectionsList
      * 
@@ -85,13 +71,23 @@ public class Flow {
     public ArrayList<Connection> getConnectionsList() {
         return connectionsList;
     }
+    
     /**
-     * Set l'attribut connectionsList
+     * Ajout element Connectible a connectiblesList
      * 
-     * @param connectionsList
+     * @param connectible
      */
-    public void setConnectionsList(ArrayList<Connection> connectionsList) {
-        this.connectionsList = connectionsList;
+    public void addConnectible(Connectible connectible) {
+        connectiblesList.add(connectible);
+    }
+
+    /**
+     * Ajout element connection a connectionsList
+     * 
+     * @param connection
+     */
+    public void addConnection(Connection connection) {
+        connectionsList.add(connection);
     }
 
     // Representation simplifie d'une instance de Flow

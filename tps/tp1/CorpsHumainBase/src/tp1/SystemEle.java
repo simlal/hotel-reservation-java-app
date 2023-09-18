@@ -1,7 +1,6 @@
 package tp1;
 
 import java.util.ArrayList;
-import java.util.concurrent.Flow;
 
 public class SystemEle {
     
@@ -11,22 +10,21 @@ public class SystemEle {
     private ArrayList <Flow> flowsList;
 
     /**
-     * Constructeur pour element System avec incluant enfants flowList
+     * Constructeur attributs de element seulement + listes vides
      * 
      * @param id
      * @param name
      * @param type
-     * @param flowsList
      */
     public SystemEle (
         int id, 
         String name, 
-        int type,
-        ArrayList <Flow> flowsList) {
+        int type
+    ) {
         setId(id);
         setName(name);
         setType(type);
-        setFlowsList(flowsList);
+        this.flowsList = new ArrayList <Flow> ();
     }
 
     /**
@@ -89,10 +87,12 @@ public class SystemEle {
     }
 
     /**
-     * Sets l'attribut flowsList
+     * Ajout element flow a flowsList
+     * 
+     * @param flow
      */
-    public void setFlowsList(ArrayList <Flow> flowsList) {
-        this.flowsList = flowsList;
+    public void addFlow(Flow flow) {
+        flowsList.add(flow);
     }
 
 

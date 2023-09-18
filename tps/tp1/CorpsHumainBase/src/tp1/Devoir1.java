@@ -3,6 +3,9 @@ package tp1;
 import java.io.*;
 import java.util.StringTokenizer;
 
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 public class Devoir1 {
 
     private static final String CMD_IMPORTER = "importer";
@@ -55,7 +58,16 @@ public class Devoir1 {
                 if (mode.equals(CMD_IMPORTER)){
                     if(extension.equals(TYPE_XML)){
                         System.out.println("Debut de l'importation du fichier XML " + nomFichier);
-                        // Votre code d'importation XML ici (Partie 2)
+                        // Lecture fichier xml avec SAXP et handler custom
+                        try {
+                            SAXParserFactory factory = SAXParserFactory.newInstance();
+                            SAXParser saxParser = factory.newSAXParser();
+                            XmlHandlerParser handler = new XmlHandlerParser();
+                            
+                            saxParser.parse(nomFichier, handler);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
 
                     }

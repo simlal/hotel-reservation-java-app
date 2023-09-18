@@ -5,6 +5,13 @@ public class Organ {
     private int id;
     private int systemId;
 
+    /**
+     * Constructeur attributs de element seulement
+     * 
+     * @param name
+     * @param id
+     * @param systemId
+     */
     public Organ(String name, int id, int systemId) {
         setName(name);
         setId(id);

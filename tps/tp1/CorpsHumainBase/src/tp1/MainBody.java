@@ -9,23 +9,16 @@ public class MainBody {
     private ArrayList <Organ> organsList;
 
     /**
-     * Constructeur element racine et enfants systemsList + organsList 
+     * Constructeur attributs de element seulement + listes vides
      * 
      * @param bodyName
      * @param id
-     * @param systemsList
-     * @param organsList
      */
-    public MainBody(
-        String bodyName,
-        int id,
-        ArrayList <SystemEle> systemsList,
-        ArrayList <Organ> organsList
-    ) {
+    public MainBody(String bodyName, int id) {
         setBodyName(bodyName);
         setId(id);
-        setSystemsList(systemsList);
-        setOrgansList(organsList);
+        this.systemsList = new ArrayList <SystemEle>();
+        this.organsList = new ArrayList <Organ>();
     }
 
     /**
@@ -63,7 +56,7 @@ public class MainBody {
     }
 
     /**
-     * Get l'attribut systemCont
+     * Get l'attribut systemsList
      * 
      * @return
      */
@@ -72,16 +65,7 @@ public class MainBody {
     }
 
     /**
-     * Sets l'attribut systemCont
-     * 
-     * @param systemCont
-     */
-    public void setSystemsList(ArrayList <SystemEle> systemsList) {
-        this.systemsList = systemsList;
-    }
-
-    /**
-     * Get l'attribut Organs
+     * Get l'attribut organsList
      * 
      * @return
      */
@@ -89,14 +73,25 @@ public class MainBody {
         return organsList;
     }
 
+
     /**
-     * Sets l'attribut organs
+     * Ajout element SystemEle a systemsList
      * 
-     * @param organs
+     * @param systemEle
      */
-    public void setOrgansList(ArrayList <Organ> organsList) {
-        this.organsList = organsList;
+    public void addSystemEle(SystemEle systemEle) {
+        systemsList.add(systemEle);
     }
+
+    /**
+     * Ajout element Organ a organsList
+     * 
+     * @param organ
+     */
+    public void addOrgan(Organ organ) {
+        organsList.add(organ);
+    }
+
 
     // Representation simplifie d'une instance de MainBody
     @Override

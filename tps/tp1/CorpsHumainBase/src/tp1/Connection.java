@@ -7,14 +7,13 @@ public class Connection {
     private ArrayList <To> tosList;
 
     /**
-     * Constructeur pour attributs required id et tosList
+     * Constructeur attributs de element seulement + listes vides
      * 
      * @param id
-     * @param tosList
      */
-    public Connection(int id, ArrayList <To> tosList) {
+    public Connection(int id) {
         setId(id);
-        setTosList(tosList);
+        this.tosList = new ArrayList <To>();
     }
 
     // Get ou set l'attribut id
@@ -29,8 +28,13 @@ public class Connection {
     public ArrayList<To> getTosList() {
         return tosList;
     }
-    public void setTosList(ArrayList<To> tosList) {
-        this.tosList = tosList;
+    
+    /**
+     * Ajout un element To a la tosList
+     * @param to
+     */
+    public void addTo(To to) {
+        tosList.add(to);
     }
 
     // Representation simplifie instance connection
