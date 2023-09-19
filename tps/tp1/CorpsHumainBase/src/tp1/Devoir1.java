@@ -14,6 +14,8 @@ import javax.json.stream.JsonGenerator;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import netscape.javascript.JSException;
+
 public class Devoir1 {
 
     private static final String CMD_IMPORTER = "importer";
@@ -79,7 +81,6 @@ public class Devoir1 {
                         System.out.println("Debut de l'importation du fichier JSON " + nomFichier);
                         //Votre code d'importation JSON ici (Partie 4)
                         mainBody = ImporterJson(nomFichier);
-                        System.out.println(mainBody);
                     }
                     else {
                         System.out.println("Le système ne supporte actuellement pas l'importation des fichiers au format " + extension);
@@ -131,7 +132,7 @@ public class Devoir1 {
         return mainBody;
     }
 
-    private static MainBody ImporterJson(String nomFichier) {
+    private static MainBody ImporterJson(String nomFichier) throws JSException {
         MainBody mainBody = null;
         JsonParserMainBody jsonParserMainBody = new JsonParserMainBody();
         try {
