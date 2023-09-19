@@ -7,6 +7,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public class XmlHandlerParser extends DefaultHandler {
 
     private MainBody mainBody;
+    private boolean mainBodyParsed;
     private SystemEle currentSystemEle;
     private Flow currentFlow;
     private Connectible currentConnectible ;
@@ -48,14 +49,13 @@ public class XmlHandlerParser extends DefaultHandler {
 
     @Override
     public void startDocument() throws SAXException {
-        System.out.println("Debut parse document avec SAXP.");
+        System.out.println("Debut parse document.");
+        this.mainBodyParsed = false;
     }
     
     @Override
     public void endDocument() throws SAXException {
-        System.out.println("Fin parse document avec element racine mainBody:");
-        System.out.println(mainBody);
-        // System.out.println(currentSystemEle.getFlowsList());
+        System.out.println("Fin parse document -> mainBodyParsed:" + Boolean.toString(isMainBodyParsed()));
     }
 
     @Override
@@ -165,9 +165,18 @@ public class XmlHandlerParser extends DefaultHandler {
             mainBody.addSystemEle(currentSystemEle);
         }
 
+        // Flag mainBody parse
+        if (qName.equals("MainBody")) {
+            this.mainBodyParsed = true;
+        }
+
     }
 
     public MainBody getMainBody() {
         return mainBody;
+    }
+
+    public boolean isMainBodyParsed() {
+        return mainBodyParsed;
     }
 }
