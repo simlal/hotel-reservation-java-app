@@ -15,6 +15,9 @@ public class Connectible {
     private boolean endRadiusAvailable;
     private double endRadius;
 
+    // Attribut specif a xmlparser
+    private String tagName;
+
     /**
      * Constructeur attributs de element seulement et set false implied attrs
      * 
@@ -23,10 +26,12 @@ public class Connectible {
      */
     public Connectible(
         String name, 
-        int id
+        int id,
+        String tagName
     ) {
         setName(name);
         setId(id);
+        setTagName(tagName);
         this.volumeAvailable = false;
         this.lengthAvailable = false;
         this.startRadiusAvailable = false;
@@ -108,6 +113,14 @@ public class Connectible {
     }
     public void setEndRadius(double endRadius) {
         this.endRadius = endRadius;
+    }
+
+    public String getTagName() {
+        return tagName;
+    }
+
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
     }
 
     // Representation simplifie instance connectible
