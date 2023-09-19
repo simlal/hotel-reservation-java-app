@@ -1,8 +1,16 @@
 package tp1;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
+import javax.json.Json;
+import javax.json.JsonException;
+import javax.json.JsonObject;
+import javax.json.JsonWriter;
+import javax.json.JsonWriterFactory;
+import javax.json.stream.JsonGenerator;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -13,6 +21,7 @@ public class Devoir1 {
     private static final String CMD_QUITTER = "quitter";
     private static final String TYPE_XML = "xml";
     private static final String TYPE_JSON = "json";
+    private static MainBody mainBody;
 
     public static void main(String[] args) {
         try
@@ -21,6 +30,9 @@ public class Devoir1 {
             // N'hésitez pas à le faire!
             BufferedReader reader = ouvrirFichier(args);
             String transaction = lireTransaction(reader);
+            
+            // Initialisation mainBody a null avant loop transactions
+            mainBody = null;
             while (!finTransaction(transaction))
             {
                 executerTransaction(transaction);
@@ -54,27 +66,18 @@ public class Devoir1 {
                 String mode = tokenizer.nextToken();
                 String nomFichier = readString(tokenizer);
                 String extension = getExtensionFichier(nomFichier);
-
+                
                 if (mode.equals(CMD_IMPORTER)){
+                    // reset mainBody a nulle avant importation
+                    mainBody = null;
                     if(extension.equals(TYPE_XML)){
-                        System.out.println("Debut de l'importation du fichier XML " + nomFichier);
                         // Lecture fichier xml avec SAXP et handler custom
-                        try {
-                            SAXParserFactory factory = SAXParserFactory.newInstance();
-                            SAXParser saxParser = factory.newSAXParser();
-                            XmlHandlerParser handler = new XmlHandlerParser();
-                            
-                            saxParser.parse(nomFichier, handler);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-
+                        System.out.println("Debut de l'importation du fichier XML " + nomFichier);
+                        mainBody = ImporterXml(nomFichier);
                     }
                     else if (extension.equals(TYPE_JSON)){
                         System.out.println("Debut de l'importation du fichier JSON " + nomFichier);
                         //Votre code d'importation JSON ici (Partie 4)
-
 
                     }
                     else {
@@ -90,9 +93,7 @@ public class Devoir1 {
                     }
                     else if (extension.equals(TYPE_JSON)){
                         System.out.println("Debut de l'exportation vers le fichier JSON " + nomFichier);
-                        //Votre code d'exportation JSON ici (Partie 3)
-
-
+                        ExporterJson(mainBody, nomFichier);
                     }
                     else {
                         System.out.println("Le système ne supporte actuellement pas l'exportation vers les fichiers au format " + extension);
@@ -106,6 +107,63 @@ public class Devoir1 {
         catch (Exception e)
         {
             System.out.println(" " + e.toString());
+        }
+    }
+
+    private static MainBody ImporterXml(String nomFichier) throws IllegalStateException, Exception {
+        MainBody mainBody = null;
+        try {
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            SAXParser saxParser = factory.newSAXParser();
+            XmlHandlerParser xmlHandlerParser = new XmlHandlerParser();
+            
+            // Parse le xml et extraire instance mainBody
+            saxParser.parse(nomFichier, xmlHandlerParser);
+            mainBody = xmlHandlerParser.getMainBody();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // Check pour parse OK mais instance est vide
+        if (mainBody == null) {
+            throw new IllegalStateException("Parse complet, mais instance mainBody est null.");
+        }
+        return mainBody;
+    }
+
+    private static void ExporterJson(
+        MainBody mainBody, 
+        String nomFichier
+    ) throws JsonException, IllegalStateException, Exception {
+        // Construction objet Json a partir de instance mainBody
+        JsonObject mainBodyJson = null;
+        MainBodyJsonBuilder mainBodyJsonBuilder = new MainBodyJsonBuilder();
+        try {
+            mainBodyJsonBuilder.buildMainBodyJson(mainBody);
+        } catch (JsonException je) {
+            je.printStackTrace();
+        } catch (IllegalStateException ise) {
+            ise.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        mainBodyJson = mainBodyJsonBuilder.getMainBodyJson();
+        if (mainBodyJson == null) {
+            throw new IllegalStateException("mainBodyJson est null");
+        }
+        
+        // Configuration pour pretty print
+        Map<String, Object> config = new HashMap<>();
+        config.put(JsonGenerator.PRETTY_PRINTING, true);
+        JsonWriterFactory writerFactory = Json.createWriterFactory(config);
+
+        // Ecrire Json dans fichier
+        try (FileWriter fileWriter = new FileWriter(nomFichier);
+            JsonWriter jsonWriter = writerFactory.createWriter(fileWriter)) {
+            jsonWriter.writeObject(mainBodyJson);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
