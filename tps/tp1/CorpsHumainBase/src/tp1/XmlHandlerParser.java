@@ -16,6 +16,36 @@ public class XmlHandlerParser extends DefaultHandler {
 
     private boolean insideConnectible;
 
+    private void processConnectibleAttributes(
+        Connectible connectible,
+        Attributes connAttributes
+    ) {
+        // Check if attribute exists before parsing
+        String volumeValue = connAttributes.getValue("volume");
+        if (volumeValue != null) {
+            double connectibleVolume = Double.parseDouble(volumeValue);
+            connectible.setVolume(connectibleVolume);
+        }
+        
+        String lengthValue = connAttributes.getValue("length");
+        if (lengthValue != null) {
+            float connectibleLength = Float.parseFloat(lengthValue);
+            connectible.setLength(connectibleLength);
+        }
+        
+        String startRadiusValue = connAttributes.getValue("startRadius");
+        if (startRadiusValue != null) {
+            double connectibleStartRadius = Double.parseDouble(startRadiusValue);
+            connectible.setStartRadius(connectibleStartRadius);
+        }
+        
+        String endRadiusValue = connAttributes.getValue("endRadius");
+        if (endRadiusValue != null) {
+            double connectibleEndRadius = Double.parseDouble(endRadiusValue);
+            connectible.setEndRadius(connectibleEndRadius);
+        }
+    }
+
     @Override
     public void startDocument() throws SAXException {
         System.out.println("Debut parse document avec SAXP.");
@@ -86,7 +116,8 @@ public class XmlHandlerParser extends DefaultHandler {
                 attributes.getValue("id"));
             currentConnectible = new Connectible(
                 connectibleName, 
-                connectibleId
+                connectibleId,
+                qName
             );
 
             // Update instance de connectible en fct des attributs parser
@@ -136,33 +167,7 @@ public class XmlHandlerParser extends DefaultHandler {
 
     }
 
-    private void processConnectibleAttributes(
-        Connectible connectible,
-        Attributes connAttributes
-    ) {
-        // Check if attribute exists before parsing
-        String volumeValue = connAttributes.getValue("volume");
-        if (volumeValue != null) {
-            double connectibleVolume = Double.parseDouble(volumeValue);
-            connectible.setVolume(connectibleVolume);
-        }
-        
-        String lengthValue = connAttributes.getValue("length");
-        if (lengthValue != null) {
-            float connectibleLength = Float.parseFloat(lengthValue);
-            connectible.setLength(connectibleLength);
-        }
-        
-        String startRadiusValue = connAttributes.getValue("startRadius");
-        if (startRadiusValue != null) {
-            double connectibleStartRadius = Double.parseDouble(startRadiusValue);
-            connectible.setStartRadius(connectibleStartRadius);
-        }
-        
-        String endRadiusValue = connAttributes.getValue("endRadius");
-        if (endRadiusValue != null) {
-            double connectibleEndRadius = Double.parseDouble(endRadiusValue);
-            connectible.setEndRadius(connectibleEndRadius);
-        }
+    public MainBody getMainBody() {
+        return mainBody;
     }
 }
