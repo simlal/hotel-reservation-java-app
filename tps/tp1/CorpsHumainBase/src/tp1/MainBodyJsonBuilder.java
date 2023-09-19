@@ -7,7 +7,7 @@ import javax.json.JsonObjectBuilder;
 
 public class MainBodyJsonBuilder {
     
-    JsonObject mainBodyJson;
+    private JsonObject mainBodyJson;
 
     public MainBodyJsonBuilder() {}
 
