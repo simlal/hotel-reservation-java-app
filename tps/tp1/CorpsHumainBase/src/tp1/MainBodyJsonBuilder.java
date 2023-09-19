@@ -23,6 +23,8 @@ public class MainBodyJsonBuilder {
     public void buildMainBodyJson(MainBody mainBody) {
         // Creer builder et ajout des attributs mainBody
         JsonObjectBuilder mainBodyBuilder = Json.createObjectBuilder();
+        JsonObjectBuilder mainBodyRootBuilder = Json.createObjectBuilder();
+
         mainBodyBuilder.add("name", mainBody.getBodyName());
         mainBodyBuilder.add("id", mainBody.getId());
 
@@ -32,7 +34,9 @@ public class MainBodyJsonBuilder {
         // Ajout organs construits
         mainBodyBuilder.add("Organs", buildOrganArrBuilder(mainBody));
 
-        this.mainBodyJson = mainBodyBuilder.build();            
+        // Ajout mainBodyBuilder dans root pour avoir ele racine
+        mainBodyRootBuilder.add("MainBody", mainBodyBuilder);
+        this.mainBodyJson = mainBodyRootBuilder.build();            
     }
 
     // Methodes pour construire les builders des elements enfants de mainBody
