@@ -7,15 +7,20 @@ import javax.json.JsonObjectBuilder;
 
 public class MainBodyJsonBuilder {
     
-    private MainBody mainBody;
-    
-    public MainBodyJsonBuilder(MainBody mainBody) {
-        this.mainBody = mainBody;
+    JsonObject mainBodyJson;
+
+    public MainBodyJsonBuilder() {}
+
+    public JsonObject getMainBodyJson() {
+        return mainBodyJson;
     }
 
-    // Get/set mainbody
-    
-    public JsonObject buildMainBodyJson(MainBody mainBody) {
+    /**
+     * Construit mainBodyJson et update attribut
+     * 
+     * @param mainBody
+     */
+    public void buildMainBodyJson(MainBody mainBody) {
         // Creer builder et ajout des attributs mainBody
         JsonObjectBuilder mainBodyBuilder = Json.createObjectBuilder();
         mainBodyBuilder.add("name", mainBody.getBodyName());
@@ -27,8 +32,7 @@ public class MainBodyJsonBuilder {
         // Ajout organs construits
         mainBodyBuilder.add("Organs", buildOrganArrBuilder(mainBody));
 
-        return mainBodyBuilder.build();
-            
+        this.mainBodyJson = mainBodyBuilder.build();            
     }
 
     // Methodes pour construire les builders des elements enfants de mainBody
