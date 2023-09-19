@@ -49,13 +49,13 @@ public class XmlHandlerParser extends DefaultHandler {
 
     @Override
     public void startDocument() throws SAXException {
-        System.out.println("Debut parse document.");
+        // System.out.println("Debut parse document.");
         this.mainBodyParsed = false;
     }
     
     @Override
     public void endDocument() throws SAXException {
-        System.out.println("Fin parse document -> mainBodyParsed:" + Boolean.toString(isMainBodyParsed()));
+        // System.out.println("Fin parse document -> mainBodyParsed:" + Boolean.toString(isMainBodyParsed()));
     }
 
     @Override
