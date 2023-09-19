@@ -78,7 +78,8 @@ public class Devoir1 {
                     else if (extension.equals(TYPE_JSON)){
                         System.out.println("Debut de l'importation du fichier JSON " + nomFichier);
                         //Votre code d'importation JSON ici (Partie 4)
-
+                        mainBody = ImporterJson(nomFichier);
+                        System.out.println(mainBody);
                     }
                     else {
                         System.out.println("Le système ne supporte actuellement pas l'importation des fichiers au format " + extension);
@@ -126,6 +127,17 @@ public class Devoir1 {
         // Check pour parse OK mais instance est vide
         if (mainBody == null) {
             throw new IllegalStateException("Parse complet, mais instance mainBody est null.");
+        }
+        return mainBody;
+    }
+
+    private static MainBody ImporterJson(String nomFichier) {
+        MainBody mainBody = null;
+        JsonParserMainBody jsonParserMainBody = new JsonParserMainBody();
+        try {
+            mainBody = jsonParserMainBody.parseJsonMainBody(nomFichier);
+        } catch (JsonException je) {
+            je.printStackTrace();
         }
         return mainBody;
     }
