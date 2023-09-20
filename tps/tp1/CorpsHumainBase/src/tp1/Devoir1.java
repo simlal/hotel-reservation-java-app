@@ -11,8 +11,15 @@ import javax.json.JsonObject;
 import javax.json.JsonWriter;
 import javax.json.JsonWriterFactory;
 import javax.json.stream.JsonGenerator;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
 
 import netscape.javascript.JSException;
 
@@ -90,12 +97,12 @@ public class Devoir1 {
                     if(extension.equals(TYPE_XML)){
                         System.out.println("Debut de l'exportation vers le fichier XML " + nomFichier);
                         // Votre code d'exportation XML ici (Partie 4)
-
+                        ExporterXml(nomFichier);
 
                     }
                     else if (extension.equals(TYPE_JSON)){
                         System.out.println("Debut de l'exportation vers le fichier JSON " + nomFichier);
-                        ExporterJson(mainBody, nomFichier);
+                        ExporterJson(nomFichier);
                     }
                     else {
                         System.out.println("Le système ne supporte actuellement pas l'exportation vers les fichiers au format " + extension);
@@ -144,7 +151,6 @@ public class Devoir1 {
     }
 
     private static void ExporterJson(
-        MainBody mainBody, 
         String nomFichier
     ) throws JsonException, IllegalStateException, Exception {
         // Construction objet Json a partir de instance mainBody
@@ -175,7 +181,36 @@ public class Devoir1 {
             JsonWriter jsonWriter = writerFactory.createWriter(fileWriter)) {
             jsonWriter.writeObject(mainBodyJson);
         }
-        catch (IOException e) {
+        catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+    private static void ExporterXml(
+        String nomFichier
+        ) throws Exception, IOException {
+        // Construction document vide
+        DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
+        Document document = f.newDocumentBuilder().newDocument();
+
+        // Populer le document avec instance mainBody
+        MainBodyXmlBuilder mainBodyXmlBuilder = new MainBodyXmlBuilder(document);
+        mainBodyXmlBuilder.buildMainBodyDocument(mainBody);
+        document = mainBodyXmlBuilder.getDocument();
+
+        // Transformer l'object document popule vers output XML
+        try {
+            FileOutputStream output = new FileOutputStream(nomFichier);
+            PrintStream out = new PrintStream(output);
+
+            TransformerFactory allSpark = TransformerFactory.newInstance();
+            Transformer optimusPrime = allSpark.newTransformer();
+            DOMSource source = new DOMSource(document);
+            StreamResult result = new StreamResult(out);
+            optimusPrime.transform(source, result);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
