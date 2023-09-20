@@ -113,6 +113,7 @@ public class Connectible {
     }
     public void setEndRadius(double endRadius) {
         this.endRadius = endRadius;
+        this.endRadiusAvailable = true;
     }
 
     public String getTagName() {
