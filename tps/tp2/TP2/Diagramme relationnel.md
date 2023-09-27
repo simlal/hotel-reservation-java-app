@@ -4,7 +4,7 @@
 |PK|idClient|int||
 ||prenom|varchar(255)|not null|
 ||nom|varchar(255)|not null|
-||age|int|age > 0|
+||age|int|age > 0 && not null|
 
 <br>
 
@@ -14,7 +14,7 @@
 |PK|idChambre|int|
 ||nom|varchar(255)|not null|
 ||typeLit|char(1)|not null|
-||prixBase|float8|not null, prixBase > 0|
+||prixBase|float8|not null && prixBase > 0|
 
 <br>
 
@@ -33,8 +33,8 @@
 |cle|nom|type|constraint|
 |---|---|---|---|
 |PK|idCommodite|int|
-||description|varchar(255)|
-||surplusPrix|float8|not null, surplusPrix > 0|
+||description|varchar(255)|not null|
+||surplusPrix|float8|not null && surplusPrix > 0|
 
 <br>
 
