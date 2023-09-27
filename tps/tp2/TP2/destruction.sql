@@ -1,3 +1,4 @@
+-- Detruire toute les tables de la bd
 -- Drop ChambreCommodite
 DROP TABLE IF EXISTS ChambreCommodite CASCADE;
 

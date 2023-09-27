@@ -1,3 +1,4 @@
+-- Creation toutes les tables de la bd
 -- Table Client
 CREATE TABLE Client (
     idClient int PRIMARY KEY,
