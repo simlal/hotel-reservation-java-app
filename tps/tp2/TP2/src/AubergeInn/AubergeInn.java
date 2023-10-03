@@ -1,10 +1,12 @@
 // Travail fait par :
-//   NomEquipier1 - Matricule
-//   NomEquipier2 - Matricule
+//   SimonLalonde - 22225192
 
 package AubergeInn;
 
-// test commit
+import Tuples.TupleClient;
+import Tables.TableClient;
+
+import Manager.ManagerClient;
 
 import java.io.*;
 import java.util.StringTokenizer;
@@ -91,21 +93,31 @@ public class AubergeInn
             {
                 String command = tokenizer.nextToken();
                 if (command.equals("ajouterClient")) {
+                    // Lecture token client
                     int idClient = readInt(tokenizer);
                     String prenom = readString(tokenizer);
                     String nom = readString(tokenizer);
                     int age = readInt(tokenizer);
+                    
+                    // Creation client et ajout db
+                    TupleClient nouveauClient = new TupleClient(idClient, prenom, nom, age);
+                    TableClient tableClient = new TableClient(cx);
+                    ManagerClient managerClient = new ManagerClient(tableClient);
 
-                    System.out.println("ajouterClient " + Integer.toString(idClient) + " " + prenom + " " + nom + " " + age);
+                    managerClient.ajouterClient(nouveauClient);
+                    
                 }
                 
                 else if (command.equals("supprimerClient"))
                 {
-                    // Lecture des parametres
-                    String param1 = readString(tokenizer);
-                    Date param2 = readDate(tokenizer);
-                    int param3 = readInt(tokenizer);
-                    // Appel de la methode des gestionnaires qui traite la transaction specifique
+                    // Sauvegarde du idClient
+                    int idClient = readInt(tokenizer);
+
+                    // Suppression client
+                    TableClient tableClient = new TableClient(cx);
+                    ManagerClient managerClient = new ManagerClient(tableClient);
+
+                    managerClient.supprimerClient(idClient);
                 }
                 else if (command.equals("commande2"))
                 {
