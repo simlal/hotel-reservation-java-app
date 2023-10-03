@@ -22,7 +22,7 @@
 |cle|nom|type|constraint|
 |---|---|---|---|
 |PK|idReservation|int|
-||dateDebut|date|
+||dateDebut|date|not null|
 ||dateFin|date|dateFin > dateDebut
 |FK1|idClient|int|
 |FK2|idChambre|int
@@ -39,8 +39,8 @@
 <br>
 
 **ChambreCommodite**
-|cle|nom|type|
-|---|---|---|
+|cle|nom|type|constraint|
+|---|---|---|---|
 |PK, FK1|idChambre|int|
 |PK, FK2|idCommodite|int|
-||nombre|int|
+||nombre|int|not null|
