@@ -26,6 +26,7 @@ public class TableClient {
             this.stmtAjouterClient = cx.getConnection().prepareStatement(sqlAjouterClient);
             this.stmtSupprimerClient = cx.getConnection().prepareStatement(sqlSupprimerClient);
         } catch (SQLException se) {
+            System.out.println(se.getMessage());
             throw new SQLException("Erreur prepareStatement dans TableClient");
         }
     }
@@ -49,6 +50,7 @@ public class TableClient {
             rs.close();
             return clientExiste;
         } catch (SQLException se) {
+            se.printStackTrace();
             throw new SQLException("Erreur checkClient dans TableClient");
         }
     }
@@ -72,6 +74,7 @@ public class TableClient {
             int nbClientAj = stmtAjouterClient.executeUpdate();
             return nbClientAj;
         } catch (SQLException se) {
+            se.printStackTrace();
             throw new SQLException("Erreur ajouterClient dans TableClient");
         }
     }
@@ -91,6 +94,7 @@ public class TableClient {
             int nbClientSupp = stmtSupprimerClient.executeUpdate();
             return nbClientSupp;
         } catch (SQLException se) {
+            se.printStackTrace();
             throw new SQLException("Erreur supprimerClient dans TableClient");
         }
     }
