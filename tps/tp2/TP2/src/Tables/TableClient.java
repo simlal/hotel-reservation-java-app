@@ -19,11 +19,15 @@ public class TableClient {
     private final PreparedStatement stmtAjouterClient;
     private final PreparedStatement stmtSupprimerClient;
 
-    public TableClient(Connexion cx) throws SQLException{
+    public TableClient(Connexion cx) throws SQLException {
         this.cx = cx;
-        this.stmtCheckClient = cx.getConnection().prepareStatement(sqlCheckClient);
-        this.stmtAjouterClient = cx.getConnection().prepareStatement(sqlAjouterClient);
-        this.stmtSupprimerClient = cx.getConnection().prepareStatement(sqlSupprimerClient);
+        try {
+            this.stmtCheckClient = cx.getConnection().prepareStatement(sqlCheckClient);
+            this.stmtAjouterClient = cx.getConnection().prepareStatement(sqlAjouterClient);
+            this.stmtSupprimerClient = cx.getConnection().prepareStatement(sqlSupprimerClient);
+        } catch (SQLException se) {
+            throw new SQLException("Erreur prepareStatement dans TableClient");
+        }
     }
 
     public Connexion getConnexion() {
@@ -38,11 +42,15 @@ public class TableClient {
      * @throws SQLException
      */
     public boolean checkClient(int idClient) throws SQLException {
-        stmtCheckClient.setInt(1, idClient);
-        ResultSet rs = stmtCheckClient.executeQuery();
-        boolean clientExiste = rs.next();
-        rs.close();
-        return clientExiste;
+        try {
+            stmtCheckClient.setInt(1, idClient);
+            ResultSet rs = stmtCheckClient.executeQuery();
+            boolean clientExiste = rs.next();
+            rs.close();
+            return clientExiste;
+        } catch (SQLException se) {
+            throw new SQLException("Erreur checkClient dans TableClient");
+        }
     }
 
     /**
@@ -53,17 +61,19 @@ public class TableClient {
      * @throws SQLException
      */
     public int ajouterClient(TupleClient client) throws SQLException{
-        
-        // Modif ps avec info client
-        stmtAjouterClient.setInt(1, client.getIdClient());
-        stmtAjouterClient.setString(2, client.getPrenom());
-        stmtAjouterClient.setString(3, client.getNom());
-        stmtAjouterClient.setInt(4, client.getAge());
+        try {
+            // Modif ps avec info client
+            stmtAjouterClient.setInt(1, client.getIdClient());
+            stmtAjouterClient.setString(2, client.getPrenom());
+            stmtAjouterClient.setString(3, client.getNom());
+            stmtAjouterClient.setInt(4, client.getAge());
 
-        // Ajout client si existe pas
-        int nbClientAj = stmtAjouterClient.executeUpdate();
-        return nbClientAj;
-
+            // Ajout client si existe pas
+            int nbClientAj = stmtAjouterClient.executeUpdate();
+            return nbClientAj;
+        } catch (SQLException se) {
+            throw new SQLException("Erreur ajouterClient dans TableClient");
+        }
     }
 
 
@@ -75,8 +85,13 @@ public class TableClient {
      * @throws SQLException
      */
     public int supprimerClient(int idClient) throws SQLException {
-        stmtSupprimerClient.setInt(1, idClient);
-        int nbClientSupp = stmtSupprimerClient.executeUpdate();
-        return nbClientSupp;
+        try {
+            // Supprimer client
+            stmtSupprimerClient.setInt(1, idClient);
+            int nbClientSupp = stmtSupprimerClient.executeUpdate();
+            return nbClientSupp;
+        } catch (SQLException se) {
+            throw new SQLException("Erreur supprimerClient dans TableClient");
+        }
     }
 }
