@@ -90,11 +90,16 @@ public class AubergeInn
             if (tokenizer.hasMoreTokens())
             {
                 String command = tokenizer.nextToken();
-                // Vous devez remplacer la chaine "commande1" et "commande2" par
-                // les commandes de votre programme. Vous pouvez ajouter autant
-                // de else if que necessaire. Vous n'avez pas a traiter la
-                // commande "quitter".
-                if (command.equals("commande1"))
+                if (command.equals("ajouterClient")) {
+                    int idClient = readInt(tokenizer);
+                    String prenom = readString(tokenizer);
+                    String nom = readString(tokenizer);
+                    int age = readInt(tokenizer);
+
+                    System.out.println("ajouterClient " + Integer.toString(idClient) + " " + prenom + " " + nom + " " + age);
+                }
+                
+                else if (command.equals("supprimerClient"))
                 {
                     // Lecture des parametres
                     String param1 = readString(tokenizer);
@@ -107,6 +112,7 @@ public class AubergeInn
                     // Lire les parametres ici et appeler la bonne methode
                     // de traitement pour la transaction
                 }
+                // Pas besoin de traiter quitter
                 else
                 {
                     System.out.println(" : Transaction non reconnue");
