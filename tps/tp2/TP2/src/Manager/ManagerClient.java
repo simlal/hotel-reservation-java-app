@@ -43,7 +43,7 @@ public class ManagerClient {
             }
             catch (SQLException se) {
                 cx.rollback();
-                System.out.println(se.getMessage());
+                se.printStackTrace();
             }
         }
     
@@ -69,7 +69,7 @@ public class ManagerClient {
         }
         catch (SQLException se) {
             cx.rollback();
-            System.out.println(se.getMessage());
+            se.printStackTrace();
         }
     }
 
