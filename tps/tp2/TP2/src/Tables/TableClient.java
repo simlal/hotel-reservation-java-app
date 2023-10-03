@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+// Interactions avec table Client
 public class TableClient {
 
     private static final String sqlCheckClient = "select * from Client where idClient = ?";
@@ -48,9 +49,10 @@ public class TableClient {
      * Ajout client dans bd
      * 
      * @param client
+     * @return nbClientAj
      * @throws SQLException
      */
-    public void ajouterClient(TupleClient client) throws SQLException{
+    public int ajouterClient(TupleClient client) throws SQLException{
         
         // Modif ps avec info client
         stmtAjouterClient.setInt(1, client.getIdClient());
@@ -59,7 +61,9 @@ public class TableClient {
         stmtAjouterClient.setInt(4, client.getAge());
 
         // Ajout client si existe pas
-        stmtAjouterClient.executeUpdate();
+        int nbClientAj = stmtAjouterClient.executeUpdate();
+        return nbClientAj;
+
     }
 
 
@@ -67,7 +71,7 @@ public class TableClient {
      * Supprimer client dans bd
      * 
      * @param idClient
-     * @return
+     * @return nbClient Supp
      * @throws SQLException
      */
     public int supprimerClient(int idClient) throws SQLException {
