@@ -8,12 +8,10 @@ public class TupleChambreCommodite {
 
     public TupleChambreCommodite(
         int idChambre,
-        int idCommodite,
-        int nombre
+        int idCommodite
     ) {
         this.idChambre = idChambre;
         this.idCommodite = idCommodite;
-        this.nombre = nombre;
     }
     
     public int getIdChambre() {
@@ -37,5 +35,6 @@ public class TupleChambreCommodite {
         if (nombre < 0) {
             throw new IllegalArgumentException("Nombre de commodite doit etre >= 0");
         }
+        this.nombre = nombre;
     }
 }
