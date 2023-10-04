@@ -98,7 +98,7 @@ public class Connexion
     {
         conn.rollback();
         conn.close();
-        System.out.println("Connexion fermée " + conn);
+        System.out.println("\nConnexion fermée " + conn);
     }
 
     /**
