@@ -4,6 +4,7 @@
 package AubergeInn;
 
 import Tuples.TupleChambre;
+import Tuples.TupleChambreCommodite;
 import Tuples.TupleClient;
 import Tuples.TupleCommodite;
 
@@ -159,6 +160,26 @@ public class AubergeInn
 
                     // Supprimer commodite dans db
                     manager.getManagerCommodite().supprimerCommodite(idCommodite);
+                }
+
+                else if (command.equals("inclureCommodite")) {
+                    // Lecture token idChambre et idCommodite
+                    int idChambre = readInt(tokenizer);
+                    int idCommodite = readInt(tokenizer);
+
+                    // Inclure commodite dans chambre
+                    TupleChambreCommodite chambreCommodite = new TupleChambreCommodite(idChambre, idCommodite);
+                    manager.getManagerChambreCommodite().inclureChambreCommodite(chambreCommodite);
+                }
+
+                else if (command.equals("enleverCommodite")) {
+                    // Lecture token idChambre et idCommodite
+                    int idChambre = readInt(tokenizer);
+                    int idCommodite = readInt(tokenizer);
+
+                    // Enlever commodite d'une chambre
+                    TupleChambreCommodite chambreCommodite = new TupleChambreCommodite(idChambre, idCommodite);
+                    manager.getManagerChambreCommodite().enleverChambreCommodite(chambreCommodite);
                 }
                 // Pas besoin de traiter quitter
                 else

@@ -53,7 +53,7 @@ public class ManagerChambreCommodite {
                 );
             } else {
                 // Check si entree chambreCommodite
-                if (tableChambreCommodite.chambreCommoditeExiste(chambreCommodite)) {
+                if (!tableChambreCommodite.chambreCommoditeExiste(chambreCommodite)) {
                     tableChambreCommodite.inclureChambreCommodite(chambreCommodite);
                     cx.commit();
                 } else {
