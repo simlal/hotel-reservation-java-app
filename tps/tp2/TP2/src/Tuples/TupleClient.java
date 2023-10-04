@@ -49,4 +49,9 @@ public class TupleClient {
         }
         this.age = age;
     }
+
+    @Override
+    public String toString() {
+        return "TupleClient [idClient=" + idClient + ", prenom=" + prenom + ", nom=" + nom + ", age=" + age + "]";
+    }
 }

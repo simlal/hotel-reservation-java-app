@@ -1,6 +1,8 @@
 package Manager;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import AubergeInn.Connexion;
 import Tables.TableClient;
@@ -44,6 +46,7 @@ public class ManagerClient {
             catch (SQLException se) {
                 cx.rollback();
                 se.printStackTrace();
+                throw new SQLException("Erreur ajouterClient dans ManagerClient");
             }
         }
     
@@ -70,11 +73,23 @@ public class ManagerClient {
         catch (SQLException se) {
             cx.rollback();
             se.printStackTrace();
+            throw new SQLException("Erreur supprimerClient dans ManagerClient");
         }
     }
 
-    public void afficherClient(int idClient) throws SQLException {
-        // tableClient.afficherClient(idClient);
-        // TODO
+    public void afficherClients() throws SQLException {
+        List<TupleClient> clients = new ArrayList<>();
+        try {
+            clients = tableClient.chercherClients();
+            for (TupleClient client : clients) {
+                System.out.println(client);
+            }
+            cx.commit();
+            System.out.println("Fin liste des clients");
+        } catch (SQLException se) {
+            cx.rollback();
+            se.printStackTrace();
+            throw new SQLException("Erreur afficherClients dans ManagerClient");
+        }
     }
 }
