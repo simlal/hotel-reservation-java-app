@@ -10,6 +10,7 @@ CREATE TABLE Client (
 -- Table Chambre
 CREATE TABLE Chambre(
     idChambre int PRIMARY KEY,
+    nom varchar(255) NOT NULL,
     typeLit varchar(255) NOT NULL,
     prixBase int CHECK(prixBase > 0) NOT NULL
 );
