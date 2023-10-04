@@ -13,7 +13,7 @@
 |---|---|---|---|
 |PK|idChambre|int|
 ||nom|varchar(255)|not null|
-||typeLit|char(1)|not null|
+||typeLit|varchar(255)|not null|
 ||prixBase|float8|not null && prixBase > 0|
 
 <br>
