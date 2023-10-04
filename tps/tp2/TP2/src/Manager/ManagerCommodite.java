@@ -20,19 +20,18 @@ public class ManagerCommodite {
      * Ajout commodite si n'existe pas dans db
      * 
      * @param commodite
-     * @throws IllegalStateException
      * @throws SQLException
      */
     public void ajouterCommodite(
         TupleCommodite commodite
-        ) throws IllegalStateException, SQLException {
+        ) throws SQLException {
         try {
             // Check si commodite existe pas et maj db
             if (!tableCommodite.checkCommodite(commodite.getIdCommodite())) {
                 tableCommodite.ajouterCommodite(commodite);
                 cx.commit();
             } else {    
-                throw new IllegalStateException(
+                throw new SQLException(
                     "Impossible ajouter commodite avec idCommodite=" + commodite.getIdCommodite() + ": existe deja dans db."
                 );
             }
@@ -47,19 +46,18 @@ public class ManagerCommodite {
      * Supprimer commodite si existe dans db
      * 
      * @param idCommodite
-     * @throws IllegalStateException
      * @throws SQLException
      */
     public void supprimerCommodite(
         int idCommodite
-        ) throws IllegalStateException, SQLException {
+        ) throws SQLException {
             try {
                 // Check si commodite existe
                 if (tableCommodite.checkCommodite(idCommodite)) {
                     tableCommodite.supprimerCommodite(idCommodite);
                     cx.commit();
                 } else {
-                    throw new IllegalStateException(
+                    throw new SQLException(
                         "Impossible supprimer commodite avec idCommodite=" + idCommodite + ": n'existe pas dans db."
                     );
                 }

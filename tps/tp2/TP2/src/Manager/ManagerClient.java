@@ -27,17 +27,16 @@ public class ManagerClient {
      * Ajout client si n'existe pas dans db
      * 
      * @param client
-     * @throws IllegalStateException
      * @throws SQLException
      */
-    public void ajouterClient(TupleClient client) throws IllegalStateException, SQLException{
+    public void ajouterClient(TupleClient client) throws SQLException{
             try {
                 // Check si client existe et maj db
                 if (!tableClient.checkClient(client.getIdClient())) {
                     tableClient.ajouterClient(client);   
                 }
                 else {    
-                    throw new IllegalStateException(
+                    throw new SQLException(
                         "Impossible ajouter client avec idClient=" + client.getIdClient() + ": existe deja dans db."
                     );
                 }
@@ -54,17 +53,16 @@ public class ManagerClient {
      * Supprimer client si existe dans db
      * 
      * @param idClient
-     * @throws IllegalStateException
      * @throws SQLException
      */
-    public void supprimerClient(int idClient) throws IllegalStateException, SQLException{
+    public void supprimerClient(int idClient) throws SQLException{
         try {
             // Check si client existe et maj db
             if (tableClient.checkClient(idClient)) {
                 tableClient.supprimerClient(idClient);   
             }
             else {    
-                throw new IllegalStateException(
+                throw new SQLException(
                     "Impossible supprimer client avec idClient=" + idClient + ": n'existe pas dans db."
                 );
             }

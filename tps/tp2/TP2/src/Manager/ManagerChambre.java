@@ -24,12 +24,11 @@ public class ManagerChambre {
      * Ajout chambre si n'existe pas dans db
      * 
      * @param chambre
-     * @throws IllegalStateException
      * @throws SQLException
      */
     public void ajouterChambre(
         TupleChambre chambre
-        ) throws IllegalStateException, SQLException {
+        ) throws SQLException {
         try {
             // Check si chambre existe pas et maj db
             if (!tableChambre.checkChambre(chambre.getIdChambre())) {
@@ -37,7 +36,7 @@ public class ManagerChambre {
                 cx.commit();
             }
             else {    
-                throw new IllegalStateException(
+                throw new SQLException(
                     "Impossible ajouter chambre avec idChambre=" + chambre.getIdChambre() + ": existe deja dans db."
                 );
             }
@@ -50,7 +49,7 @@ public class ManagerChambre {
     
 
     public void supprimerChambre(
-        int idChambre) throws IllegalStateException, SQLException {
+        int idChambre) throws SQLException {
         try {
             // Check si chambre existe et maj db
             if (tableChambre.checkChambre(idChambre)) {
@@ -58,7 +57,7 @@ public class ManagerChambre {
                 cx.commit();
             }
             else {    
-                throw new IllegalStateException(
+                throw new SQLException(
                     "Impossible supprimer chambre avec idChambre=" + idChambre + ": n'existe pas dans db."
                 );
             }
@@ -66,7 +65,7 @@ public class ManagerChambre {
         } catch (SQLException se) {
             cx.rollback();
             se.printStackTrace();
-            throw new IllegalStateException("Erreur supprimerChambre dans ManagerChambre");
+            throw new SQLException("Erreur supprimerChambre dans ManagerChambre");
         }
     }
 }
