@@ -68,6 +68,7 @@ public class ManagerClient {
                     "Impossible supprimer client avec idClient=" + idClient + ": n'existe pas dans db."
                 );
             }
+            // TODO CHECK SI CLIENT NA PAS DE RESERVATION AVANT SUPPRIMER
             cx.commit();
         }
         catch (SQLException se) {

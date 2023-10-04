@@ -62,6 +62,7 @@ public class ManagerChambre {
                     "Impossible supprimer chambre avec idChambre=" + idChambre + ": n'existe pas dans db."
                 );
             }
+            // TODO CHECK SI CHAMBRE LIBRE AVANT SUPPRIMER
         } catch (SQLException se) {
             cx.rollback();
             se.printStackTrace();
