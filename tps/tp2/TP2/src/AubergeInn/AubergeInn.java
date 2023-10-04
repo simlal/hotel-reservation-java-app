@@ -3,6 +3,7 @@
 
 package AubergeInn;
 
+import Tuples.TupleChambre;
 import Tuples.TupleClient;
 import Tables.TableClient;
 
@@ -45,6 +46,7 @@ import java.sql.*;
 public class AubergeInn
 {
     private static Connexion cx;
+    private static MainManager manager;
 
     /**
      * @param args
@@ -61,9 +63,13 @@ public class AubergeInn
         
         try
         {
-            // Il est possible que vous ayez à déplacer la connexion ailleurs.
-            // N'hésitez pas à le faire!
+            
+            // Creation de la connection
             cx = new Connexion(args[0], args[1], args[2], args[3]);
+            
+            // Container pour les tables et les managers
+            manager = new MainManager(cx);
+
             BufferedReader reader = ouvrirFichier(args);
             String transaction = lireTransaction(reader);
             while (!finTransaction(transaction))
@@ -92,7 +98,11 @@ public class AubergeInn
             if (tokenizer.hasMoreTokens())
             {
                 String command = tokenizer.nextToken();
-                if (command.equals("ajouterClient")) {
+                if (command.equals("//")) {
+                    // commentaire, on ne fait rien
+                }
+                
+                else if (command.equals("ajouterClient")) {
                     // Lecture token client
                     int idClient = readInt(tokenizer);
                     String prenom = readString(tokenizer);
@@ -101,29 +111,39 @@ public class AubergeInn
                     
                     // Creation client et ajout db
                     TupleClient nouveauClient = new TupleClient(idClient, prenom, nom, age);
-                    TableClient tableClient = new TableClient(cx);
-                    ManagerClient managerClient = new ManagerClient(tableClient);
-
-                    managerClient.ajouterClient(nouveauClient);
+                    manager.getManagerClient().ajouterClient(nouveauClient);
                     
                 }
                 
-                else if (command.equals("supprimerClient"))
-                {
+                else if (command.equals("supprimerClient")) {
                     // Sauvegarde du idClient
                     int idClient = readInt(tokenizer);
 
                     // Suppression client
-                    TableClient tableClient = new TableClient(cx);
-                    ManagerClient managerClient = new ManagerClient(tableClient);
+                    manager.getManagerClient().supprimerClient(idClient);
+                }
+                else if (command.equals("afficherClients")) {
+                    manager.getManagerClient().afficherClients();
+                }
+                else if (command.equals("ajouterChambre")) {
+                    // Lecture token chambre
+                    int idChambre = readInt(tokenizer);
+                    String nom = readString(tokenizer);
+                    String typeLit = readString(tokenizer);
+                    int prixBase = readInt(tokenizer);
 
-                    managerClient.supprimerClient(idClient);
+                    // Ajout chambre dans db
+                    TupleChambre chambre = new TupleChambre(idChambre, nom, typeLit, prixBase);
+                    manager.getManagerChambre().ajouterChambre(chambre);
                 }
-                else if (command.equals("commande2"))
-                {
-                    // Lire les parametres ici et appeler la bonne methode
-                    // de traitement pour la transaction
+                else if (command.equals("supprimerChambre")) {
+                    // Lecute token idChambre
+                    int idChambre = readInt(tokenizer);
+
+                    // Suppression chambre dans db
+                    manager.getManagerChambre().supprimerChambre(idChambre);
                 }
+
                 // Pas besoin de traiter quitter
                 else
                 {
@@ -164,6 +184,7 @@ public class AubergeInn
      */
     static String lireTransaction(BufferedReader reader) throws IOException
     {
+        System.out.println("");
         return reader.readLine();
     }
 
