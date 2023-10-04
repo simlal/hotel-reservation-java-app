@@ -4,18 +4,18 @@ public class TupleChambre {
     
     private int idChambre;
     private String nom;
-    private String type;
-    private double prixBase;
+    private String typeLit;
+    private int prixBase;
 
     public TupleChambre  (
         int idChambre,
         String nom,
-        String type,
-        double prixBase
+        String typeLit,
+        int prixBase
     ) {
         this.idChambre = idChambre;
         this.nom = nom;
-        this.type = type;
+        this.typeLit = typeLit;
         this.prixBase = prixBase;
     }
 
@@ -33,17 +33,17 @@ public class TupleChambre {
         this.nom = nom;
     }
 
-    public String getType() {
-        return type;
+    public String getTypeLit() {
+        return typeLit;
     }
-    public void setType(String type) {
-        this.type = type;
+    public void setTypeLit(String typeLit) {
+        this.typeLit = typeLit;
     }
 
-    public double getPrixBase() {
+    public int getPrixBase() {
         return prixBase;
     }
-    public void setPrixBase(double prixBase) throws IllegalArgumentException {
+    public void setPrixBase(int prixBase) throws IllegalArgumentException {
         if (prixBase <= 0) {
             throw new IllegalArgumentException("Prix de base doit etre positif");
         }
