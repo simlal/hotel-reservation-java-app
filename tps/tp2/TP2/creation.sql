@@ -11,7 +11,7 @@ CREATE TABLE Client (
 CREATE TABLE Chambre(
     idChambre int PRIMARY KEY,
     typeLit varchar(255) NOT NULL,
-    prixBase float8 CHECK(prixBase > 0) NOT NULL
+    prixBase int CHECK(prixBase > 0) NOT NULL
 );
 
 -- Table Reservation
@@ -27,7 +27,7 @@ CREATE TABLE Reservation(
 CREATE TABLE Commodite(
     idCommodite int PRIMARY KEY,
     description varchar(255),
-    surplusPrix float8 CHECK(surplusPrix > 0) NOT NULL
+    surplusPrix int CHECK(surplusPrix > 0) NOT NULL
 );
 
 -- Table ChambreCommodite
