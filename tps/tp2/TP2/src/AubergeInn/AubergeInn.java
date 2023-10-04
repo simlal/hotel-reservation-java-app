@@ -5,9 +5,8 @@ package AubergeInn;
 
 import Tuples.TupleChambre;
 import Tuples.TupleClient;
-import Tables.TableClient;
+import Tuples.TupleCommodite;
 
-import Manager.ManagerClient;
 
 import java.io.*;
 import java.util.StringTokenizer;
@@ -143,7 +142,24 @@ public class AubergeInn
                     // Suppression chambre dans db
                     manager.getManagerChambre().supprimerChambre(idChambre);
                 }
+                else if (command.equals("ajouterCommodite")) {
+                    // Lecture token commodite
+                    int idCommodite = readInt(tokenizer);
+                    String description = readString(tokenizer);
+                    int surplusPrix = readInt(tokenizer);
 
+                    // Ajout commodite dans db
+                    TupleCommodite commodite = new TupleCommodite(idCommodite, description, surplusPrix);
+                    manager.getTableCommodite().ajouterCommodite(commodite);
+                }
+
+                else if (command.equals("supprimerCommodite")) {
+                    // Lecture token idCommodite
+                    int idCommodite = readInt(tokenizer);
+
+                    // Supprimer commodite dans db
+                    manager.getManagerCommodite().supprimerCommodite(idCommodite);
+                }
                 // Pas besoin de traiter quitter
                 else
                 {
