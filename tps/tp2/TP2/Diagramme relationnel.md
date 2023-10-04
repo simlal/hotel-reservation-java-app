@@ -43,4 +43,4 @@
 |---|---|---|---|
 |PK, FK1|idChambre|int|
 |PK, FK2|idCommodite|int|
-||nombre|int|not null|
+||nombre|int||
