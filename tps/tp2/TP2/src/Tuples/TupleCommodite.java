@@ -4,12 +4,12 @@ public class TupleCommodite {
     
     private int idCommodite;
     private String description;
-    private double surplusPrix;
+    private int surplusPrix;
 
     public TupleCommodite(
         int idCommodite,
         String description,
-        double surplusPrix
+        int surplusPrix
     ) {
         this.idCommodite = idCommodite;
         this.description = description;
@@ -30,10 +30,10 @@ public class TupleCommodite {
         this.description = description;
     }
 
-    public double getSurplusPrix() {
+    public int getSurplusPrix() {
         return surplusPrix;
     }
-    public void setSurplusPrix(double surplusPrix) throws IllegalArgumentException {
+    public void setSurplusPrix(int surplusPrix) throws IllegalArgumentException {
         if (surplusPrix <= 0) {
             throw new IllegalArgumentException("Surplus de prix doit etre positif");
         }
