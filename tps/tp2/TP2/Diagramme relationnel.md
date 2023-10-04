@@ -14,7 +14,7 @@
 |PK|idChambre|int|
 ||nom|varchar(255)|not null|
 ||typeLit|varchar(255)|not null|
-||prixBase|float8|not null && prixBase > 0|
+||prixBase|int|not null && prixBase > 0|
 
 <br>
 
@@ -34,7 +34,7 @@
 |---|---|---|---|
 |PK|idCommodite|int|
 ||description|varchar(255)|not null|
-||surplusPrix|float8|not null && surplusPrix > 0|
+||surplusPrix|int|not null && surplusPrix > 0|
 
 <br>
 
