@@ -17,7 +17,16 @@ public class TableClient {
     private static final String sqlCheckClient = "select * from Client where idClient = ?";
     private static final String sqlAjouterClient = "insert into Client (idClient, prenom, nom, age) values(?,?,?,?)";
     private static final String sqlSupprimerClient = "delete from Client where idClient = ?";
-    private static final String sqlChercherClients = "select * from Client";
+    private static final String sqlAfficherClient = 
+    "SELECT Client.*, Reservation.dateDebut, Reservation.dateFin, Chambre.*, Commodite.*, Chambre.prixBase + COALESCE(SUM(Commodite.surplusPrix), 0) AS prixTotalCommodites " +
+    "FROM Client " +
+    "LEFT JOIN Reservation ON Client.idClient = Reservation.idClient " +
+    "LEFT JOIN Chambre ON Reservation.idChambre = Chambre.idChambre " +
+    "LEFT JOIN ChambreCommodite ON Chambre.idChambre = ChambreCommodite.idChambre " +
+    "LEFT JOIN Commodite ON ChambreCommodite.idCommodite = Commodite.idCommodite " +
+    "WHERE Client.idClient = ? " +
+    "GROUP BY Client.idClient, Reservation.dateDebut, Reservation.dateFin, Chambre.idChambre, Commodite.idCommodite";
+
     private static final String sqlCheckClientReservationEnCours = 
     "select * from Client " +
     "join Reservation on Client.idClient = Reservation.idClient " +
@@ -28,7 +37,7 @@ public class TableClient {
     private final PreparedStatement stmtCheckClient;
     private final PreparedStatement stmtAjouterClient;
     private final PreparedStatement stmtSupprimerClient;
-    private final PreparedStatement stmtChercherClients;
+    private final PreparedStatement stmtAfficherClient;
     private final PreparedStatement stmtCheckClientReservationEnCours;
 
     public TableClient(Connexion cx) throws SQLException {
@@ -37,7 +46,7 @@ public class TableClient {
             this.stmtCheckClient = cx.getConnection().prepareStatement(sqlCheckClient);
             this.stmtAjouterClient = cx.getConnection().prepareStatement(sqlAjouterClient);
             this.stmtSupprimerClient = cx.getConnection().prepareStatement(sqlSupprimerClient);
-            this.stmtChercherClients = cx.getConnection().prepareStatement(sqlChercherClients);
+            this.stmtAfficherClient = cx.getConnection().prepareStatement(sqlAfficherClient);
             this.stmtCheckClientReservationEnCours = 
             cx.getConnection().prepareStatement(sqlCheckClientReservationEnCours);
         } catch (SQLException se) {
@@ -131,25 +140,31 @@ public class TableClient {
         }
     }
 
-    public List<TupleClient> chercherClients() throws SQLException {
-        List<TupleClient> clients = new ArrayList<>();
+    public void afficherClient(int idClient) throws SQLException {
         try {
-            // Chercher clients avec statement general
-            ResultSet rs = stmtChercherClients.executeQuery();
-            while (rs.next()) {
-                int idClient = rs.getInt("idClient");
-                String prenom = rs.getString("prenom");
-                String nom = rs.getString("nom");
-                int age = rs.getInt("age");
+            // update ps avec idclient
+            stmtAfficherClient.setInt(1, idClient);
 
-                // Creation client et ajout dans container
-                TupleClient client = new TupleClient(idClient, prenom, nom, age);
-                clients.add(client);
+            ResultSet rs = stmtAfficherClient.executeQuery();
+            while (rs.next()) {
+                System.out.println(
+                    "idClient: " + rs.getInt(1) + 
+                    ", prenom: " + rs.getString(2) + 
+                    ", nom: " + rs.getString(3) + 
+                    ", age: " + rs.getInt(4) + 
+                    ", dateDebut: " + rs.getDate(5) + 
+                    ", dateFin: " + rs.getDate(6) + 
+                    ", idChambre: " + rs.getInt(7) +
+                    ", nomChambre: " + rs.getString(8) +
+                    ", prixBaseChambre: " + rs.getInt(10) +
+                    ", prixTotalCommodites: " + rs.getInt(13)
+                );
+                
             }
+            rs.close();
         } catch (SQLException se) {
             se.printStackTrace();
-            throw new SQLException("Erreur chercherClients dans TableClient");
+            throw new SQLException("Erreur afficherClient dans TableClient");
         }
-        return clients;
     }
 }

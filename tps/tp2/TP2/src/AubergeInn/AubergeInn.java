@@ -122,8 +122,12 @@ public class AubergeInn
                     // Suppression client
                     manager.getManagerClient().supprimerClient(idClient);
                 }
-                else if (command.equals("afficherClients")) {
-                    manager.getManagerClient().afficherClients();
+                else if (command.equals("afficherClient")) {
+                    // Lecture token idClient
+                    int idClient = readInt(tokenizer);
+                    
+                    // Affichage client
+                    manager.getManagerClient().afficherClient(idClient);
                 }
                 else if (command.equals("ajouterChambre")) {
                     // Lecture token chambre

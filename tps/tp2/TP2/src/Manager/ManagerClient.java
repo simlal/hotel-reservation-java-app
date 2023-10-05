@@ -80,19 +80,20 @@ public class ManagerClient {
         }
     }
 
-    public void afficherClients() throws SQLException {
-        List<TupleClient> clients = new ArrayList<>();
+    public void afficherClient(int idClient) throws SQLException {
         try {
-            clients = tableClient.chercherClients();
-            for (TupleClient client : clients) {
-                System.out.println(client);
+            // Check si client existe et maj db
+            if (!tableClient.checkClient(idClient)) {
+                throw new SQLException(
+                    "Impossible supprimer client avec idClient=" + idClient + ": n'existe pas dans db."
+                ); 
             }
-            cx.commit();
-            System.out.println("Fin liste des clients");
+            else {
+                tableClient.afficherClient(idClient);
+            }
         } catch (SQLException se) {
-            cx.rollback();
             se.printStackTrace();
-            throw new SQLException("Erreur afficherClients dans ManagerClient");
+            throw new SQLException("Erreur afficherClient dans ManagerClient");
         }
     }
 }

@@ -31,6 +31,7 @@ public class TableChambre {
     "WHERE Chambre.idChambre NOT IN (SELECT idChambre FROM Reservation WHERE (dateDebut < ? AND dateFin > ?)) " +
     "GROUP BY Chambre.idChambre " +
     "ORDER BY Chambre.idChambre";
+    
     private static final String sqlAfficherChambre = 
     "select Chambre.*, Commodite.* " +
     "from Chambre " +
