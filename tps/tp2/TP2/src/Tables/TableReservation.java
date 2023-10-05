@@ -17,15 +17,19 @@ public class TableReservation {
     private final static String sqlFaireReservation = 
     "insert into Reservation (dateDebut, dateFin, idClient, idChambre) "+
     "values (?,?,?,?)";
+    private final static String sqlSupprimerReservationChambre = 
+    "delete from Reservation where idChambre = ?";
     
     private final PreparedStatement stmtCheckChambreReserve;
     private final PreparedStatement stmtFaireReservation;
+    private final PreparedStatement stmtSupprimerReservationChambre;
 
     public TableReservation (Connexion cx) throws Exception {
         this.cx = cx;
         try {
             this.stmtCheckChambreReserve = cx.getConnection().prepareStatement(sqlCheckChambreReserve);
             this.stmtFaireReservation = cx.getConnection().prepareStatement(sqlFaireReservation);
+            this.stmtSupprimerReservationChambre = cx.getConnection().prepareStatement(sqlSupprimerReservationChambre);
         } catch (Exception se) {
             se.printStackTrace();
             throw new Exception("Erreur prepareStatement dans TableReservation");
@@ -87,6 +91,29 @@ public class TableReservation {
         } catch (SQLException se) {
             se.printStackTrace();
             throw new SQLException("Erreur reserver dans TableReservation");
+        }
+    }
+
+    /**
+     * Operation supprimer reservation dans une chambre
+     * 
+     * @param idChambre
+     * @throws Exception
+     */
+    public int supprimerReservationChambre(
+        int idChambre
+        ) throws SQLException {
+            try {
+
+                // Modif du ps avec info reservation
+                stmtSupprimerReservationChambre.setInt(1, idChambre);
+
+                // Suppression de la reservation
+                int nbReservation = stmtSupprimerReservationChambre.executeUpdate();
+                return nbReservation;
+        } catch (SQLException se) {
+            se.printStackTrace();
+            throw new SQLException("Erreur supprimerReservationChambre dans TableReservation");
         }
     }
 }

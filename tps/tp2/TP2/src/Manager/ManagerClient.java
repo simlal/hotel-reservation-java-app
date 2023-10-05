@@ -58,16 +58,20 @@ public class ManagerClient {
     public void supprimerClient(int idClient) throws SQLException{
         try {
             // Check si client existe et maj db
-            if (tableClient.checkClient(idClient)) {
-                tableClient.supprimerClient(idClient);   
-            }
-            else {    
+            if (!tableClient.checkClient(idClient)) {
                 throw new SQLException(
                     "Impossible supprimer client avec idClient=" + idClient + ": n'existe pas dans db."
-                );
+                );  
             }
-            // TODO CHECK SI CLIENT NA PAS DE RESERVATION AVANT SUPPRIMER
-            cx.commit();
+            else if (tableClient.checkClientReservationEnCours(idClient)) {
+                throw new SQLException(
+                    "Impossible supprimer client avec idClient=" + idClient + ": a des reservations en cours."
+                );  
+            }
+            else {
+                tableClient.supprimerClient(idClient);
+                cx.commit();
+            }
         }
         catch (SQLException se) {
             cx.rollback();

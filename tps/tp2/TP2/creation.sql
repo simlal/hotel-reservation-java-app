@@ -22,8 +22,8 @@ CREATE TABLE Reservation(
     idClient int,
     idChambre int,
     PRIMARY KEY (idClient, idChambre),
-    FOREIGN KEY (idClient) REFERENCES Client(idClient),
-    FOREIGN KEY (idChambre) REFERENCES Chambre(idChambre)
+    FOREIGN KEY (idClient) REFERENCES Client(idClient) ON DELETE CASCADE,
+    FOREIGN KEY (idChambre) REFERENCES Chambre(idChambre) ON DELETE CASCADE
 );
 
 -- Table Commodite
@@ -38,6 +38,6 @@ CREATE TABLE ChambreCommodite(
     idChambre int,
     idCommodite int,
     PRIMARY KEY (idChambre, idCommodite),
-    FOREIGN KEY (idChambre) REFERENCES Chambre(idChambre),
-    FOREIGN KEY (idCommodite) REFERENCES Commodite(idCommodite)
+    FOREIGN KEY (idChambre) REFERENCES Chambre(idChambre) ON DELETE CASCADE,
+    FOREIGN KEY (idCommodite) REFERENCES Commodite(idCommodite) ON DELETE CASCADE
 );

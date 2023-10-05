@@ -9,6 +9,7 @@ import Tuples.TupleClient;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Date;
 
 // Interactions avec table Client
 public class TableClient {
@@ -17,6 +18,10 @@ public class TableClient {
     private static final String sqlAjouterClient = "insert into Client (idClient, prenom, nom, age) values(?,?,?,?)";
     private static final String sqlSupprimerClient = "delete from Client where idClient = ?";
     private static final String sqlChercherClients = "select * from Client";
+    private static final String sqlCheckClientReservationEnCours = 
+    "select * from Client " +
+    "join Reservation on Client.idClient = Reservation.idClient " +
+    "where Client.idClient = ? and Reservation.dateDebut >= ?";
 
 
     private Connexion cx;
@@ -24,6 +29,7 @@ public class TableClient {
     private final PreparedStatement stmtAjouterClient;
     private final PreparedStatement stmtSupprimerClient;
     private final PreparedStatement stmtChercherClients;
+    private final PreparedStatement stmtCheckClientReservationEnCours;
 
     public TableClient(Connexion cx) throws SQLException {
         this.cx = cx;
@@ -32,6 +38,8 @@ public class TableClient {
             this.stmtAjouterClient = cx.getConnection().prepareStatement(sqlAjouterClient);
             this.stmtSupprimerClient = cx.getConnection().prepareStatement(sqlSupprimerClient);
             this.stmtChercherClients = cx.getConnection().prepareStatement(sqlChercherClients);
+            this.stmtCheckClientReservationEnCours = 
+            cx.getConnection().prepareStatement(sqlCheckClientReservationEnCours);
         } catch (SQLException se) {
             System.out.println(se.getMessage());
             throw new SQLException("Erreur prepareStatement dans TableClient");
@@ -103,6 +111,23 @@ public class TableClient {
         } catch (SQLException se) {
             se.printStackTrace();
             throw new SQLException("Erreur supprimerClient dans TableClient");
+        }
+    }
+
+    public boolean checkClientReservationEnCours(int idClient) throws SQLException {
+        try {
+            // update ps avec idclient et date maintenant
+            Date maintenant = new Date(System.currentTimeMillis());
+            stmtCheckClientReservationEnCours.setInt(1, idClient);
+            stmtCheckClientReservationEnCours.setDate(2, maintenant);
+
+            ResultSet rs = stmtCheckClientReservationEnCours.executeQuery();
+            boolean clientReserve = rs.next();
+            rs.close();
+            return clientReserve;
+        } catch (SQLException se) {
+            se.printStackTrace();
+            throw new SQLException("Erreur checkClientReservation dans TableClient");
         }
     }
 
