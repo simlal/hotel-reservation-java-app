@@ -194,6 +194,22 @@ public class AubergeInn
                     manager.getManagerReservation().faireReservation(reservation);
                 }
 
+                else if (command.equals("afficherChambresLibres")) {
+                    // Lecture token dates
+                    Date dateDebut = readDate(tokenizer);
+                    Date dateFin = readDate(tokenizer);
+
+                    // Affichage des chambres libres
+                    manager.getManagerChambre().afficherChambresLibres(dateDebut, dateFin);
+                }
+
+                else if (command.equals("afficherChambre")) {
+                    // Lecture token idChambre
+                    int idChambre = readInt(tokenizer);
+
+                    // affichage de la chambre si existe
+                    manager.getManagerChambre().afficherChambre(idChambre);
+                }
                 // Pas besoin de traiter quitter
                 else
                 {

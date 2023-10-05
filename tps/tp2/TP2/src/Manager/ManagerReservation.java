@@ -45,6 +45,13 @@ public class ManagerReservation {
                     throw new SQLException(
                         "Impossible faire reservation avec idChambre=" + reservation.getIdChambre() + ": chambre n'existe pas dans db."
                     );
+                } else if (reservation.getDateFin().compareTo(reservation.getDateDebut()) <= 0){
+                    throw new SQLException(
+                        "Impossible faire reservation avec dateDebut=" + 
+                        reservation.getDateDebut().toString() + " et dateFin=" + 
+                        reservation.getDateFin().toString() +
+                        ": dateFin doit etre plus grand que dateDebut."
+                    );
                 } else {
                     // Reservation de chambre si libre
                     if (!tableReservation.checkChambreReserve(

@@ -50,13 +50,13 @@ public class TableReservation {
     public boolean checkChambreReserve(
             int idChambre,
             Date dateDebut,
-            Date datefin
+            Date dateFin
         ) throws SQLException {
             try {
                 // modif ps avec info reservation
                 stmtCheckChambreReserve.setInt(1, idChambre);
-                stmtCheckChambreReserve.setDate(2, dateDebut);
-                stmtCheckChambreReserve.setDate(3, datefin);
+                stmtCheckChambreReserve.setDate(2, dateFin);
+                stmtCheckChambreReserve.setDate(3, dateDebut);
 
                 // Verif si chambre est reservee
                 ResultSet rs = stmtCheckChambreReserve.executeQuery();

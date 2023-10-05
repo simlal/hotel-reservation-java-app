@@ -5,6 +5,7 @@ import Tables.TableChambre;
 import Tuples.TupleChambre;
 
 import java.sql.SQLException;
+import java.sql.Date;
 
 public class ManagerChambre {
     
@@ -72,6 +73,56 @@ public class ManagerChambre {
             cx.rollback();
             se.printStackTrace();
             throw new SQLException("Erreur supprimerChambre dans ManagerChambre");
+        }
+    }
+
+    /**
+     * Afficher chambres libres + prix total
+     * 
+     * @param dateDebut
+     * @param dateFin
+     * @throws SQLException
+     */
+    public void afficherChambresLibres(
+        Date dateDebut, 
+        Date dateFin
+    ) throws SQLException {
+        try {
+            if (dateFin.compareTo(dateDebut) <= 0){
+                throw new SQLException(
+                    "Impossible faire reservation avec dateDebut=" + 
+                    dateDebut.toString() + " et dateFin=" + dateFin.toString() +
+                    ": dateFin doit etre plus grand que dateDebut."
+                );
+            } else {
+                tableChambre.afficherChambresLibres(dateDebut, dateFin);
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+            throw new SQLException("Erreur afficherChambresLibres dans ManagerChambre");
+        }
+    }
+
+    /**
+     * Afficher info chambre
+     * 
+     * @param idChambre
+     * @throws SQLException
+     */
+    public void afficherChambre(
+        int idChambre
+    ) throws SQLException {
+        try {
+            if (!tableChambre.checkChambre(idChambre)) {
+                throw new SQLException(
+                    "Impossible afficher info chambre avec idChambre=" + idChambre + ": n'existe pas dans db."
+                );
+            } else {
+                tableChambre.afficherChambre(idChambre);
+            }
+        } catch (SQLException se) {
+            se.printStackTrace();
+            throw new SQLException("Erreur afficherInfoChambre dans ManagerChambre");
         }
     }
 }
