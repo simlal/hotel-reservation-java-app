@@ -11,7 +11,7 @@ import Tuples.TupleClient;
 public class ManagerClient {
     
     private Connexion cx;
-    private TableClient tableClient;
+    private final TableClient tableClient;
 
 
     public ManagerClient(TableClient tableClient) {

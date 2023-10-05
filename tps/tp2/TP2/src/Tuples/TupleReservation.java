@@ -4,32 +4,30 @@ import java.sql.Date;
 
 public class TupleReservation {
     
-    private int idReservation;
+    // private int idReservation;
     private Date dateDebut;
     private Date dateFin;
     private int idClient;
     private int idChambre;
 
     public TupleReservation(
-        int idReservation,
         Date dateDebut,
         Date dateFin,
         int idClient,
         int idChambre
     ) {
-        setIdReservation(idReservation);
         setDateDebut(dateDebut);
         setDateFin(dateFin);
         setIdClient(idClient);
         setIdChambre(idChambre);
     }
 
-    public int getIdReservation() {
-        return idReservation;
-    }
-    public void setIdReservation(int idReservation) {
-        this.idReservation = idReservation;
-    }
+    // public int getIdReservation() {
+    //     return idReservation;
+    // }
+    // public void setIdReservation(int idReservation) {
+    //     this.idReservation = idReservation;
+    // }
 
     public Date getDateDebut() {
         return dateDebut;

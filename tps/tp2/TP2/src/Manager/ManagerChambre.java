@@ -9,7 +9,7 @@ import java.sql.SQLException;
 public class ManagerChambre {
     
     private Connexion cx;
-    private TableChambre tableChambre;
+    private final TableChambre tableChambre;
     
     public ManagerChambre(TableChambre tableChambre) {
         this.cx = tableChambre.getConnexion();

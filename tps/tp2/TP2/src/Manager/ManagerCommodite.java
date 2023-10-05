@@ -9,7 +9,7 @@ import AubergeInn.Connexion;
 public class ManagerCommodite {
     
     private Connexion cx;
-    private TableCommodite tableCommodite;
+    private final TableCommodite tableCommodite;
 
     public ManagerCommodite(TableCommodite tableCommodite) {
         this.cx = tableCommodite.getConnexion();

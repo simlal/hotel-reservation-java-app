@@ -6,11 +6,13 @@ import Manager.ManagerChambre;
 import Manager.ManagerClient;
 import Manager.ManagerCommodite;
 import Manager.ManagerChambreCommodite;
+import Manager.ManagerReservation;
 
 import Tables.TableClient;
 import Tables.TableCommodite;
 import Tables.TableChambre;
 import Tables.TableChambreCommodite;
+import Tables.TableReservation;
 
 
 public class MainManager {
@@ -19,11 +21,13 @@ public class MainManager {
     private final TableChambre tableChambre;
     private final TableCommodite tableCommodite;
     private final TableChambreCommodite tableChambreCommodite;
+    private final TableReservation tableReservation;
 
     private final ManagerClient managerClient;
     private final ManagerChambre managerChambre;
     private final ManagerCommodite managerCommodite;
     private final ManagerChambreCommodite managerChambreCommodite;
+    private final ManagerReservation managerReservation;
 
     public MainManager(Connexion cx) throws Exception {
         try {
@@ -32,6 +36,7 @@ public class MainManager {
             this.tableChambre = new TableChambre(cx);
             this.tableCommodite = new TableCommodite(cx);
             this.tableChambreCommodite = new TableChambreCommodite(cx);
+            this.tableReservation = new TableReservation(cx);
 
             // Regroupement package Manager
             this.managerClient = new ManagerClient(tableClient);
@@ -41,6 +46,11 @@ public class MainManager {
                 tableChambre, 
                 tableCommodite, 
                 tableChambreCommodite
+            );
+            this.managerReservation = new ManagerReservation(
+                tableClient, 
+                tableChambre, 
+                tableReservation
             );
         } catch (SQLException se) {
             System.out.println(se.getMessage());
@@ -61,6 +71,9 @@ public class MainManager {
     public TableChambreCommodite getTableChambreCommodite() {
         return tableChambreCommodite;
     }
+    public TableReservation getTableReservation() {
+        return tableReservation;
+    }
 
 
     // Getters pour Manager
@@ -75,6 +88,9 @@ public class MainManager {
     }
     public ManagerChambreCommodite getManagerChambreCommodite() {
         return managerChambreCommodite;
+    }
+    public ManagerReservation getManagerReservation() {
+        return managerReservation;
     }
     
 }

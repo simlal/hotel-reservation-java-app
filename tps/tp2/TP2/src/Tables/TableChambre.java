@@ -35,7 +35,7 @@ public class TableChambre {
     }
 
     /**
-     * Verification si chambre existe (true si existe, false sinon)
+     * Verification si quitchambre existe (true si existe, false sinon)
      * 
      * @param idChambre
      * @return chambreExiste
@@ -61,7 +61,7 @@ public class TableChambre {
      * @return nbChambreAj
      * @throws SQLException
      */
-    public int ajouterChambre(TupleChambre chambre) throws SQLException{
+    public int ajouterChambre(TupleChambre chambre) throws SQLException {
         try {
             // Modif ps avec info chambre
             stmtAjouterChambre.setInt(1, chambre.getIdChambre());

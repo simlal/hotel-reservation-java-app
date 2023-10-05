@@ -7,7 +7,7 @@ import Tuples.TupleChambre;
 import Tuples.TupleChambreCommodite;
 import Tuples.TupleClient;
 import Tuples.TupleCommodite;
-
+import Tuples.TupleReservation;
 
 import java.io.*;
 import java.util.StringTokenizer;
@@ -181,6 +181,19 @@ public class AubergeInn
                     TupleChambreCommodite chambreCommodite = new TupleChambreCommodite(idChambre, idCommodite);
                     manager.getManagerChambreCommodite().enleverChambreCommodite(chambreCommodite);
                 }
+
+                else if (command.equals("reserver")) {
+                    // Lecture token information reservation
+                    int idClient = readInt(tokenizer);
+                    int idChambre = readInt(tokenizer);
+                    Date dateDebut = readDate(tokenizer);
+                    Date dateFin = readDate(tokenizer);
+
+                    // Reservation d'une chambre
+                    TupleReservation reservation = new TupleReservation(dateDebut, dateFin, idClient, idChambre);
+                    manager.getManagerReservation().faireReservation(reservation);
+                }
+
                 // Pas besoin de traiter quitter
                 else
                 {
