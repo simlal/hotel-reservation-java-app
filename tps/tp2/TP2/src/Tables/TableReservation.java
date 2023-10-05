@@ -13,11 +13,10 @@ public class TableReservation {
     private Connexion cx;
     
     private final static String sqlCheckChambreReserve = 
-    "select * from Reservation where idChambre = ? and dateDebut < ? and dateFin > ?" +
-    "values(?,?,?,?)";
+    "select * from Reservation where idChambre = ? and dateDebut < ? and dateFin > ?";
     private final static String sqlFaireReservation = 
-    "insert into Reservation (idReservation, dateDebut, dateFin, idClient, idChambre) "+
-    "values (?,?,?,?,?)";
+    "insert into Reservation (dateDebut, dateFin, idClient, idChambre) "+
+    "values (?,?,?,?)";
     
     private final PreparedStatement stmtCheckChambreReserve;
     private final PreparedStatement stmtFaireReservation;
@@ -38,11 +37,9 @@ public class TableReservation {
     }
 
     /**
-     * Verif si chambre est reservee
-     * 
      * @param idChambre
      * @param dateDebut
-     * @param dateFin
+     * @param datefin
      * @return chambreReservee
      * @throws SQLException
      */
@@ -70,10 +67,7 @@ public class TableReservation {
     /**
      * Operation faire reservation dans une chambre
      * 
-     * @param dateDebut
-     * @param dateFin
-     * @param idClient
-     * @param idChambre
+     * @param reservation
      * @throws Exception
      */
     public int reserver(

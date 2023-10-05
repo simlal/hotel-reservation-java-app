@@ -17,11 +17,13 @@ CREATE TABLE Chambre(
 
 -- Table Reservation
 CREATE TABLE Reservation(
-    idReservation int PRIMARY KEY,
     dateDebut date NOT NULL,
     dateFin date NOT NULL,
-    idClient int REFERENCES Client(idClient),
-    idChambre int REFERENCES Chambre(idChambre)
+    idClient int,
+    idChambre int,
+    PRIMARY KEY (idClient, idChambre),
+    FOREIGN KEY (idClient) REFERENCES Client(idClient),
+    FOREIGN KEY (idChambre) REFERENCES Chambre(idChambre)
 );
 
 -- Table Commodite

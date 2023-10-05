@@ -47,8 +47,8 @@ public class ManagerReservation {
                     );
                 } else {
                     // Reservation de chambre si libre
-                    if (tableReservation.checkChambreReserve(
-                        reservation.getIdReservation(),
+                    if (!tableReservation.checkChambreReserve(
+                        reservation.getIdChambre(),
                         reservation.getDateDebut(),
                         reservation.getDateFin()
                     )) {

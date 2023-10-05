@@ -10,8 +10,11 @@ import java.sql.ResultSet;
 // Interactions avec table Chambre
 public class TableChambre {
     private static final String sqlCheckChambre = "select * from Chambre where idChambre = ?";
-    private static final String sqlAjouterChambre = "insert into Chambre (idChambre, nom, typeLit, prixBase) values(?,?,?,?)";
-    private static final String sqlSupprimerChambre = "delete from Chambre where idChambre = ?";    
+    private static final String sqlAjouterChambre = 
+    "insert into Chambre (idChambre, nom, typeLit, prixBase) values(?,?,?,?)";
+    private static final String sqlSupprimerChambre = "delete from Chambre where idChambre = ?";
+    // private static final String sqlCheckChambreSansRes = 
+    // "select * from Chambre join on reservation";    
     
     private Connexion cx;
     private final PreparedStatement stmtCheckChambre;
@@ -52,6 +55,10 @@ public class TableChambre {
             se.printStackTrace();
             throw new SQLException("Erreur checkChambre dans TableChambre");
         }
+    }
+
+    public void checkChambreSansReservation(int idChambre) throws SQLException {
+
     }
 
     /**
