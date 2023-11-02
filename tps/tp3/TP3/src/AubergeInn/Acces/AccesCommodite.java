@@ -1,10 +1,11 @@
 package Acces;
 
-import AubergeInn.Connexion;
 import Tuples.TupleChambre;
 import Tuples.TupleCommodite;
 
 import javax.persistence.TypedQuery;
+
+import AubergeInn.Connexion;
 
 public class AccesCommodite {
     

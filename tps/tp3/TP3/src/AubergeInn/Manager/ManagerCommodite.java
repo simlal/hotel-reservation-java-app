@@ -5,9 +5,9 @@ import java.util.List;
 import Tuples.TupleChambre;
 import Tuples.TupleCommodite;
 import Acces.AccesCommodite;
-import Acces.AccesChambre;
 import AubergeInn.Connexion;
 import AubergeInn.IFT287Exception;
+import Acces.AccesChambre;
 
 public class ManagerCommodite {
     
