@@ -8,7 +8,7 @@ Find the sub-projects inside `hotel-res-app/` with the name according to the db 
 
 Libs aren't provided so you would need to fetch the proper  JDBC driver (4.2), postgresql(11.2) and objectdb (2.8.8) .jar files. For MongoDB, see the pom.xml file.
 
-### Overview
+## Overview
 
 You can either work in a local server/db or a remote. See each `Connexion.java` for details on how to connect.
 
