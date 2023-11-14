@@ -44,7 +44,7 @@ public class Connexion
         }
         else if (serveur.equals("dinf"))
         {
-        	client = MongoClients.create("mongodb://"+user+":"+pass+"@bd-info2.dinf.usherbrooke.ca:27017/"+bd+"?ssl=true");
+        	client = MongoClients.create("mongodb://"+user+":"+pass+"@bd-info2.dinf.usherbrooke.ca:27017/"+bd+"?ssl=false");
         }
         else
         {

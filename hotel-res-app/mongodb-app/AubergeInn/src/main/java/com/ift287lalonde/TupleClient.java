@@ -2,34 +2,39 @@ package com.ift287lalonde;
 
 import java.util.List;
 import java.util.ArrayList;
+import org.bson.Document;
 
-import javax.persistence.*;
-
-@Entity
 public class TupleClient {
-    @Id
-    @GeneratedValue
-    private long id;
 
+    private int idClient;
     private String prenom;
     private String nom;
     private int age;
+    private List<Integer> reservationsId;
 
-    @OneToMany(mappedBy = "client")
-    private List<TupleReservation> reservations;
-
-    public TupleClient(String prenom, String nom, int age) {
+    public TupleClient(Document doc) {
+        setId(doc.getInteger("idClient"));
+        setPrenom(doc.getString("prenom"));
+        setNom(doc.getString("nom"));
+        reservationsId = doc.getList("reservationsId", Integer.class);
+    }
+    
+    public TupleClient(int idClient, String prenom, String nom, int age) {
+        setId(idClient);
         setPrenom(prenom);
         setNom(nom);
         setAge(age);
 
         // Reservations assoc a client
-        reservations = new ArrayList<TupleReservation>();
+        reservationsId = new ArrayList<Integer>();
     }
 
     // getters setters pour client
-    public long getId() {
-        return id;
+    public int getId() {
+        return idClient;
+    }
+    public void setId(int idClient) {
+        this.idClient = idClient;
     }
 
     public String getPrenom() {
@@ -57,16 +62,27 @@ public class TupleClient {
     }
 
     // Lien a une ou plusieurs reservations
-    public List<TupleReservation> getReservations() {
-        return reservations;
+    public List<Integer> getReservationsId() {
+        return reservationsId;
     }
 
-    public void ajouterReservation(TupleReservation reservation) {
-        reservations.add(reservation);
+    public void ajouterReservation(int idReservation) {
+        reservationsId.add(idReservation);
     }
 
-    public void supprimerReservation(TupleReservation reservation) {
-        reservations.remove(reservation);
+    public void supprimerReservation(int idReservation) {
+        reservationsId.remove(idReservation);
+    }
+
+    // creer document pour operation db
+    public Document toDocument() {
+        Document doc = new Document();
+        doc.append("idClient", idClient)
+            .append("prenom", prenom)
+            .append("nom", nom)
+            .append("age", age)
+            .append("reservationsId", reservationsId);
+        return doc;
     }
 
 }

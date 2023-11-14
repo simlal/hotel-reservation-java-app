@@ -1,48 +1,51 @@
 package com.ift287lalonde;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import org.bson.Document;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-
-@Entity
 public class TupleChambre {
-    
-    @Id
-    @GeneratedValue
-    private long id;
-
+    private int idChambre;
     private String nom;
     private String typeLit;
     private int prixBase;
 
-    @OneToMany(mappedBy = "chambre")
-    private List<TupleReservation> reservations;
+    private List<Integer> reservationsId;
+    private List<Integer> commoditesId;
 
-    @ManyToMany
-    private List<TupleCommodite> commodites;
+    public TupleChambre (Document doc) {
+        // Chambre attrs
+        setId(doc.getInteger("idChambre"));
+        setNom(doc.getString("nom"));
+        setTypeLit(doc.getString("typeLit"));
+        setPrixBase(doc.getInteger("prixBase"));
 
-    public TupleChambre  (
+        // Relations reservation et commodites
+        reservationsId = doc.getList("reservationsId", Integer.class);
+        commoditesId = doc.getList("commoditesId", Integer.class);
+    }
+    public TupleChambre (
+        int idChambre,
         String nom,
         String typeLit,
         int prixBase
     ) {
         // Chambre attrs
+        setId(idChambre);
         setNom(nom);
         setTypeLit(typeLit);
         setPrixBase(prixBase);
 
         // Relations reservation et commodites
-        this.reservations = new ArrayList<>();
-        this.commodites = new ArrayList<>();
+        this.reservationsId = new ArrayList<>();
+        this.commoditesId = new ArrayList<>();
     }
 
-    public long getId() {
-        return id;
+    public int getId() {
+        return idChambre;
+    }
+    public void setId(int idChambre) {
+        this.idChambre = idChambre;
     }
 
     public String getNom() {
@@ -70,25 +73,35 @@ public class TupleChambre {
     }
 
     // getters et setters pour relations reservation et commodites
-    public List<TupleReservation> getReservations() {
-        return reservations;
+    public List<Integer> getReservations() {
+        return reservationsId;
     }
-    public void ajouterReservation(TupleReservation reservation) {
-        reservations.add(reservation);
+    public void ajouterReservation(int idReservation) {
+        reservationsId.add(idReservation);
     }
-    public void supprimerReservation(TupleReservation reservation) {
-        reservations.remove(reservation);
+    public void supprimerReservation(int idReservation) {
+        reservationsId.remove(idReservation);
     }
 
+    public List<Integer> getCommodites() {
+        return commoditesId;
+    }
+    public void ajouterCommodite(int idCommodite) {
+        commoditesId.add(idCommodite);
+    }
+    public void supprimerCommodite(int idCommodite) {
+        commoditesId.remove(idCommodite);
+    }
 
-    public List<TupleCommodite> getCommodites() {
-        return commodites;
+    // Conversion en document mongodb
+    public Document toDocument() {
+        Document doc = new Document();
+        doc.append("idChambre", idChambre)
+            .append("nom", nom)
+            .append("typeLit", typeLit)
+            .append("prixBase", prixBase)
+            .append("reservationsId", reservationsId)
+            .append("commoditesId", commoditesId);
+        return doc;
     }
-    public void ajouterCommodite(TupleCommodite commodite) {
-        commodites.add(commodite);
-    }
-    public void supprimerCommodite(TupleCommodite commodite) {
-        commodites.remove(commodite);
-    }
-    
 }

@@ -1,31 +1,34 @@
 package com.ift287lalonde;
 
-import javax.persistence.TypedQuery;
 
 // import com.ift287lalonde.Connexion;
 
 import java.util.Date;
+
+import javax.print.Doc;
+
+import org.bson.Document;
+
+import com.mongodb.client.MongoCollection;
 
 // import com.ift287lalonde.TupleReservation;
 
 public class AccesReservation {
     
     private Connexion cx;
-
-    private final static String queryCheckReservation = 
-        "select reservation from TupleReservation reservation where reservation.id = :idReservation";
-    private final static String queryCheckChambreReserve = 
-        "select reservation from TupleReservation reservation where chambre.id = :idChambre " + 
-        "and reservation.dateDebut < :dateFin and reservation.dateFin > :dateDebut";
+    private MongoCollection<Document> reservationsCollection;
+    // private final static String queryCheckReservation = 
+    //     "select reservation from TupleReservation reservation where reservation.id = :idReservation";
+    // private final static String queryCheckChambreReserve = 
+    //     "select reservation from TupleReservation reservation where chambre.id = :idChambre " + 
+    //     "and reservation.dateDebut < :dateFin and reservation.dateFin > :dateDebut";
     
-    private TypedQuery<TupleReservation> stmtCheckReservation;
-    private TypedQuery<TupleReservation> stmtCheckChambreReserve;
+    // private TypedQuery<TupleReservation> stmtCheckReservation;
+    // private TypedQuery<TupleReservation> stmtCheckChambreReserve;
 
     public AccesReservation(Connexion cx) {
         this.cx = cx;
-
-        this.stmtCheckReservation = cx.getConnection().createQuery(queryCheckReservation, TupleReservation.class);
-        this.stmtCheckChambreReserve = cx.getConnection().createQuery(queryCheckChambreReserve, TupleReservation.class);
+        this.reservationsCollection = cx.getDatabase().getCollection("reservations");
     }
     
     /**
@@ -35,6 +38,14 @@ public class AccesReservation {
      */
     public Connexion getConnexion() {
         return cx;
+    }
+    /**
+     * Cherche la collection associee
+     * 
+     * @return MongoCollection<Document>
+     */
+    public MongoCollection<Document> getReservationsCollection() {
+        return reservationsCollection;
     }
 
     /**

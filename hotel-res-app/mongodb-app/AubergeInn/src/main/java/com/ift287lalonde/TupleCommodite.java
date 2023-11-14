@@ -2,37 +2,39 @@ package com.ift287lalonde;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.Document;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.GeneratedValue;
-
-@Entity
 public class TupleCommodite {
-    
-    @Id
-    @GeneratedValue
-    private long id;
-
+    private int idCommodite;
     private String description;
     private int surplusPrix;
 
-    @ManyToMany(mappedBy = "commodites")
-    private List<TupleChambre> chambres;
+    private List<Integer> chambresId;
+
+    public TupleCommodite(Document d) {
+        setId(d.getInteger("idCommodite"));
+        setDescription(d.getString("description"));
+        setSurplusPrix(d.getInteger("surplusPrix"));
+        chambresId = d.getList("chambresId", Integer.class);
+    }
 
     public TupleCommodite(
+        int idCommodite,
         String description,
         int surplusPrix
     ) {
+        setId(idCommodite);
         setDescription(description);
         setSurplusPrix(surplusPrix);
-        this.chambres = new ArrayList<>();
+        this.chambresId = new ArrayList<Integer>();
     }
 
     // Getters et setters attr commodite base
-    public long getId() {
-        return id;
+    public int getId() {
+        return idCommodite;
+    }
+    public void setId(int idCommodite) {
+        this.idCommodite = idCommodite;
     }
 
     public String getDescription() {
@@ -53,16 +55,26 @@ public class TupleCommodite {
     }
 
     // Relation avec chambres
-    public List<TupleChambre> getChambres() {
-        return chambres;
+    public List<Integer> getChambres() {
+        return chambresId;
     }
 
-    public void inclureCommoditeChambre(TupleChambre chambre) {
-        chambres.add(chambre);
+    public void inclureCommoditeChambre(int idChambre) {
+        chambresId.add(idChambre);
     }
 
-    public void enleverCommoditeChambre(TupleChambre chambre) {
-        chambres.remove(chambre);
+    public void enleverCommoditeChambre(int idChambre) {
+        chambresId.remove(idChambre);
+    }
+
+    // Conversion pour document nongodb
+    public Document toDocument() {
+        Document doc = new Document();
+        doc.append("idCommodite", idCommodite)
+            .append("description", description)
+            .append("surplusPrix", surplusPrix)
+            .append("chambresId", chambresId);
+        return doc;
     }
 
 }

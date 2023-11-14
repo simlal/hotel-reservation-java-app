@@ -1,46 +1,47 @@
 package com.ift287lalonde;
 
 import java.util.Date;
+import org.bson.Document;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-
-@Entity
 public class TupleReservation {
     
-    @Id
-    @GeneratedValue
-    private long id;
-
     // Attributs reservation
+    private int idReservation;
     private Date dateDebut;
     private Date dateFin;
 
     // relations reservation avec client et chambre
-    @ManyToOne
-    private TupleClient client;
+    private int idClient;
+    private int idChambre;
 
-    @ManyToOne
-    private TupleChambre chambre;
-
+    public TupleReservation(Document doc) {
+        setId(doc.getInteger("idReservation"));
+        setClient(doc.getInteger("idClient"));
+        setChambre(doc.getInteger("idChambre"));
+        setDateDebut(doc.getDate("dateDebut"));
+        setDateFin(doc.getDate("dateFin"));
+    }
 
     public TupleReservation(
-        TupleClient client,
-        TupleChambre chambre,
+        int idReservation,
+        int idClient,
+        int idChambre,
         Date dateDebut,
         Date dateFin
     ) {
-        setClient(client);
-        setChambre(chambre);
+        setId(idReservation);
+        setClient(idClient);
+        setChambre(idChambre);
         setDateDebut(dateDebut);
         setDateFin(dateFin);
     }
 
     // Getter et setters pour reservation
-    public long getId() {
-        return id;
+    public int getId() {
+        return idReservation;
+    }
+    public void setId(int idReservation) {
+        this.idReservation = idReservation;
     }
     
     public Date getDateDebut() {
@@ -58,18 +59,29 @@ public class TupleReservation {
     }
 
     // Liens avec un client et une chambre
-    public TupleClient getClient() {
-        return client;
+    public int getClient() {
+        return idClient;
     }
 
-    public void setClient(TupleClient client) {
-        this.client = client;
+    public void setClient(int idClient) {
+        this.idClient = idClient;
     }
     
-    public TupleChambre getChambre() {
-        return chambre;
+    public int getChambre() {
+        return idChambre;
     }
-    public void setChambre(TupleChambre chambre) {
-        this.chambre = chambre;
+    public void setChambre(int idChambre) {
+        this.idChambre = idChambre;
+    }
+
+    // Conversion pour document mongodb
+    public Document toDocument() {
+        Document doc = new Document();
+        doc.append("idReservation", idReservation)
+            .append("idClient", idClient)
+            .append("idChambre", idChambre)
+            .append("dateDebut", dateDebut)
+            .append("dateFin", dateFin);
+        return doc;
     }
 }

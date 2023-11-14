@@ -85,4 +85,10 @@ public class MainManager {
     public ManagerReservation getManagerReservation() {
         return managerReservation;
     }
+
+    public void fermer()
+    {
+        // fermeture de la connexion
+        cx.fermer();
+    }
 }

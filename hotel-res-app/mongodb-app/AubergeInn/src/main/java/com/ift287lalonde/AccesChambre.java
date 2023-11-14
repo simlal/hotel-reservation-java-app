@@ -3,34 +3,28 @@ package com.ift287lalonde;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.TypedQuery;
 
-// // import com.ift287lalonde.Connexion;
-// import com.ift287lalonde.TupleChambre;
-// import com.ift287lalonde.TupleCommodite;
-// import com.ift287lalonde.TupleReservation;
+import org.bson.Document;
+
+import com.mongodb.client.MongoCollection;
 
 public class AccesChambre {
 
     private Connexion cx;
+    private MongoCollection<Document> chambresCollection;
+    // private static final String queryCheckChambre = "select chambre from TupleChambre chambre where chambre.id = :idChambre";
+    // private static final String queryCheckChambreReservationEnCours = "select reservation from TupleReservation reservation where chambre.id = :idChambre "
+    //         +
+    //         "and reservation.dateDebut < :maintenant and reservation.dateFin > :maintenant";
+    // private static final String queryCheckChambreReservationFuture = "select reservation from TupleReservation reservation where chambre.id = :idChambre "
+    //         +
+    //         "and reservation.dateDebut > :maintenant";
+    // private static final String queryAfficherChambres = "select chambre from TupleChambre chambre";
 
-    private static final String queryCheckChambre = "select chambre from TupleChambre chambre where chambre.id = :idChambre";
-    private static final String queryCheckChambreReservationEnCours = "select reservation from TupleReservation reservation where chambre.id = :idChambre "
-            +
-            "and reservation.dateDebut < :maintenant and reservation.dateFin > :maintenant";
-    private static final String queryCheckChambreReservationFuture = "select reservation from TupleReservation reservation where chambre.id = :idChambre "
-            +
-            "and reservation.dateDebut > :maintenant";
-    private static final String queryAfficherChambres = "select chambre from TupleChambre chambre";
-
-    private TypedQuery<TupleChambre> stmtCheckChambre;
-    private TypedQuery<TupleReservation> stmtCheckChambreReservationEnCours;
-    private TypedQuery<TupleReservation> stmtCheckChambreReservationFuture;
-    private TypedQuery<TupleChambre> stmtAfficherChambres;
 
     public AccesChambre(Connexion cx) {
         this.cx = cx;
-
+        this.chambresCollection = cx.getDatabase().getCollection("chambres");
         this.stmtCheckChambre = cx.getConnection().createQuery(queryCheckChambre, TupleChambre.class);
         this.stmtCheckChambreReservationEnCours = cx.getConnection().createQuery(queryCheckChambreReservationEnCours,
                 TupleReservation.class);
@@ -39,8 +33,21 @@ public class AccesChambre {
         this.stmtAfficherChambres = cx.getConnection().createQuery(queryAfficherChambres, TupleChambre.class);
     }
 
+    /**
+     * Chercher la connexion mongodb
+     * 
+     * @return
+     */
     public Connexion getConnexion() {
         return cx;
+    }
+    /**
+     * Chercher la collection
+     * 
+     * @return chambresCollection
+     */
+    public MongoCollection<Document> getChambresCollection() {
+        return chambresCollection;
     }
 
     /**
