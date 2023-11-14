@@ -1,4 +1,4 @@
-package Tuples;
+package com.ift287lalonde;
 
 import java.util.ArrayList;
 import java.util.List;
