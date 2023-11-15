@@ -2,7 +2,6 @@ package com.ift287lalonde;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 
 import org.bson.Document;
@@ -19,7 +18,6 @@ import static com.mongodb.client.model.Sorts.ascending;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 
-// import com.ift287lalonde.TupleReservation;
 
 public class AccesReservation {
     
@@ -89,6 +87,7 @@ public class AccesReservation {
         // Chercher les reservations d'un client
         MongoCursor<Document> reservationsCursor = reservationsCollection
             .find(eq("idClient", idClient))
+            .sort(ascending("dateDebut"))
             .iterator();
         
         // Creer la liste
@@ -152,7 +151,7 @@ public class AccesReservation {
     //     }
     //     return chambreReservee;
     // }
-    public boolean checkChambreReserveSpecif(int idChambre, Date dateDebut, Date dateFin) {
+    public boolean checkChambreLibre(int idChambre, Date dateDebut, Date dateFin) {
         // Requete pour chambre et periode specif
         Bson query = and(
             eq("idChambre", idChambre),
@@ -161,11 +160,11 @@ public class AccesReservation {
         );
 
         // Verif si reservation existe pour requete
-        boolean chambreReservee = false;
+        boolean chambreLibre = true;
         if (reservationsCollection.find(query).first() != null) {
-            chambreReservee = true;
+            chambreLibre = false;
         }
-        return chambreReservee;
+        return chambreLibre;
     }
 
     /**
@@ -255,12 +254,6 @@ public class AccesReservation {
         }
         return chambreReservee;
 }
-
-    /**
-     * Lister chambres libres pour une periode specifiee
-     * 
-     * @param reservation
-     */
 
     /**
      * Ajoute une reservation dans la db
