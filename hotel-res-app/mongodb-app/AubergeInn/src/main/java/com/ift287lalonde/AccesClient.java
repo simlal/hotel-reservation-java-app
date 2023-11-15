@@ -107,22 +107,27 @@ public class AccesClient {
             throw new IllegalArgumentException("Client inexistant :" + client.getId());
         }
 
-        // Verif si client a reservation dans db
+        // Chercher les reservations du client
         boolean clientAvecReservation = false;
         MongoCollection<Document> reservationsCollection = new AccesReservation(getConnexion()).getReservationsCollection();
         MongoCursor<Document> reservationsCursor = reservationsCollection.find(eq("idClient", client.getId())).iterator();
-        Date maintenant = new Date();
+        List<TupleReservation> reservations = new ArrayList<>();
         try {
             while (reservationsCursor.hasNext()) {
                 Document reservationDoc = reservationsCursor.next();
                 TupleReservation reservation = new TupleReservation(reservationDoc);
-                if (reservation.getDateDebut().before(maintenant) && reservation.getDateFin().after(maintenant)) {
-                    clientAvecReservation = true;
-                    break;
-                }
+                reservations.add(reservation);
             }
         } finally {
             reservationsCursor.close();
+        }
+        // Verifie si la reservation est en cours
+        Date maintenant = new Date();
+        for (TupleReservation reservation : reservations) {
+            if (reservation.getDateDebut().before(maintenant) && reservation.getDateFin().after(maintenant)) {
+                clientAvecReservation = true;
+                break;
+            }
         }
         return clientAvecReservation;
     
@@ -141,8 +146,13 @@ public class AccesClient {
                 "\n\tNom: " + client.getNom() +
                 "\n\tAge: " + client.getAge();
 
-        // Chercher les reservations d'un client
+        //TODO VALIDATE BETTER WAY
+        // Creer instances de chacunes des collections 
         MongoCollection<Document> reservationsCollection = new AccesReservation(getConnexion()).getReservationsCollection();
+        MongoCollection<Document> chambresCollection = new AccesChambre(getConnexion()).getChambresCollection();
+        MongoCollection<Document> commoditesCollection = new AccesCommodite(getConnexion()).getCommoditesCollection();
+
+        // Chercher les reservations d'un client
         MongoCursor<Document> reservationsCursor = reservationsCollection.find(eq("idClient", client.getId()))
             .sort(ascending("dateDebut"))
             .iterator();
@@ -156,7 +166,6 @@ public class AccesClient {
         } finally {
             reservationsCursor.close();
         }
-
         String infoReservations = "\nReservations associees: ";
         if (reservations.isEmpty() || reservations.size() == 0) {
             infoReservations = "\nAucune reservation pour ce client";
@@ -165,10 +174,15 @@ public class AccesClient {
         // Chercher les informations de chaque chambre
         for (TupleReservation reservation : reservations) {
             // info chambre par reserv
-            MongoCollection<Document> chambresCollection = new AccesChambre(getConnexion()).getChambresCollection();
-            // TODO DO THE CHAMBRES AND COMMODITES ACCES FIRST
-            MongoCursor<Document> chambresCursor = chambresCollection.find(eq("idReservation", reservation.getId())).iterator();
-            List<TupleChambre> chambres = new ArrayList<>()
+            MongoCursor<Document> chambresCursor = chambresCollection.find(eq("idReservation", reservation.getId()));
+            
+            // try {
+                // while (chambresCursor.hasNext()) {
+                    // Document chambreDoc = chambresCursor.next();
+                    // TupleChambre chambre = new TupleChambre(chambreDoc);
+                    // chambres.add(chambre)
+                // }
+            }
         }
     }
 

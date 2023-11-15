@@ -5,32 +5,19 @@ import java.util.Date;
 import java.util.List;
 
 import org.bson.Document;
-
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Sorts.ascending;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 
 public class AccesChambre {
 
     private Connexion cx;
     private MongoCollection<Document> chambresCollection;
-    // private static final String queryCheckChambre = "select chambre from TupleChambre chambre where chambre.id = :idChambre";
-    // private static final String queryCheckChambreReservationEnCours = "select reservation from TupleReservation reservation where chambre.id = :idChambre "
-    //         +
-    //         "and reservation.dateDebut < :maintenant and reservation.dateFin > :maintenant";
-    // private static final String queryCheckChambreReservationFuture = "select reservation from TupleReservation reservation where chambre.id = :idChambre "
-    //         +
-    //         "and reservation.dateDebut > :maintenant";
-    // private static final String queryAfficherChambres = "select chambre from TupleChambre chambre";
-
 
     public AccesChambre(Connexion cx) {
         this.cx = cx;
         this.chambresCollection = cx.getDatabase().getCollection("chambres");
-        this.stmtCheckChambre = cx.getConnection().createQuery(queryCheckChambre, TupleChambre.class);
-        this.stmtCheckChambreReservationEnCours = cx.getConnection().createQuery(queryCheckChambreReservationEnCours,
-                TupleReservation.class);
-        this.stmtCheckChambreReservationFuture = cx.getConnection().createQuery(queryCheckChambreReservationFuture,
-                TupleReservation.class);
-        this.stmtAfficherChambres = cx.getConnection().createQuery(queryAfficherChambres, TupleChambre.class);
     }
 
     /**
@@ -58,8 +45,11 @@ public class AccesChambre {
      * @return true si la chambre existe, false sinon
      */
     public boolean chambreExiste(int idChambre) {
-        stmtCheckChambre.setParameter("idChambre", idChambre);
-        return !stmtCheckChambre.getResultList().isEmpty();
+        boolean chambreExiste = false;
+        if (chambresCollection.find(eq("idChambre", idChambre)).first() != null) {
+            chambreExiste = true;
+        }
+        return chambreExiste;
     }
 
     /**
@@ -70,8 +60,9 @@ public class AccesChambre {
      */
     public TupleChambre getChambre(int idChambre) {
         if (chambreExiste(idChambre)) {
-            stmtCheckChambre.setParameter("idChambre", idChambre);
-            return stmtCheckChambre.getSingleResult();
+            Document chambreDoc = chambresCollection.find(eq("idChambre", idChambre).first());
+            TupleChambre chambre = new TupleChambre(chambreDoc);
+            return chambre;
         } else {
             return null;
         }
@@ -83,36 +74,61 @@ public class AccesChambre {
      * @param chambre
      */
     public void ajouterChambre(TupleChambre chambre) {
-        cx.getConnection().persist(chambre);
+        chambresCollection.insertOne(chambre.toDocument());
     }
 
     /**
      * Supprime une chambre de la base de donnees.
      * 
      * @param idChambre
+     * @return true si chambre supprimer
      */
-    public void supprimerChambre(int idChambre) {
-        TupleChambre chambre = getChambre(idChambre);
-
-        if (chambre == null) {
-            throw new IllegalArgumentException("Chambre inexistante: " + idChambre);
+    public boolean supprimerChambre(TupleChambre chambre) {
+        if (!chambreExiste(chambre.getId())) {
+            throw new IllegalArgumentException("Chambre inexistante: " + chambre.getId());
         }
-        cx.getConnection().remove(chambre);
+        boolean chambreSupprime = chambresCollection.deleteOne(eq("idChambre", chambre.getId())).getDeletedCount() > 0;
+        return chambreSupprime;
     }
 
     /**
      * Verifie si une chambre a une reservation en cours
      * 
-     * @param idChambre l'identifiant de la chambre à verifier
+     * @param chambre la chambre à verifier
      * @return true si la chambre a une reservation en cours, false sinon
      */
-    public boolean checkChambreReservationEnCours(int idChambre) {
+    public boolean checkChambreReservationEnCours(TupleChambre chambre) {
+        // Chercher la collection reservation
+        boolean chambreReservee = false;
+        MongoCollection<Document> reservationsCollection = new AccesReservation(getConnexion()).getReservationsCollection();
+        MongoCursor<Document> reservationsCursor = reservationsCollection.find(eq("idChambre", chambre.getId()))
+            .sort(ascending("dateDebut"))
+            .iterator();
+        // Chambre jamais reservee
+        if (!reservationsCursor.hasNext()) {
+            return chambreReservee;
+        }
+        // Chercher reservations associe a chambre
+        List<TupleReservation> reservations = new ArrayList<>();
+        try {
+            while (reservationsCursor.hasNext()) {
+                Document reservationDoc = reservationsCursor.next();
+                TupleReservation reservation = new TupleReservation(reservationDoc);
+                reservations.add(reservation);
+            }
+        } finally {
+            reservationsCursor.close();
+        }
+        // Verifier si reservation est en cours
+        // Verifie si la reservation est en cours
         Date maintenant = new Date();
-        stmtCheckChambreReservationEnCours.setParameter("idChambre", idChambre);
-        stmtCheckChambreReservationEnCours.setParameter("maintenant", maintenant);
-
-        List<TupleReservation> reservations = stmtCheckChambreReservationEnCours.getResultList();
-        return !reservations.isEmpty();
+        for (TupleReservation reservation : reservations) {
+            if (reservation.getDateDebut().before(maintenant) && reservation.getDateFin().after(maintenant)) {
+                chambreReservee = true;
+                break;
+            }
+        }
+        return chambreReservee;
     }
 
     /**

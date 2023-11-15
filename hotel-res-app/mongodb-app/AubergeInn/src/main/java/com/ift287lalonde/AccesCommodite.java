@@ -1,25 +1,23 @@
 package com.ift287lalonde;
 
+import javax.print.Doc;
+
 // import com.ift287lalonde.TupleChambre;
 // import com.ift287lalonde.TupleCommodite;
 
-import javax.persistence.TypedQuery;
+import org.bson.Document;
+import com.mongodb.client.MongoCollection;
 
 // import com.ift287lalonde.Connexion;
 
 public class AccesCommodite {
     
     private Connexion cx;
-
-    private static final String queryCheckCommodite = 
-        "select commodite from TupleCommodite commodite where commodite.id = :idCommodite";
-
-    private TypedQuery<TupleCommodite> stmtCheckCommodite;
+    private MongoCollection<Document> commoditesCollection;
 
     public AccesCommodite(Connexion cx) {
         this.cx = cx;
-
-        this.stmtCheckCommodite = cx.getConnection().createQuery(queryCheckCommodite, TupleCommodite.class);
+        this.commoditesCollection = cx.getDatabase().getCollection("commodites");
     }
 
     /**
@@ -29,6 +27,15 @@ public class AccesCommodite {
      */
     public Connexion getConnexion() {
         return cx;
+    }
+
+    /**
+     * Retourne la collection
+     * 
+     * @return commoditeCollection
+     */
+    public MongoCollection<Document> getCommoditesCollection() {
+        return commoditesCollection;
     }
 
     /**
