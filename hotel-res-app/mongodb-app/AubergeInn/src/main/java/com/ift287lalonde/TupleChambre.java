@@ -21,8 +21,8 @@ public class TupleChambre {
         setPrixBase(doc.getInteger("prixBase"));
 
         // Relations reservation et commodites
-        reservationsId = doc.getList("reservationsId", Integer.class);
-        commoditesId = doc.getList("commoditesId", Integer.class);
+        this.reservationsId = doc.getList("reservationsId", Integer.class);
+        this.commoditesId = doc.getList("commoditesId", Integer.class);
     }
     public TupleChambre (
         int idChambre,
@@ -72,8 +72,8 @@ public class TupleChambre {
         this.prixBase = prixBase;
     }
 
-    // getters et setters pour relations reservation et commodites
-    public List<Integer> getReservations() {
+    // getters pour relations reservation et commodites
+    public List<Integer> getReservationsId() {
         return reservationsId;
     }
     public void ajouterReservation(int idReservation) {
@@ -83,7 +83,7 @@ public class TupleChambre {
         reservationsId.remove(idReservation);
     }
 
-    public List<Integer> getCommodites() {
+    public List<Integer> getCommoditesId() {
         return commoditesId;
     }
     public void ajouterCommodite(int idCommodite) {

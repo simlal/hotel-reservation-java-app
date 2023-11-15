@@ -1,14 +1,16 @@
 package com.ift287lalonde;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.bson.Document;
 import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Sorts.ascending;
+import static com.mongodb.client.model.Filters.in;
+import static com.mongodb.client.model.Updates.push;
+import static com.mongodb.client.model.Updates.pull;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.result.UpdateResult;
 
 public class AccesChambre {
 
@@ -59,19 +61,58 @@ public class AccesChambre {
      * @return TupleChambre
      */
     public TupleChambre getChambre(int idChambre) {
+        TupleChambre chambre = null;
         if (chambreExiste(idChambre)) {
-            Document chambreDoc = chambresCollection.find(eq("idChambre", idChambre).first());
-            TupleChambre chambre = new TupleChambre(chambreDoc);
-            return chambre;
-        } else {
-            return null;
+            Document chambreDoc = chambresCollection.find(eq("idChambre", idChambre)).first();
+            chambre = new TupleChambre(chambreDoc);
         }
+        return chambre;
+    }
+
+    /**
+     * lister toutes les chambres
+     * 
+     * @return chambres
+     */
+    public List<TupleChambre> listerChambres() {
+        List<TupleChambre> chambres = new ArrayList<>();
+        MongoCursor<Document> chambresCursor = chambresCollection.find().iterator();
+        try {
+            while (chambresCursor.hasNext()) {
+                Document chambresDoc = chambresCursor.next();
+                TupleChambre chambre = new TupleChambre(chambresDoc);
+                chambres.add(chambre);
+            }
+        } finally {
+            chambresCursor.close();
+        }
+        return chambres;
+    }
+
+     /**
+     * Chercher la chambre associee a reservation
+     * 
+     * @param idReservation
+     * @return
+     */
+    public TupleChambre getChambreReservation(int idReservation) {
+        // Faire la requete pour chambre avec reservation
+        Document chambreDoc = chambresCollection
+            .find(in("idReservation", idReservation))
+            .first();
+        // Creer instance de chambre
+        TupleChambre chambre = null;
+        if (chambreDoc != null) {
+            chambre = new TupleChambre(chambreDoc);
+        }
+        return chambre;
+        
     }
 
     /**
      * Ajoute une chambre dans la base de donnees.
      * 
-     * @param chambre
+     * @param chambre une instance de chambre
      */
     public void ajouterChambre(TupleChambre chambre) {
         chambresCollection.insertOne(chambre.toDocument());
@@ -80,178 +121,152 @@ public class AccesChambre {
     /**
      * Supprime une chambre de la base de donnees.
      * 
-     * @param idChambre
+     * @param idChambre id de la chambre
      * @return true si chambre supprimer
      */
-    public boolean supprimerChambre(TupleChambre chambre) {
-        if (!chambreExiste(chambre.getId())) {
-            throw new IllegalArgumentException("Chambre inexistante: " + chambre.getId());
-        }
-        boolean chambreSupprime = chambresCollection.deleteOne(eq("idChambre", chambre.getId())).getDeletedCount() > 0;
+    public boolean supprimerChambre(int idChambre) {
+        boolean chambreSupprime = chambresCollection
+            .deleteOne(eq("idChambre", idChambre))
+            .getDeletedCount() > 0;
         return chambreSupprime;
     }
 
     /**
-     * Verifie si une chambre a une reservation en cours
+     * Faire le lien entre la chambre et la commodite
      * 
-     * @param chambre la chambre à verifier
-     * @return true si la chambre a une reservation en cours, false sinon
+     * @param chambre
+     * @param commodite
      */
-    public boolean checkChambreReservationEnCours(TupleChambre chambre) {
-        // Chercher la collection reservation
-        boolean chambreReservee = false;
-        MongoCollection<Document> reservationsCollection = new AccesReservation(getConnexion()).getReservationsCollection();
-        MongoCursor<Document> reservationsCursor = reservationsCollection.find(eq("idChambre", chambre.getId()))
-            .sort(ascending("dateDebut"))
-            .iterator();
-        // Chambre jamais reservee
-        if (!reservationsCursor.hasNext()) {
-            return chambreReservee;
-        }
-        // Chercher reservations associe a chambre
-        List<TupleReservation> reservations = new ArrayList<>();
-        try {
-            while (reservationsCursor.hasNext()) {
-                Document reservationDoc = reservationsCursor.next();
-                TupleReservation reservation = new TupleReservation(reservationDoc);
-                reservations.add(reservation);
-            }
-        } finally {
-            reservationsCursor.close();
-        }
-        // Verifier si reservation est en cours
-        // Verifie si la reservation est en cours
-        Date maintenant = new Date();
-        for (TupleReservation reservation : reservations) {
-            if (reservation.getDateDebut().before(maintenant) && reservation.getDateFin().after(maintenant)) {
-                chambreReservee = true;
-                break;
-            }
-        }
-        return chambreReservee;
+    public boolean inclureCommodite(TupleChambre chambre, TupleCommodite commodite) {
+        UpdateResult result = chambresCollection
+            .updateOne(
+                eq("idChambre", chambre.getId()),
+                push("commoditesId", commodite.getId())
+            );
+        boolean commoditeIncluse = result.getModifiedCount() > 0;
+        return commoditeIncluse;
     }
 
     /**
-     * Verifie si une chambre a des reservations futures.
+     * Retirer le lien entre chambre et commodite
      * 
-     * @param idChambre l'identifiant de la chambre à verifier
-     * @return true si la chambre a des reservations futures, false sinon
+     * @param chambre
+     * @param commodite
      */
-    public boolean checkChambreReservationFuture(int idChambre) {
-        // maj statement avec date maintenant
-        Date maintenant = new Date();
-        stmtCheckChambreReservationFuture.setParameter("idChambre", idChambre);
-        stmtCheckChambreReservationFuture.setParameter("maintenant", maintenant);
-        List<TupleReservation> reservations = stmtCheckChambreReservationFuture.getResultList();
-        return !reservations.isEmpty();
+    public boolean enleverCommodite(TupleChambre chambre, TupleCommodite commodite) {
+        UpdateResult result = chambresCollection
+            .updateOne(
+                eq("idChambre", chambre.getId()),
+                pull("commoditesId", commodite.getId())
+            );
+        boolean commoditeRetiree = result.getModifiedCount() > 0;
+        return commoditeRetiree;
     }
 
-    /**
-     * Affiche les informations d'une chambre
-     * 
-     * @param idChambre l'identifiant de la chambre à afficher
-     * @throws IllegalArgumentException si la chambre avec id existe pas
-     */
-    public void afficherChambre(int idChambre) {
-        // Chercher la chambre + prixBase
-        TupleChambre chambre = getChambre(idChambre);
-        if (chambre == null) {
-            throw new IllegalArgumentException("Chambre inexistante: " + idChambre);
-        }
-        int prixTotal = chambre.getPrixBase();
+    // /**
+    //  * Affiche les informations d'une chambre
+    //  * 
+    //  * @param idChambre l'identifiant de la chambre à afficher
+    //  * @throws IllegalArgumentException si la chambre avec id existe pas
+    //  */
+    // public void afficherChambre(int idChambre) {
+    //     // Chercher la chambre + prixBase
+    //     TupleChambre chambre = getChambre(idChambre);
+    //     int prixTotal = chambre.getPrixBase();
 
-        // Chercher commodites associees a chambre
-        List<TupleCommodite> commodites = chambre.getCommodites();
+    //     // Chercher commodites associees a chambre
+    //     // TODO COMMODITE HERE
+    //     List<TupleCommodite> commodites = chambre.getCommodites();
 
-        // Representation en string des infos
-        String infoCommodites = "";
-        for (TupleCommodite commodite : commodites) {
-            infoCommodites += commodite.getDescription() + "=";
-            infoCommodites += commodite.getSurplusPrix() + "$" + ", ";
-            prixTotal += commodite.getSurplusPrix();
-        }
-        // Enlever derniere virgule
-        if (infoCommodites.endsWith(", ")) {
-            infoCommodites = infoCommodites.substring(0, infoCommodites.length() - 2);
-        }
-        // Pour les chambres sans commodites
-        if (infoCommodites.isEmpty()) {
-            infoCommodites = "Aucune commodite";
-        }
+    //     // Representation en string des infos
+    //     String infoCommodites = "";
+    //     for (TupleCommodite commodite : commodites) {
+    //         infoCommodites += commodite.getDescription() + "=";
+    //         infoCommodites += commodite.getSurplusPrix() + "$" + ", ";
+    //         prixTotal += commodite.getSurplusPrix();
+    //     }
+    //     // Enlever derniere virgule
+    //     if (infoCommodites.endsWith(", ")) {
+    //         infoCommodites = infoCommodites.substring(0, infoCommodites.length() - 2);
+    //     }
+    //     // Pour les chambres sans commodites
+    //     if (infoCommodites.isEmpty()) {
+    //         infoCommodites = "Aucune commodite";
+    //     }
 
-        // Afficher informations chambre
-        System.out.println(
-                "\nChambre: " + chambre.getNom() +
-                        "\n\tidChambre: " + chambre.getId() +
-                        "\n\tType de lit: " + chambre.getTypeLit() +
-                        "\n\tPrix de base: " + chambre.getPrixBase() + "$" +
-                        "\n\tCommodites: " + infoCommodites +
-                        "\n\tPrix total: " + prixTotal + "$");
-    }
+    //     // Afficher informations chambre
+    //     System.out.println(
+    //             "\nChambre: " + chambre.getNom() +
+    //                     "\n\tidChambre: " + chambre.getId() +
+    //                     "\n\tType de lit: " + chambre.getTypeLit() +
+    //                     "\n\tPrix de base: " + chambre.getPrixBase() + "$" +
+    //                     "\n\tCommodites: " + infoCommodites +
+    //                     "\n\tPrix total: " + prixTotal + "$");
+    // }
+    
+    // /**
+    //  * Affiche les chambres libres pour une periode donnee.
+    //  * 
+    //  * @param dateDebut La date de debut de la periode.
+    //  * @param dateFin   La date de fin de la periode.
+    //  */
+    // public void afficherChambresLibres(Date dateDebut, Date dateFin) {
+    //     // Chercher les chambres avec reservations
+    //     List<TupleChambre> chambres = stmtAfficherChambres.getResultList();
 
-    /**
-     * Affiche les chambres libres pour une periode donnee.
-     * 
-     * @param dateDebut La date de debut de la periode.
-     * @param dateFin   La date de fin de la periode.
-     */
-    public void afficherChambresLibres(Date dateDebut, Date dateFin) {
-        // Chercher les chambres avec reservations
-        List<TupleChambre> chambres = stmtAfficherChambres.getResultList();
+    //     // Verifier si chambres libres pour dates donnees
+    //     List<TupleChambre> chambresLibres = new ArrayList<TupleChambre>();
+    //     for (TupleChambre chambre : chambres) {
+    //         List<TupleReservation> reservations = chambre.getReservations();
+    //         boolean isFree = true;
+    //         for (TupleReservation reservation : reservations) {
+    //             if (reservation.getDateDebut().compareTo(dateFin) < 0
+    //                     && reservation.getDateFin().compareTo(dateDebut) > 0) {
+    //                 isFree = false;
+    //                 break;
+    //             }
+    //         }
+    //         if (isFree) {
+    //             chambresLibres.add(chambre);
+    //         }
+    //     }
+    //     // affichage en fonction des dates
+    //     if (chambresLibres.isEmpty()) {
+    //         System.out.println(
+    //                 "\nAucune chambre libre pour la periode:" +
+    //                         "\n\tDate debut: " + dateDebut +
+    //                         "\n\tDate fin: " + dateFin);
+    //     }
 
-        // Verifier si chambres libres pour dates donnees
-        List<TupleChambre> chambresLibres = new ArrayList<TupleChambre>();
-        for (TupleChambre chambre : chambres) {
-            List<TupleReservation> reservations = chambre.getReservations();
-            boolean isFree = true;
-            for (TupleReservation reservation : reservations) {
-                if (reservation.getDateDebut().compareTo(dateFin) < 0
-                        && reservation.getDateFin().compareTo(dateDebut) > 0) {
-                    isFree = false;
-                    break;
-                }
-            }
-            if (isFree) {
-                chambresLibres.add(chambre);
-            }
-        }
-        // affichage en fonction des dates
-        if (chambresLibres.isEmpty()) {
-            System.out.println(
-                    "\nAucune chambre libre pour la periode:" +
-                            "\n\tDate debut: " + dateDebut +
-                            "\n\tDate fin: " + dateFin);
-        }
+    //     for (TupleChambre chambre : chambresLibres) {
+    //         int prixTotal = chambre.getPrixBase();
 
-        for (TupleChambre chambre : chambresLibres) {
-            int prixTotal = chambre.getPrixBase();
+    //         // Chercher commodites associees a chambre
+    //         List<TupleCommodite> commodites = chambre.getCommodites();
 
-            // Chercher commodites associees a chambre
-            List<TupleCommodite> commodites = chambre.getCommodites();
+    //         // Representation en string des infos
+    //         String infoCommodites = "";
+    //         for (TupleCommodite commodite : commodites) {
+    //             infoCommodites += commodite.getDescription() + "=";
+    //             infoCommodites += commodite.getSurplusPrix() + "$" + ", ";
+    //             prixTotal += commodite.getSurplusPrix();
+    //         }
+    //         // Enlever derniere virgule
+    //         if (infoCommodites.endsWith(", ")) {
+    //             infoCommodites = infoCommodites.substring(0, infoCommodites.length() - 2);
+    //         }
+    //         // Pour les chambres sans commodites
+    //         if (infoCommodites.isEmpty()) {
+    //             infoCommodites = "Aucune commodite";
+    //         }
 
-            // Representation en string des infos
-            String infoCommodites = "";
-            for (TupleCommodite commodite : commodites) {
-                infoCommodites += commodite.getDescription() + "=";
-                infoCommodites += commodite.getSurplusPrix() + "$" + ", ";
-                prixTotal += commodite.getSurplusPrix();
-            }
-            // Enlever derniere virgule
-            if (infoCommodites.endsWith(", ")) {
-                infoCommodites = infoCommodites.substring(0, infoCommodites.length() - 2);
-            }
-            // Pour les chambres sans commodites
-            if (infoCommodites.isEmpty()) {
-                infoCommodites = "Aucune commodite";
-            }
-
-            // Afficher informations chambres libres
-            System.out.println(
-                    "\nChambre: " + chambre.getNom() +
-                            "\n\tidChambre: " + chambre.getId() +
-                            "\n\tType de lit: " + chambre.getTypeLit() +
-                            "\n\tCommodites: " + infoCommodites +
-                            "\n\tPrix total: " + prixTotal);
-        }
-    }
+    //         // Afficher informations chambres libres
+    //         System.out.println(
+    //                 "\nChambre: " + chambre.getNom() +
+    //                         "\n\tidChambre: " + chambre.getId() +
+    //                         "\n\tType de lit: " + chambre.getTypeLit() +
+    //                         "\n\tCommodites: " + infoCommodites +
+    //                         "\n\tPrix total: " + prixTotal);
+    //     }
+    // }
 }

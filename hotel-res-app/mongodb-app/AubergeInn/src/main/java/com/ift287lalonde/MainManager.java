@@ -1,14 +1,5 @@
 package com.ift287lalonde;
 
-// import Acces.AccesClient;
-// import Acces.AccesCommodite;
-// import Acces.AccesChambre;
-// import Acces.AccesReservation;
-// import Manager.ManagerChambre;
-// import Manager.ManagerClient;
-// import Manager.ManagerCommodite;
-// import Manager.ManagerReservation;
-
 public class MainManager {
 
     private final Connexion cx;

@@ -26,7 +26,7 @@ public class TupleClient {
         setAge(age);
 
         // Reservations assoc a client
-        reservationsId = new ArrayList<Integer>();
+        this.reservationsId = new ArrayList<Integer>();
     }
 
     // getters setters pour client
@@ -64,14 +64,6 @@ public class TupleClient {
     // Lien a une ou plusieurs reservations
     public List<Integer> getReservationsId() {
         return reservationsId;
-    }
-
-    public void ajouterReservation(int idReservation) {
-        reservationsId.add(idReservation);
-    }
-
-    public void supprimerReservation(int idReservation) {
-        reservationsId.remove(idReservation);
     }
 
     // creer document pour operation db

@@ -15,7 +15,7 @@ public class TupleCommodite {
         setId(d.getInteger("idCommodite"));
         setDescription(d.getString("description"));
         setSurplusPrix(d.getInteger("surplusPrix"));
-        chambresId = d.getList("chambresId", Integer.class);
+        this.chambresId = d.getList("chambresId", Integer.class);
     }
 
     public TupleCommodite(
@@ -55,16 +55,8 @@ public class TupleCommodite {
     }
 
     // Relation avec chambres
-    public List<Integer> getChambres() {
+    public List<Integer> getChambresId() {
         return chambresId;
-    }
-
-    public void inclureCommoditeChambre(int idChambre) {
-        chambresId.add(idChambre);
-    }
-
-    public void enleverCommoditeChambre(int idChambre) {
-        chambresId.remove(idChambre);
     }
 
     // Conversion pour document nongodb

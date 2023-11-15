@@ -1,14 +1,18 @@
 package com.ift287lalonde;
 
-import javax.print.Doc;
-
-// import com.ift287lalonde.TupleChambre;
-// import com.ift287lalonde.TupleCommodite;
-
 import org.bson.Document;
-import com.mongodb.client.MongoCollection;
+import static com.mongodb.client.model.Updates.push;
 
-// import com.ift287lalonde.Connexion;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.mongodb.client.model.Updates.pull;
+import static com.mongodb.client.model.Filters.in;
+import static com.mongodb.client.model.Filters.eq;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.result.UpdateResult;
+
 
 public class AccesCommodite {
     
@@ -45,8 +49,11 @@ public class AccesCommodite {
      * @return true si la commodite existe, false sinon
      */
     public boolean commoditeExiste(int idCommodite) {
-        stmtCheckCommodite.setParameter("idCommodite", idCommodite);
-        return !stmtCheckCommodite.getResultList().isEmpty();
+        boolean commoditeExiste = false;
+        if (commoditesCollection.find(eq("idCommodite", idCommodite)).first() != null) {
+            commoditeExiste = true;
+        }
+        return commoditeExiste;
     }
 
     /**
@@ -56,12 +63,12 @@ public class AccesCommodite {
      * @return TupleCommodite
      */
     public TupleCommodite getCommodite(int idCommodite) {
+        TupleCommodite commodite = null;
         if (commoditeExiste(idCommodite)) {
-            stmtCheckCommodite.setParameter("idCommodite", idCommodite);
-            return stmtCheckCommodite.getSingleResult();
-        } else {
-            return null;
+            Document commoditeDoc = commoditesCollection.find(eq("idCommodite", idCommodite)).first();
+            commodite = new TupleCommodite(commoditeDoc);
         }
+        return commodite;
     }
 
     /**
@@ -70,7 +77,7 @@ public class AccesCommodite {
      * @param commodite
      */
     public void ajouterCommodite(TupleCommodite commodite) {
-            cx.getConnection().persist(commodite);
+        commoditesCollection.insertOne(commodite.toDocument());
     }
 
     /**
@@ -78,32 +85,67 @@ public class AccesCommodite {
      *
      * @param idCommodite 
      */
-    public void supprimerCommodite(int idCommodite) {
-        TupleCommodite commodite = getCommodite(idCommodite);
+    public boolean supprimerCommodite(int idCommodite) {
+        boolean commoditeSupprime = commoditesCollection
+            .deleteOne(eq("idCommodite", idCommodite))
+            .getDeletedCount() > 0;
+        return commoditeSupprime;
+    }
 
-        if (commodite == null) {
-            throw new IllegalArgumentException("Commodite inexistante :" + idCommodite);
+    /**
+     * Faire le lien entre la chambre et la commodite
+     * 
+     * @param chambre
+     * @param commodite
+     */
+    public boolean inclureCommodite(TupleChambre chambre, TupleCommodite commodite) {
+        UpdateResult result = commoditesCollection
+            .updateOne(
+                eq("idCommodite", commodite.getId()),
+                push("chambresId", chambre.getId())
+            );
+        boolean commoditeIncluse = result.getModifiedCount() > 0;
+        return commoditeIncluse;
+    }
+
+    /**
+     * Retirer le lien entre chambre et commodite
+     * 
+     * @param chambre
+     * @param commodite
+     */
+    public boolean enleverCommodite(TupleChambre chambre, TupleCommodite commodite) {
+        UpdateResult result = commoditesCollection
+            .updateOne(
+                eq("idCommodite", commodite.getId()),
+                pull("chambresId", chambre.getId())
+            );
+        boolean commoditeRetiree = result.getModifiedCount() > 0;
+        return commoditeRetiree;
+    }
+
+    /**
+     * Lister commodites d'une chambre
+     * 
+     * @param idChambre
+     * @return commodites
+     */
+    public List<TupleCommodite> getCommoditesChambre(int idChambre) {
+        // Trouver commodites associes a une chambre
+        MongoCursor<Document> commoditesCursor = commoditesCollection
+            .find(in("chambresId", idChambre))
+            .iterator();
+        List<TupleCommodite> commodites = new ArrayList<>();
+
+        try {
+            while (commoditesCursor.hasNext()) {
+                Document commoditeDoc = commoditesCursor.next();
+                TupleCommodite commodite = new TupleCommodite(commoditeDoc);
+                commodites.add(commodite);
+            }
+        } finally {
+            commoditesCursor.close();
         }
-        cx.getConnection().remove(commodite);
-    }
-
-    /**
-     * Inclusion d'une commodite dans une chambre
-     * 
-     * @param chambre
-     * @param commodite
-     */
-    public void inclureCommodite(TupleChambre chambre, TupleCommodite commodite) {
-        chambre.ajouterCommodite(commodite);
-    }
-
-    /**
-     * Exclusion d'une commodite dans une chambre
-     * 
-     * @param chambre
-     * @param commodite
-     */
-    public void enleverCommodite(TupleChambre chambre, TupleCommodite commodite) {
-        chambre.supprimerCommodite(commodite);
+        return commodites;
     }
 }
