@@ -1,11 +1,6 @@
-package Acces;
-
-import Tuples.TupleChambre;
-import Tuples.TupleCommodite;
+package AubergeInn;
 
 import javax.persistence.TypedQuery;
-
-import AubergeInn.Connexion;
 
 public class AccesCommodite {
     

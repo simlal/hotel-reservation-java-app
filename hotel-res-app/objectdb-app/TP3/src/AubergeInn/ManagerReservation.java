@@ -1,15 +1,6 @@
-package Manager;
+package AubergeInn;
 
 import java.util.Date;
-
-import Acces.AccesClient;
-import Acces.AccesChambre;
-import Acces.AccesReservation;
-import AubergeInn.Connexion;
-import AubergeInn.IFT287Exception;
-import Tuples.TupleClient;
-import Tuples.TupleChambre;
-import Tuples.TupleReservation;
 
 public class ManagerReservation {
     

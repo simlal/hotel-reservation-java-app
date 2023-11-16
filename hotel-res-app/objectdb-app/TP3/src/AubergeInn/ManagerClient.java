@@ -1,9 +1,4 @@
-package Manager;
-
-import Acces.AccesClient;
-import AubergeInn.Connexion;
-import AubergeInn.IFT287Exception;
-import Tuples.TupleClient;
+package AubergeInn;
 
 public class ManagerClient {
     

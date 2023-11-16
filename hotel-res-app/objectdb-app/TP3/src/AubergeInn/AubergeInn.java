@@ -1,11 +1,6 @@
 // Travail fait par :
 //   SimonLalonde - 22225192
-
 package AubergeInn;
-
-import Tuples.TupleChambre;
-import Tuples.TupleClient;
-import Tuples.TupleCommodite;
 
 import java.io.*;
 import java.util.StringTokenizer;

@@ -1,13 +1,6 @@
-package Manager;
+package AubergeInn;
 
 import java.util.List;
-
-import Tuples.TupleChambre;
-import Tuples.TupleCommodite;
-import Acces.AccesCommodite;
-import AubergeInn.Connexion;
-import AubergeInn.IFT287Exception;
-import Acces.AccesChambre;
 
 public class ManagerCommodite {
     

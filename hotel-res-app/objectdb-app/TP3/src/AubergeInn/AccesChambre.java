@@ -1,14 +1,9 @@
-package Acces;
+package AubergeInn;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.TypedQuery;
-
-import AubergeInn.Connexion;
-import Tuples.TupleChambre;
-import Tuples.TupleCommodite;
-import Tuples.TupleReservation;
 
 public class AccesChambre {
 

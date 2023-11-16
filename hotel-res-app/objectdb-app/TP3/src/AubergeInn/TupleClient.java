@@ -1,4 +1,4 @@
-package Tuples;
+package AubergeInn;
 
 import java.util.List;
 import java.util.ArrayList;
