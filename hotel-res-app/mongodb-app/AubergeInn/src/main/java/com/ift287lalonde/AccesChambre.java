@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.in;
 import static com.mongodb.client.model.Updates.push;
 import static com.mongodb.client.model.Updates.pull;
+import static com.mongodb.client.model.Updates.set;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.result.UpdateResult;
@@ -95,7 +97,7 @@ public class AccesChambre {
      * @param idReservation
      * @return
      */
-    public TupleChambre getChambreReservation(int idReservation) {
+    public TupleChambre getChambreReservation(ObjectId idReservation) {
         // Faire la requete pour chambre avec reservation
         Document chambreDoc = chambresCollection
             .find(in("idReservation", idReservation))
@@ -117,6 +119,19 @@ public class AccesChambre {
     public void ajouterChambre(TupleChambre chambre) {
         chambresCollection.insertOne(chambre.toDocument());
     }
+    public boolean ajouterReservationChambre(
+        TupleChambre chambre, 
+        ObjectId idReservation
+    ) {
+        UpdateResult result =  chambresCollection
+            .updateOne(
+                eq("idChambre", chambre.getId()), 
+                set("idReservation", idReservation)
+            );
+        boolean reservationIncluse = result.getModifiedCount() > 0;
+        return reservationIncluse;
+    }
+    
 
     /**
      * Supprime une chambre de la base de donnees.

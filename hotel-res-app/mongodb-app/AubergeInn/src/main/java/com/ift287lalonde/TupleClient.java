@@ -3,6 +3,7 @@ package com.ift287lalonde;
 import java.util.List;
 import java.util.ArrayList;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 public class TupleClient {
 
@@ -10,13 +11,13 @@ public class TupleClient {
     private String prenom;
     private String nom;
     private int age;
-    private List<Integer> reservationsId;
+    private List<ObjectId> reservationsId;
 
     public TupleClient(Document doc) {
         setId(doc.getInteger("idClient"));
         setPrenom(doc.getString("prenom"));
         setNom(doc.getString("nom"));
-        reservationsId = doc.getList("reservationsId", Integer.class);
+        reservationsId = doc.getList("_id", ObjectId.class);
     }
     
     public TupleClient(int idClient, String prenom, String nom, int age) {
@@ -26,7 +27,7 @@ public class TupleClient {
         setAge(age);
 
         // Reservations assoc a client
-        this.reservationsId = new ArrayList<Integer>();
+        this.reservationsId = new ArrayList<ObjectId>();
     }
 
     // getters setters pour client
@@ -62,7 +63,7 @@ public class TupleClient {
     }
 
     // Lien a une ou plusieurs reservations
-    public List<Integer> getReservationsId() {
+    public List<ObjectId> getReservationsId() {
         return reservationsId;
     }
 

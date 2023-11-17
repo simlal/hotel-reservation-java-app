@@ -17,7 +17,10 @@ public class MainManager {
     /**
      * Constructeur pour gestionnaire des gestionnaires
      * 
-     * @param cx
+     * @param serveur
+     * @param bd
+     * @param user
+     * @param pass
      * @throws IFT287Exception
      */
     public MainManager(
@@ -36,8 +39,17 @@ public class MainManager {
         this.accesReservation = new AccesReservation(cx);
 
         // Regroupement package Manager
-        this.managerClient = new ManagerClient(accesClient);
-        this.managerChambre = new ManagerChambre(accesChambre);
+        this.managerClient = new ManagerClient(
+            accesClient, 
+            accesReservation, 
+            accesChambre, 
+            accesCommodite
+        );
+        this.managerChambre = new ManagerChambre(
+            accesChambre, 
+            accesReservation, 
+            accesCommodite
+        );
         this.managerCommodite = new ManagerCommodite(
             accesChambre, 
             accesCommodite

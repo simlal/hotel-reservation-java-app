@@ -5,7 +5,6 @@ import java.util.List;
 
 public class ManagerChambre {
     
-    private Connexion cx;
     private final AccesChambre accesChambre;
     private final AccesReservation accesReservation;
     private final AccesCommodite accesCommodite;
@@ -15,19 +14,14 @@ public class ManagerChambre {
         AccesReservation accesReservation,
         AccesCommodite accesCommodite
     ) {
-        this.cx = accesChambre.getConnexion();
+        if (accesChambre.getConnexion() != accesReservation.getConnexion() || accesChambre.getConnexion() != accesCommodite.getConnexion()) {
+            throw new IllegalArgumentException(
+                "Les instances de AccesChambre, AccesReservation et AccesCommodite n'utilisent pas la meme connexion au serveur."
+            );
+        }
         this.accesChambre = accesChambre;
         this.accesReservation = accesReservation;
         this.accesCommodite = accesCommodite;
-    }
-
-    /**
-     * Retourne la connexion
-     * 
-     * @return Connexion
-     */
-    public Connexion getConnexion() {
-        return cx;
     }
 
     /**
@@ -168,4 +162,11 @@ public class ManagerChambre {
                         "\n\tCommodites: " + infoCommodites +
                         "\n\tPrix total: " + prixTotal + "$");
     }
+
+    /**
+     * Inclure une reservation dans une chambre
+     * 
+     * @oaram reservation
+     * @param 
+     */
 }

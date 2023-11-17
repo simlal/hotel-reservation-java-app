@@ -6,6 +6,7 @@ import java.util.Date;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
@@ -17,6 +18,7 @@ import static com.mongodb.client.model.Sorts.ascending;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.result.InsertOneResult;
 
 
 public class AccesReservation {
@@ -52,9 +54,9 @@ public class AccesReservation {
      * @param idReservation
      * @return true si la reservation existe, false sinon
      */
-    public boolean reservationExiste(int idReservation) {
+    public boolean reservationExiste(ObjectId idReservation) {
         boolean reservationExiste = false;
-        if (reservationsCollection.find(eq("idClient", idReservation)).first() != null) {
+        if (reservationsCollection.find(eq("_id", idReservation)).first() != null) {
             reservationExiste = true;
         }
         return reservationExiste;
@@ -66,11 +68,11 @@ public class AccesReservation {
      * @param idReservation
      * @return TupleReservation
      */
-    public TupleReservation getReservation(int idReservation) {
+    public TupleReservation getReservation(ObjectId idReservation) {
         TupleReservation reservation = null;
         if (reservationExiste(idReservation)) {
             Document reservationDoc = reservationsCollection
-                .find(eq("idReservation", idReservation))
+                .find(eq("_id", idReservation))
                 .first();
             reservation = new TupleReservation(reservationDoc);
         }
@@ -151,6 +153,14 @@ public class AccesReservation {
     //     }
     //     return chambreReservee;
     // }
+    /**
+     * Verifie si la chambre est libre pour la periode specifiee
+     * 
+     * @param idChambre
+     * @param dateDebut
+     * @param dateFin
+     * @return true si la chambre est libre
+     */
     public boolean checkChambreLibre(int idChambre, Date dateDebut, Date dateFin) {
         // Requete pour chambre et periode specif
         Bson query = and(
@@ -256,12 +266,14 @@ public class AccesReservation {
 }
 
     /**
-     * Ajoute une reservation dans la db
+     * Ajoute une reservation dans la db.
      * 
      * @param reservation
+     * @return reservation avec _id genere
      */
-    public void ajouterReservation(TupleReservation reservation) {
-        reservationsCollection.insertOne(reservation.toDocument());
+    public InsertOneResult ajouterReservation(TupleReservation reservation) {
+        // Insertion dans mongodb + generation _id
+        return reservationsCollection.insertOne(reservation.toDocument());
     }
 
     /**

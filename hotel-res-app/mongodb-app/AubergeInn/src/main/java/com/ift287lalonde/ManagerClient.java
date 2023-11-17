@@ -5,7 +5,6 @@ import java.util.List;
 
 public class ManagerClient {
 
-    private Connexion cx;
     private AccesClient accesClient;
     private AccesReservation accesReservation;
     private AccesChambre accesChambre;
@@ -17,16 +16,17 @@ public class ManagerClient {
         AccesChambre accesChambre,
         AccesCommodite accesCommodite
     ) {
-        this.cx = accesClient.getConnexion();
+        if (accesClient.getConnexion() != accesReservation.getConnexion() || accesClient.getConnexion() != accesChambre.getConnexion() || accesClient.getConnexion() != accesCommodite.getConnexion()) {
+            throw new IllegalArgumentException(
+                "Les instances de AccesClient, AccesReservation, AccesChambre et AccesCommodite n'utilisent pas la meme connexion au serveur."
+            );
+        }
         this.accesClient = accesClient;
         this.accesReservation = accesReservation;
         this.accesChambre = accesChambre;
         this.accesCommodite = accesCommodite;
     }
 
-    public Connexion getConnexion() {
-        return cx;
-    }
 
     /**
      * Ajout client si n'existe pas dans db

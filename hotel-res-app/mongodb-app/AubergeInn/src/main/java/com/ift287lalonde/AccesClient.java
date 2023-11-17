@@ -1,8 +1,13 @@
 package com.ift287lalonde;
 
-import com.mongodb.client.MongoCollection;
-import static com.mongodb.client.model.Filters.eq;
+import org.bson.types.ObjectId;
 import org.bson.Document;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.result.UpdateResult;
+
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Updates.set;
+
 public class AccesClient {
 
     private Connexion cx;
@@ -87,6 +92,25 @@ public class AccesClient {
             .deleteOne(eq("idClient", idClient))
             .getDeletedCount() > 0;
         return clientSupprime;
+    }
+
+    /**
+     * Ajouter une reservation a un client
+     * 
+     * @param client
+     * @param idReservation
+     */
+    public boolean ajouterReservationClient(
+        TupleClient client, 
+        ObjectId idReservation
+    ) {
+        UpdateResult result = clientsCollection
+            .updateOne(
+                eq("idClient", client.getId()), 
+                set("idReservation", idReservation)
+            );
+        boolean reservationAjoutee = result.getModifiedCount() > 0;
+        return reservationAjoutee;
     }
 
     // /**

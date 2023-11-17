@@ -2,7 +2,6 @@ package com.ift287lalonde;
 
 import java.io.*;
 import java.util.Date;
-import java.util.List;
 import java.util.StringTokenizer;
 import java.text.*;
 
@@ -155,12 +154,13 @@ public class AubergeInn
                 // *******************
                 case "ajouterClient": {
                     // Lecture token client
+                    int idClient = readInt(tokenizer);
                     String prenom = readString(tokenizer);
                     String nom = readString(tokenizer);
                     int age = readInt(tokenizer);
                     
                     // Creation client et ajout db
-                    TupleClient client = new TupleClient(prenom, nom, age);
+                    TupleClient client = new TupleClient(idClient, prenom, nom, age);
                     mainManager.getManagerClient().ajouterClient(client);
                     System.out.println("\nAjout client idClient=" + client.getId() + " avec succes.");
                 }
@@ -188,12 +188,13 @@ public class AubergeInn
                 // *******************
                 case "ajouterChambre": {
                     // Lecture token chambre
+                    int idChambre = readInt(tokenizer);
                     String nom = readString(tokenizer);
                     String typeLit = readString(tokenizer);
                     int prixBase = readInt(tokenizer);
 
                     // Ajout chambre dans db
-                    TupleChambre chambre = new TupleChambre(nom, typeLit, prixBase);
+                    TupleChambre chambre = new TupleChambre(idChambre, nom, typeLit, prixBase);
                     mainManager.getManagerChambre().ajouterChambre(chambre);
                     System.out.println("\nAjout chambre idChambre=" + chambre.getId() + " avec succes.");
                     break;
@@ -214,11 +215,12 @@ public class AubergeInn
                 // *******************
                 case "ajouterCommodite": {
                     // Lecture token commodite
+                    int idCommodite = readInt(tokenizer);
                     String description = readString(tokenizer);
                     int surplusPrix = readInt(tokenizer);
 
                     // Ajout commodite dans db
-                    TupleCommodite commodite = new TupleCommodite(description, surplusPrix);
+                    TupleCommodite commodite = new TupleCommodite(idCommodite, description, surplusPrix);
                     mainManager.getManagerCommodite().ajouterCommodite(commodite);
                     System.out.println("\nAjout commodite idCommodite=" + commodite.getId() + " avec succes.");
                     break;
@@ -315,7 +317,7 @@ public class AubergeInn
                     int idChambre = readInt(tokenizer);
 
                     // affichage de la chambre si existe
-                    manager.getManagerChambre().afficherChambre(idChambre);
+                    mainManager.getManagerChambre().afficherChambre(idChambre);
                     break;
                 }
                 // *********************

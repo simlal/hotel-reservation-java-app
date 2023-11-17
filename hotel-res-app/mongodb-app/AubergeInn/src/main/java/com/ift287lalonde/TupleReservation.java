@@ -1,12 +1,14 @@
 package com.ift287lalonde;
 
 import java.util.Date;
+
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 public class TupleReservation {
     
     // Attributs reservation
-    private int idReservation;
+    private ObjectId idReservation;
     private Date dateDebut;
     private Date dateFin;
 
@@ -15,7 +17,7 @@ public class TupleReservation {
     private int idChambre;
 
     public TupleReservation(Document doc) {
-        setId(doc.getInteger("idReservation"));
+        this.idReservation = (doc.getObjectId("_id"));
         setClient(doc.getInteger("idClient"));
         setChambre(doc.getInteger("idChambre"));
         setDateDebut(doc.getDate("dateDebut"));
@@ -23,13 +25,12 @@ public class TupleReservation {
     }
 
     public TupleReservation(
-        int idReservation,
         int idClient,
         int idChambre,
         Date dateDebut,
         Date dateFin
     ) {
-        setId(idReservation);
+        // generation id unique lors de creation d'une reservation
         setClient(idClient);
         setChambre(idChambre);
         setDateDebut(dateDebut);
@@ -37,11 +38,8 @@ public class TupleReservation {
     }
 
     // Getter et setters pour reservation
-    public int getId() {
+    public ObjectId getId() {
         return idReservation;
-    }
-    public void setId(int idReservation) {
-        this.idReservation = idReservation;
     }
     
     public Date getDateDebut() {
@@ -77,8 +75,7 @@ public class TupleReservation {
     // Conversion pour document mongodb
     public Document toDocument() {
         Document doc = new Document();
-        doc.append("idReservation", idReservation)
-            .append("idClient", idClient)
+        doc.append("idClient", idClient)
             .append("idChambre", idChambre)
             .append("dateDebut", dateDebut)
             .append("dateFin", dateFin);

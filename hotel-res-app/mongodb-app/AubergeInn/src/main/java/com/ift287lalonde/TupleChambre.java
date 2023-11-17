@@ -3,6 +3,7 @@ package com.ift287lalonde;
 import java.util.ArrayList;
 import java.util.List;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 public class TupleChambre {
     private int idChambre;
@@ -10,7 +11,7 @@ public class TupleChambre {
     private String typeLit;
     private int prixBase;
 
-    private List<Integer> reservationsId;
+    private List<ObjectId> reservationsId;
     private List<Integer> commoditesId;
 
     public TupleChambre (Document doc) {
@@ -21,7 +22,7 @@ public class TupleChambre {
         setPrixBase(doc.getInteger("prixBase"));
 
         // Relations reservation et commodites
-        this.reservationsId = doc.getList("reservationsId", Integer.class);
+        this.reservationsId = doc.getList("reservationsId", ObjectId.class);
         this.commoditesId = doc.getList("commoditesId", Integer.class);
     }
     public TupleChambre (
@@ -73,13 +74,13 @@ public class TupleChambre {
     }
 
     // getters pour relations reservation et commodites
-    public List<Integer> getReservationsId() {
+    public List<ObjectId> getReservationsId() {
         return reservationsId;
     }
-    public void ajouterReservation(int idReservation) {
+    public void ajouterReservation(ObjectId idReservation) {
         reservationsId.add(idReservation);
     }
-    public void supprimerReservation(int idReservation) {
+    public void supprimerReservation(ObjectId idReservation) {
         reservationsId.remove(idReservation);
     }
 
