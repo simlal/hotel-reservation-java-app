@@ -15,9 +15,9 @@ public class ManagerClient {
         AccesReservation accesReservation,
         AccesChambre accesChambre,
         AccesCommodite accesCommodite
-    ) {
+    ) throws IFT287Exception {
         if (accesClient.getConnexion() != accesReservation.getConnexion() || accesClient.getConnexion() != accesChambre.getConnexion() || accesClient.getConnexion() != accesCommodite.getConnexion()) {
-            throw new IllegalArgumentException(
+            throw new IFT287Exception(
                 "Les instances de AccesClient, AccesReservation, AccesChambre et AccesCommodite n'utilisent pas la meme connexion au serveur."
             );
         }
@@ -35,13 +35,17 @@ public class ManagerClient {
      * @throws IFT287Exception
      */
     public void ajouterClient(TupleClient client) throws IFT287Exception{
+        System.out.println("Checking if client exists");
         // Check si client n'existe pas
         if (accesClient.clientExiste(client.getId())) {
             throw new IFT287Exception(
                 "Impossible ajouter client avec idClient=" + client.getId() + ": existe deja dans db."
             );
         }
+        System.out.println("pre ajouterClient manager");
         accesClient.ajouterClient(client);
+        System.out.println("done");
+
     }
     
     /**

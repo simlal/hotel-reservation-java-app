@@ -60,7 +60,7 @@ public class MainManager {
             accesReservation
         );
     }
-    // Getters pour Acces
+    // Getters pour Acces pour prints dans main
     public AccesClient getAccesClient() {
         return accesClient;
     }

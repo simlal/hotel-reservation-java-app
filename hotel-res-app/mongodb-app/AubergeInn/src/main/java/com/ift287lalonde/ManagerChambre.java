@@ -13,9 +13,9 @@ public class ManagerChambre {
         AccesChambre accesChambre,
         AccesReservation accesReservation,
         AccesCommodite accesCommodite
-    ) {
+    ) throws IFT287Exception {
         if (accesChambre.getConnexion() != accesReservation.getConnexion() || accesChambre.getConnexion() != accesCommodite.getConnexion()) {
-            throw new IllegalArgumentException(
+            throw new IFT287Exception(
                 "Les instances de AccesChambre, AccesReservation et AccesCommodite n'utilisent pas la meme connexion au serveur."
             );
         }
@@ -66,7 +66,17 @@ public class ManagerChambre {
             );
         }
         
-        accesChambre.supprimerChambre(idChambre);
+        // Chercher la chambre
+        TupleChambre chambre = accesChambre.getChambre(idChambre);
+
+        // Supprimer la reference de la chambre dans les commodites
+        List<TupleCommodite> commodites = accesCommodite.getCommoditesChambre(idChambre);
+        for (TupleCommodite commodite : commodites) {
+            accesCommodite.enleverCommodite(chambre, commodite);
+        }
+
+        // Supprimer chambre
+        accesChambre.supprimerChambre(chambre.getId());
 
     }
 
@@ -162,11 +172,4 @@ public class ManagerChambre {
                         "\n\tCommodites: " + infoCommodites +
                         "\n\tPrix total: " + prixTotal + "$");
     }
-
-    /**
-     * Inclure une reservation dans une chambre
-     * 
-     * @oaram reservation
-     * @param 
-     */
 }

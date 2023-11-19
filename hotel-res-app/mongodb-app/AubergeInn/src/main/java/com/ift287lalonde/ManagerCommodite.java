@@ -7,9 +7,12 @@ public class ManagerCommodite {
     private AccesChambre accesChambre;
     private AccesCommodite accesCommodite;
 
-    public ManagerCommodite(AccesChambre accesChambre, AccesCommodite accesCommodite) {
+    public ManagerCommodite(
+    AccesChambre accesChambre, 
+    AccesCommodite accesCommodite
+    ) throws IFT287Exception {
         if (accesChambre.getConnexion() != accesCommodite.getConnexion()) {
-            throw new IllegalArgumentException(
+            throw new IFT287Exception(
                 "Les instances de AccesChambre et AccesCommodite n'utilisent pas la meme connexion au serveur."
             );
         }
@@ -46,6 +49,16 @@ public class ManagerCommodite {
                 "Impossible supprimer commodite avec idCommodite=" + idCommodite + ": n'existe pas dans db."
             );
         }
+        // Chercher commodite
+        TupleCommodite commodite = accesCommodite.getCommodite(idCommodite);
+
+        // Supprimer la reference de la commodite dans les chambres
+        List <TupleChambre> chambres = accesChambre.getChambresCommodite(commodite);
+        for (TupleChambre chambre : chambres) {
+            accesChambre.enleverCommodite(chambre, commodite);
+        }
+
+        // Supprimer la commodite
         accesCommodite.supprimerCommodite(idCommodite);
     }
 
