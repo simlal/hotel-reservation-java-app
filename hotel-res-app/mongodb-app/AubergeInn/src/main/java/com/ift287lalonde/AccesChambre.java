@@ -108,8 +108,31 @@ public class AccesChambre {
             chambre = new TupleChambre(chambreDoc);
         }
         return chambre;
-        
     }
+
+    /**
+     * Chercher les chambres associees a une commodite
+     *  
+     * @param commodite
+     * @return liste de commodites
+     */
+     public List<TupleChambre> getChambresCommodite(TupleCommodite commodite) {
+        // Faire la requete pour chambre avec commodite
+        List<TupleChambre> chambres = new ArrayList<>();
+        MongoCursor<Document> chambresCursor = chambresCollection
+            .find(in("commoditesId", commodite.getId()))
+            .iterator();
+        try {
+            while (chambresCursor.hasNext()) {
+                Document chambreDoc = chambresCursor.next();
+                TupleChambre chambre = new TupleChambre(chambreDoc);
+                chambres.add(chambre);
+            }
+        } finally {
+            chambresCursor.close();
+        }
+        return chambres;
+     }
 
     /**
      * Ajoute une chambre dans la base de donnees.

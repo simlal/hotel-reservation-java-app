@@ -15,9 +15,9 @@ public class ManagerReservation {
         AccesClient accesClient,
         AccesChambre accesChambre,
         AccesReservation accesReservation
-    ) {
+    ) throws IFT287Exception {
         if (accesClient.getConnexion() != accesChambre.getConnexion() || accesClient.getConnexion() != accesReservation.getConnexion()) {
-            throw new IllegalArgumentException(
+            throw new IFT287Exception(
                 "Les instances de AccesClient, AccesChambre et AccesReservation n'utilisent pas la meme connexion au serveur."
             );
         }

@@ -163,6 +163,7 @@ public class AubergeInn
                     TupleClient client = new TupleClient(idClient, prenom, nom, age);
                     mainManager.getManagerClient().ajouterClient(client);
                     System.out.println("\nAjout client idClient=" + client.getId() + " avec succes.");
+                    break;
                 }
                 // *******************
                 // SUPPRIMER UN CLIENT
@@ -327,6 +328,16 @@ public class AubergeInn
                     // ne rien faire, c'est un commentaire
                     break;
                 // ***********************
+                // EXIT
+                // ***********************
+                case "quitter": {
+                    System.out.println("Fin du programme");
+                    mainManager.fermer();
+                    System.exit(0);
+                    break;
+                }
+
+                // ***********************
                 // TRANSACTION INCONNUE
                 // ***********************
                 default:
@@ -355,12 +366,12 @@ public class AubergeInn
         System.out.println();
         System.out.println("Les transactions sont:");
         System.out.println("  aide");
-        System.out.println("  ajouterClient <prenom> <nom> <age>");
+        System.out.println("  ajouterClient <idClient> <prenom> <nom> <age>");
         System.out.println("  supprimerClient <idClient>");
         System.out.println("  afficherClient <idClient>");
-        System.out.println("  ajouterChambre <nom> <typeLit> <prixBase>");
+        System.out.println("  ajouterChambre <idChambre> <nom> <typeLit> <prixBase>");
         System.out.println("  supprimerChambre <idChambre>");
-        System.out.println("  ajouterCommodite <description> <surplusPrix>");
+        System.out.println("  ajouterCommodite <idCommodite> <description> <surplusPrix>");
         System.out.println("  supprimerCommodite <idCommodite>");
         System.out.println("  inclureCommodite <idChambre> <idCommodite>");
         System.out.println("  enleverCommodite <idChambre> <idCommodite>");
@@ -368,7 +379,7 @@ public class AubergeInn
         System.out.println("  afficherChambresLibres <dateDebut> <dateFin>");
         System.out.println("  afficherChambre <idChambre>");
         System.out.println("  // ou -- pour un commentaire");
-        System.out.println("  exit");
+        System.out.println("  quitter");
         
     }
 

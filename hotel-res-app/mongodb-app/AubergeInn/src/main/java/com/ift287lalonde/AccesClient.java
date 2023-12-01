@@ -23,6 +23,10 @@ public class AccesClient {
         this.cx = cx;
         this.clientsCollection = cx.getDatabase().getCollection("clients");
 
+        // test collection
+        // Document doc = new Document("testNom", "testValeur");
+        // clientsCollection.insertOne(doc);
+
     }
 
     /**
@@ -49,10 +53,12 @@ public class AccesClient {
      * @return boolean
      */
     public boolean clientExiste(int idClient) {
+        System.out.println("check dans access");
         boolean clientExiste = false;
         if (clientsCollection.find(eq("idClient", idClient)).first() != null) {
             clientExiste = true;
         }
+        System.out.println("OK access");
         return clientExiste;
     }
 
@@ -64,6 +70,7 @@ public class AccesClient {
      */
     public TupleClient getClient(int idClient) {
         TupleClient client = null;
+        System.out.println("get client access");
         if (clientExiste(idClient)) {
             Document clientDoc = clientsCollection.find(eq("idClient", idClient)).first();
             client = new TupleClient(clientDoc);
