@@ -45,7 +45,7 @@ public class AubergeInn
     /**
      * @param args
      */
-    public static void main(String[] args) throws Exception
+    public static void main(String[] args) throws Exception, IFT287Exception
     {
         if (args.length < 4)
         {
