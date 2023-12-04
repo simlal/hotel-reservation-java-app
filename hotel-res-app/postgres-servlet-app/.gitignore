@@ -40,3 +40,6 @@ build/
 
 ### credentials db ###
 credentials.txt
+
+# archived class
+_archives/
