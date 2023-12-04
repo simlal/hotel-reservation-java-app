@@ -28,20 +28,20 @@
 <!--    </servlet>-->
 
     <!--    Listeners-->
-<!--    <listener>-->
-<!--        <listener-class>AubServlet.MainSessionListener</listener-class>-->
-<!--    </listener>-->
-<!--    <listener>-->
-<!--        <listener-class>AubServlet.MainContextListener</listener-class>-->
-<!--    </listener>-->
+    <listener>
+        <listener-class>AubServlet.AubergeInnSessionListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>AubServlet.AubergeInnContextListener</listener-class>
+    </listener>
 <!--    Liste de servlets-->
     <servlet>
-        <servlet-name>helloServlet</servlet-name>
-        <servlet-class>AubServlet.HelloServlet</servlet-class>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>AubServlet.Login</servlet-class>
     </servlet>
 <!--    Mappings-->
     <servlet-mapping>
-        <servlet-name>helloServlet</servlet-name>
-        <url-pattern>/hello</url-pattern>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/Login</url-pattern>
     </servlet-mapping>
 </web-app>
