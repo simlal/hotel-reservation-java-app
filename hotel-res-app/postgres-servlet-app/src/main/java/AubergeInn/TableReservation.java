@@ -21,15 +21,15 @@ public class TableReservation {
     private final PreparedStatement stmtFaireReservation;
     private final PreparedStatement stmtSupprimerReservationChambre;
 
-    public TableReservation (Connexion cx) throws Exception {
+    public TableReservation (Connexion cx) throws SQLException {
         this.cx = cx;
         try {
             this.stmtCheckChambreReserve = cx.getConnection().prepareStatement(sqlCheckChambreReserve);
             this.stmtFaireReservation = cx.getConnection().prepareStatement(sqlFaireReservation);
             this.stmtSupprimerReservationChambre = cx.getConnection().prepareStatement(sqlSupprimerReservationChambre);
-        } catch (Exception se) {
+        } catch (SQLException se) {
             se.printStackTrace();
-            throw new Exception("Erreur prepareStatement dans TableReservation");
+            throw new SQLException("Erreur prepareStatement dans TableReservation");
         }
     }
 

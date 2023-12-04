@@ -17,7 +17,7 @@ public class MainManager {
     private final ManagerChambreCommodite managerChambreCommodite;
     private final ManagerReservation managerReservation;
 
-    public MainManager(String serveur, String bd, String user, String pass) throws Exception {
+    public MainManager(String serveur, String bd, String user, String pass) throws IFT287Exception, SQLException {
         try {
             this.cx = new Connexion(serveur, bd, user, pass);
             // Regroupement package Tables
