@@ -10,7 +10,7 @@ import java.util.*;
  * Sherbrooke
  */
 
-public class MainContextListener implements ServletContextListener
+public class AubergeInnContextListener implements ServletContextListener
 {
     public void contextInitialized(ServletContextEvent sce)
     {
