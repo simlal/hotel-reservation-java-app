@@ -53,16 +53,12 @@ public class AubergeInn
             return;
         }
         
-        cx = null;
-        
         try
         {
             
-            // Creation de la connection
-            cx = new Connexion(args[0], args[1], args[2], args[3]);
-            
-            // Container pour les tables et les managers
-            manager = new MainManager(cx);
+
+            // Creation connexion et gestionnaire principal
+            manager = new MainManager(args[0], args[1], args[2], args[3]);
 
             BufferedReader reader = ouvrirFichier(args);
             String transaction = lireTransaction(reader);
@@ -74,8 +70,8 @@ public class AubergeInn
         }
         finally
         {
-            if (cx != null)
-                cx.fermer();
+            if (manager.getConnexion() != null)
+                manager.fermer();
         }
     }
 
@@ -221,7 +217,7 @@ public class AubergeInn
             // Ce rollback est ici seulement pour vous aider et éviter des problèmes lors de la correction
             // automatique. En théorie, il ne sert à rien et ne devrait pas apparaître ici dans un programme
             // fini et fonctionnel sans bogues.
-            cx.rollback();
+            manager.getConnexion().rollback();
         }
     }
 

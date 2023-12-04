@@ -13,8 +13,17 @@ public class ManagerChambreCommodite {
         TableChambre tableChambre,
         TableCommodite tableCommodite,
         TableChambreCommodite tableChambreCommodite
-        ) {
+        ) throws IFT287Exception{
         this.cx = tableChambreCommodite.getConnexion();
+        if (
+                tableChambre.getConnexion() != tableCommodite.getConnexion() ||
+                        tableChambre.getConnexion() != tableChambreCommodite.getConnexion() ||
+                        tableCommodite.getConnexion() != tableChambreCommodite.getConnexion()
+        ) {
+            throw new IFT287Exception(
+                    "Les instances de TableChambre, TableCommodite et/ou TableChambreCommodite n'utilisent pas la meme connexion au serveur."
+            );
+        }
         this.tableChambre = tableChambre;
         this.tableCommodite = tableCommodite;
         this.tableChambreCommodite = tableChambreCommodite;

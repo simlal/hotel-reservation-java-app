@@ -14,8 +14,17 @@ public class ManagerReservation {
         TableClient tableClient,
         TableChambre tableChambre,
         TableReservation tableReservation
-        ) {
+        ) throws IFT287Exception {
         this.cx = tableReservation.getConnexion();
+        if (
+                tableClient.getConnexion() != tableChambre.getConnexion() ||
+                        tableClient.getConnexion() != tableReservation.getConnexion() ||
+                        tableChambre.getConnexion() != tableReservation.getConnexion()
+        ) {
+            throw new IFT287Exception(
+                    "Les instances de TableClient, TableChambre et/ou TableReservation n'utilisent pas la meme connexion au serveur."
+            );
+        }
         this.tableClient = tableClient;
         this.tableChambre = tableChambre;
         this.tableReservation = tableReservation;

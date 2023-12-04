@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 public class MainManager {
 
+    private final Connexion cx;
     private final TableClient tableClient;
     private final TableChambre tableChambre;
     private final TableCommodite tableCommodite;
@@ -16,8 +17,9 @@ public class MainManager {
     private final ManagerChambreCommodite managerChambreCommodite;
     private final ManagerReservation managerReservation;
 
-    public MainManager(Connexion cx) throws Exception {
+    public MainManager(String serveur, String bd, String user, String pass) throws Exception {
         try {
+            this.cx = new Connexion(serveur, bd, user, pass);
             // Regroupement package Tables
             this.tableClient = new TableClient(cx);
             this.tableChambre = new TableChambre(cx);
@@ -45,6 +47,11 @@ public class MainManager {
         }
         
     }
+
+    public Connexion getConnexion() {
+        return cx;
+    }
+
     // Getters pour Tables
     public TableClient getTableClient() {
         return tableClient;
@@ -81,8 +88,8 @@ public class MainManager {
     }
 
 //    Fermeture connexion
-    public void fermer() {
-//        cx.close();
+    public void fermer() throws SQLException {
+        getConnexion().fermer();
     }
     
 }
