@@ -1,5 +1,6 @@
-<%@ page import="AubergeInn.*,AubServlet.*"
+<%@ page import="AubergeInn.*,AubServlet.*,javax.sql.*"
          contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,16 +22,79 @@
 
 </head>
 <body>
+<jsp:include page="/navigation.jsp" />
 <div class="container">
-    <jsp:include page="/navigation.jsp" />
     <h1 class="text-center">Système de gestion de AubergeInn</h1>
-<%--    Interface admin gestion Update/Delete   --%>
-    <% if (session.getAttribute("admin") != null) {%>
-        <h2>you are the admin!</h2>
-    <%} else {%>
-        <h2>regular user!</h2>
-    <%}%>
+<%--Statistiques generales--%>
+    <h2 class="text-center"> Vue d'ensemble</h2>
+    <div class="container">
+        <h3>Info utilisateurs logiciel</h3>
+        <table class="table-dark">
+            <thead>
+            <tr>
+                <th>Type de Privilege</th>
+                <th>Total</th>
+            </tr>
+            </thead>
+            <%
+                List<TupleUtilisateur> utilisateurs = AubergeInnHelper
+                        .getAubergeInnInterro(session)
+                        .getManagerUtilisateurs()
+                        .getListeUtilisateurs(true);
+                Integer nbAdmins = 0;
+                Integer nbReguliers = 0;
+                for (TupleUtilisateur utilisateur : utilisateurs) {
+                    if (utilisateur.getNiveauAcces() == 0) {
+                        nbAdmins += 1;
+                    } else {
+                        nbReguliers += 1;
+                    }
+                }
+            %>
+            <tbody>
+                <tr>
+                    <td>Administrateur</td>
+                    <td><%=nbAdmins%></td>
+                </tr>
+                <tr>
+                    <td>Regulier</td>
+                    <td><%=nbReguliers%></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h3>Clients</h3>
+                    <table class="table">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>Parametre</th>
+                                <th>valeur</th>
+                            </tr>
+                        </thead>
+<%--                        <% List<TupleClient> clients = AubergeInnHelper--%>
+<%--                                .getAubergeInnInterro(session)--%>
+<%--                                .getManagerClient();--%>
 
+<%--                        %>--%>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-4">
+                    <table class="table">
+<%--                        TODO TABLE CHAMBRECOMM--%>
+                    </table>
+                </div>
+                <div class="col-md-4">
+                    <table class="table">
+                        <%--                        TODO TABLE RESERV--%>
+                    </table>
+                </div>
+            </div>
+        </div>
     <br>
     <%-- inclusion d'une autre page pour l'affichage des messages d'erreur--%>
     <jsp:include page="/messageErreur.jsp" />
