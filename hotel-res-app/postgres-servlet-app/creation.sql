@@ -51,3 +51,4 @@ CREATE TABLE Utilisateurs(
     telephone bigint
 );
 INSERT INTO Utilisateurs (utilisateurName, motDePasse, acces, nom, telephone) values ('AubergeInnAdmin', 'admin', 0, 'Administrateur', 5551234567);
+INSERT INTO Utilisateurs (utilisateurName, motDePasse, acces, nom, telephone) values ('usertest', 'test', 1, 'user1', 8191112222);

@@ -29,7 +29,7 @@
      %>
     <div class="navbar-collapse collapse justify-content-end">
         <ul class="nav navbar-nav navbar-right">
-            <li><p class="nav-item nav-link">Privileges: <%=statut%></p></li>
+            <li><div class="nav-item nav-link">Privileges: <%=statut%></div></li>
             <li><a class="nav-item nav-link" href="Logout">Deconnexion (<%=utilisateurName%>)</a></li>
         </ul>
     </div>
