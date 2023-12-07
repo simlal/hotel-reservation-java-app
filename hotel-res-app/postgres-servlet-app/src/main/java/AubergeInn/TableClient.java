@@ -4,6 +4,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
+
 
 // Interactions avec table Client
 public class TableClient {
@@ -24,7 +27,9 @@ public class TableClient {
     private static final String sqlCheckClientReservationEnCours = 
     "select * from Client " +
     "join Reservation on Client.idClient = Reservation.idClient " +
-    "where Client.idClient = ? and Reservation.dateDebut >= ?";
+    "where Client.idClient = ? and Reservation.dateDebut < ? and Reservation.dateFin > ?";
+
+    private static final String sqlGetClients = "select * from Client";
 
 
     private Connexion cx;
@@ -33,6 +38,7 @@ public class TableClient {
     private final PreparedStatement stmtSupprimerClient;
     private final PreparedStatement stmtAfficherClient;
     private final PreparedStatement stmtCheckClientReservationEnCours;
+    private final PreparedStatement stmtGetClients;
 
     public TableClient(Connexion cx) throws SQLException {
         this.cx = cx;
@@ -43,6 +49,7 @@ public class TableClient {
             this.stmtAfficherClient = cx.getConnection().prepareStatement(sqlAfficherClient);
             this.stmtCheckClientReservationEnCours = 
             cx.getConnection().prepareStatement(sqlCheckClientReservationEnCours);
+            this.stmtGetClients = cx.getConnection().prepareStatement(sqlGetClients);
         } catch (SQLException se) {
             System.out.println(se.getMessage());
             throw new SQLException("Erreur prepareStatement dans TableClient");
@@ -123,6 +130,7 @@ public class TableClient {
             Date maintenant = new Date(System.currentTimeMillis());
             stmtCheckClientReservationEnCours.setInt(1, idClient);
             stmtCheckClientReservationEnCours.setDate(2, maintenant);
+            stmtCheckClientReservationEnCours.setDate(3, maintenant);
 
             ResultSet rs = stmtCheckClientReservationEnCours.executeQuery();
             boolean clientReserve = rs.next();
@@ -134,6 +142,25 @@ public class TableClient {
         }
     }
 
+    public List<TupleClient> getListClients() throws SQLException {
+        try {
+            ResultSet rs = stmtGetClients.executeQuery();
+            List<TupleClient> clients = new ArrayList<TupleClient>();
+            while (rs.next()) {
+                Integer idClient = rs.getInt(1);
+                String prenom = rs.getString(2);
+                String nom = rs.getString(3);
+                Integer age = rs.getInt(4);
+                TupleClient client = new TupleClient(idClient, prenom, nom, age);
+
+                clients.add(client);
+            }
+            return clients;
+        } catch (SQLException e) {
+                e.printStackTrace();
+                throw new SQLException("Erreur getListClients dans TableClient");
+            }
+    }
     public void afficherClient(int idClient) throws SQLException {
         try {
             // update ps avec idclient
