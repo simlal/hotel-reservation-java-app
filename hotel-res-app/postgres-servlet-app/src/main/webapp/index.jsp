@@ -2,7 +2,7 @@
 <%
     if(getServletContext().getAttribute("serveur") != null)
     {%>
-<jsp:forward page="/WEB-INF/login.jsp" />
+<jsp:forward page="/login.jsp" />
 <%}
 %>
 <!DOCTYPE html>
@@ -23,7 +23,7 @@
 <div class="container">
     <h1 class="text-center">Système de gestion pour AubegeInn</h1>
     <div class="col-md-4 offset-md-4">
-        <form action="Login" method="POST">
+        <form action="/tp5/Login" method="POST">
             <div class="form-group">
                 <label for="userIdBD">Nom d'utilisateur de la base de donnée</label>
                 <input class="form-control" type="TEXT" name="userIdBD" value="<%= (request.getAttribute("userIdBD") != null ? (String)request.getAttribute("userIdBD") : "") %>" placeholder="ift287_XX">
@@ -49,7 +49,7 @@
 </div>
 <br>
 <%-- inclusion d'une autre page pour l'affichage des messages d'erreur--%>
-<jsp:include page="/WEB-INF/messageErreur.jsp" />
+<jsp:include page="/messageErreur.jsp" />
 <br>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

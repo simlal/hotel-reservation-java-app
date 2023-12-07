@@ -36,12 +36,28 @@
     </listener>
 <!--    Liste de servlets-->
     <servlet>
+        <servlet-name>Index</servlet-name>
+        <servlet-class>AubServlet.Index</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>Login</servlet-name>
         <servlet-class>AubServlet.Login</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Accueil</servlet-name>
+        <servlet-class>AubServlet.Accueil</servlet-class>
+    </servlet>
 <!--    Mappings-->
     <servlet-mapping>
+        <servlet-name>Index</servlet-name>
+        <url-pattern>/tp5/</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>Login</servlet-name>
-        <url-pattern>/Login</url-pattern>
+        <url-pattern>/tp5/Login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Accueil</servlet-name>
+        <url-pattern>/tp5/Accueil</url-pattern>
     </servlet-mapping>
 </web-app>

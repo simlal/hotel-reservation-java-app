@@ -10,7 +10,9 @@ public class MainManager {
     private final TableCommodite tableCommodite;
     private final TableChambreCommodite tableChambreCommodite;
     private final TableReservation tableReservation;
+    private final TableUtilisateurs tableUtilisateurs;
 
+    private final ManagerUtilisateurs managerUtilisateurs;
     private final ManagerClient managerClient;
     private final ManagerChambre managerChambre;
     private final ManagerCommodite managerCommodite;
@@ -26,6 +28,7 @@ public class MainManager {
             this.tableCommodite = new TableCommodite(cx);
             this.tableChambreCommodite = new TableChambreCommodite(cx);
             this.tableReservation = new TableReservation(cx);
+            this.tableUtilisateurs = new TableUtilisateurs(cx);
 
             // Regroupement package Manager
             this.managerClient = new ManagerClient(tableClient);
@@ -41,6 +44,8 @@ public class MainManager {
                 tableChambre, 
                 tableReservation
             );
+            this.managerUtilisateurs = new ManagerUtilisateurs(tableUtilisateurs);
+
         } catch (SQLException se) {
             System.out.println(se.getMessage());
             throw new SQLException("Erreur dans MainManager");
@@ -68,6 +73,9 @@ public class MainManager {
     public TableReservation getTableReservation() {
         return tableReservation;
     }
+    public TableUtilisateurs getTableUtilisateurs() {
+        return tableUtilisateurs;
+    }
 
 
     // Getters pour Manager
@@ -85,6 +93,9 @@ public class MainManager {
     }
     public ManagerReservation getManagerReservation() {
         return managerReservation;
+    }
+    public ManagerUtilisateurs getManagerUtilisateurs() {
+        return managerUtilisateurs;
     }
 
 //    Fermeture connexion

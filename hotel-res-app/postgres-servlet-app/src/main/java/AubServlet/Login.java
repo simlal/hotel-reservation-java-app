@@ -84,7 +84,7 @@ public class Login extends HttpServlet
                 getServletContext().setAttribute("pass", motDePasse);
 
                 // Afficher le menu de connexion principal de l'application
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/Login");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/tp5/Login");
                 dispatcher.forward(request, response);
             }
             catch(Exception e)

@@ -73,7 +73,7 @@ public class AubergeInnHelper {
             session.invalidate();
         }
         // Afficher le menu de connexion principal de l'application
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/login.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/login.jsp");
         dispatcher.forward(request, response);
     }
 

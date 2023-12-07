@@ -32,7 +32,7 @@
                     <input class="btn btn-primary" type="SUBMIT" name="connecter" value="Se connecter">
                 </div>
                 <div class="col-md-6 text-right">
-                    <input class="btn btn-outline-primary" type="SUBMIT" name="inscrire" value="S'inscrire" onclick="form.action='Inscription';">
+                    <input class="btn btn-outline-primary" type="SUBMIT" name="inscrire" value="S'inscrire" onclick="form.action='tp5/Inscription';">
                 </div>
             </div>
         </form>
@@ -40,7 +40,7 @@
 </div>
 <br>
 <%-- inclusion d'une autre page pour l'affichage des messages d'erreur--%>
-<jsp:include page="/WEB-INF/messageErreur.jsp" />
+<jsp:include page="/messageErreur.jsp" />
 <br>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
