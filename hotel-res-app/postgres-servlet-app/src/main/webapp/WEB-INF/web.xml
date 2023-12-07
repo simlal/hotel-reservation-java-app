@@ -47,6 +47,10 @@
         <servlet-name>Accueil</servlet-name>
         <servlet-class>AubServlet.Accueil</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Logout</servlet-name>
+        <servlet-class>AubServlet.Logout</servlet-class>
+    </servlet>
 <!--    Mappings-->
     <servlet-mapping>
         <servlet-name>Index</servlet-name>
@@ -59,5 +63,9 @@
     <servlet-mapping>
         <servlet-name>Accueil</servlet-name>
         <url-pattern>/tp5/Accueil</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Logout</servlet-name>
+        <url-pattern>/tp5/Logout</url-pattern>
     </servlet-mapping>
 </web-app>
