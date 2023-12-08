@@ -3,6 +3,9 @@ package AubergeInn;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class TableChambreCommodite {
     
@@ -10,10 +13,17 @@ public class TableChambreCommodite {
     private final static String sqlCheckChambreCommodite = "select * from ChambreCommodite where idChambre = ? and idCommodite = ?";
     private final static String sqlInclureChambreCommodite = "insert into ChambreCommodite (idChambre, idCommodite) values (?,?)";
     private final static String sqlEnleverChambreCommodite = "delete from ChambreCommodite where idChambre = ? and idCommodite = ?";
+    private final static String sqlGetCommmoditesDeChambre =
+            "select Commodite.* from Chambre " +
+                    "join ChambreCommodite on Chambre.idChambre = ChambreCommodite.idChambre " +
+                    "join Commodite on Commodite.idCommodite = ChambreCommodite.idCommodite " +
+                    "where Chambre.idChambre = ? " +
+                    "order by Commodite.idCommodite";
 
     private final PreparedStatement stmtCheckChambreCommodite;
     private final PreparedStatement stmtInclureChambreCommodite;
     private final PreparedStatement stmtEnleverChambreCommodite;
+    private final PreparedStatement stmtGetCommoditesDeChambre;
 
     public TableChambreCommodite(Connexion cx) throws SQLException {
         this.cx = cx;
@@ -21,6 +31,7 @@ public class TableChambreCommodite {
             this.stmtCheckChambreCommodite = cx.getConnection().prepareStatement(sqlCheckChambreCommodite);
             this.stmtInclureChambreCommodite = cx.getConnection().prepareStatement(sqlInclureChambreCommodite);
             this.stmtEnleverChambreCommodite = cx.getConnection().prepareStatement(sqlEnleverChambreCommodite);
+            this.stmtGetCommoditesDeChambre = cx.getConnection().prepareStatement(sqlGetCommmoditesDeChambre);
         } catch (SQLException se) {
             se.printStackTrace();
             throw new SQLException("Erreur prepareStatement dans TableChambreCommodite");
@@ -104,6 +115,28 @@ public class TableChambreCommodite {
         } catch (SQLException se) {
             se.printStackTrace();
             throw new SQLException("Erreur enleverChambreCommodite dans TableChambreCommodite");
+        }
+    }
+
+    public List<TupleCommodite> getCommoditesdeChambre(TupleChambre chambre) throws SQLException {
+        List<TupleCommodite> commoditesDeChambre = new ArrayList<>();
+
+        try {
+            stmtGetCommoditesDeChambre.setInt(1, chambre.getIdChambre());
+            ResultSet rs = stmtGetCommoditesDeChambre.executeQuery();
+
+            while (rs.next()) {
+                int idCommodite = rs.getInt(1);
+                String description = rs.getString(2);
+                int surplusPrix = rs.getInt(3);
+                TupleCommodite commodite = new TupleCommodite(idCommodite, description, surplusPrix);
+
+                commoditesDeChambre.add(commodite);
+            }
+            return commoditesDeChambre;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Erreur getCommoditesDeChambre dans TableChambreCommodite");
         }
     }
 }

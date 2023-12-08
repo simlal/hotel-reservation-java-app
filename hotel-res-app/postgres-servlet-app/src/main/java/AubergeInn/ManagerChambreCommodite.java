@@ -1,6 +1,8 @@
 package AubergeInn;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ManagerChambreCommodite {
 
@@ -106,6 +108,24 @@ public class ManagerChambreCommodite {
             cx.rollback();
             se.printStackTrace();
             throw new SQLException("Erreur enleverCommodite avec chambreCommodite");
+        }
+    }
+
+    public List<TupleCommodite> getCommoditesDeChambre(TupleChambre chambre) throws SQLException {
+        List<TupleCommodite> commoditesDeChambre = new ArrayList<>();
+        try {
+            if (!tableChambre.checkChambre(chambre.getIdChambre())) {
+                throw new SQLException(
+                        "idChambre = " + chambre.getIdChambre() + " n'existe pas"
+                );
+            }
+            commoditesDeChambre = tableChambreCommodite.getCommoditesdeChambre(chambre);
+            cx.commit();
+            return commoditesDeChambre;
+        } catch (SQLException e) {
+            cx.rollback();
+            e.printStackTrace();
+            throw new SQLException("Erreur getCommoditesDeChambre dans ManagerCommodite");
         }
     }
 }

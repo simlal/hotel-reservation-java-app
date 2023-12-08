@@ -2,21 +2,17 @@
     <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
             <%
-                if (session.getAttribute("admin") != null)    // Lien vers operations update/delete
+                if (session.getAttribute("admin") != null)    // Lien vers operations utilisateurs
                 {
             %>
-            <li><a class="nav-item nav-link" href="#">Gestion Utilisateurs</a></li>
+            <li><a class="nav-item nav-link" href="Utilisateurs">Gestion Utilisateurs</a></li>
+
+            <%
+                }
+            %>
             <li><a class="nav-item nav-link" href="#">Gestion Clients</a></li>
             <li><a class="nav-item nav-link" href="#">Gestion Chambres + Commodites</a></li>
             <li><a class="nav-item nav-link" href="#">Faire une reservation</a></li>
-            <%
-                } else    // non-admin read-only
-                {
-            %>
-
-            <li><a class="nav-item nav-link" href="#">Informations clients</a></li>
-            <li><a class="nav-item nav-link" href="#">Informations chambres et commodites</a></li>
-            <%  }%>
         </ul>
     </div>
     <%String statut = null;

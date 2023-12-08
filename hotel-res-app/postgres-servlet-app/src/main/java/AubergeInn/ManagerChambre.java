@@ -2,6 +2,8 @@ package AubergeInn;
 
 import java.sql.SQLException;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ManagerChambre {
     
@@ -119,6 +121,32 @@ public class ManagerChambre {
         } catch (SQLException se) {
             se.printStackTrace();
             throw new SQLException("Erreur afficherInfoChambre dans ManagerChambre");
+        }
+    }
+
+    public List<TupleChambre> getListChambres()throws SQLException {
+        List<TupleChambre> chambres = new ArrayList<>();
+        try {
+            chambres = tableChambre.getListChambres();
+            cx.commit();
+            return chambres;
+        } catch (SQLException e) {
+            cx.rollback();
+            e.printStackTrace();
+            throw new SQLException("Erreur getListChambres dans ManagerChambre");
+        }
+    }
+
+    public List<TupleChambre> getListChambresLibres(Date dateDebut, Date dateFin)throws SQLException {
+        List<TupleChambre> chambresLibres = new ArrayList<>();
+        try {
+            chambresLibres = tableChambre.getListChambresLibres(dateDebut, dateFin);
+            cx.commit();
+            return chambresLibres;
+        } catch (SQLException e) {
+            cx.rollback();
+            e.printStackTrace();
+            throw new SQLException("Erreur getListChambresLibres dans ManagerChambre");
         }
     }
 }

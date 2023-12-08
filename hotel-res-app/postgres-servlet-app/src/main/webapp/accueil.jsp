@@ -1,6 +1,9 @@
 <%@ page import="AubergeInn.*,AubServlet.*,javax.sql.*"
          contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.HashSet" %>
+<%@ page import="java.util.Set" %>
+<%@ page import="java.sql.Date" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,12 +27,12 @@
 <body>
 <jsp:include page="/navigation.jsp" />
 <div class="container">
-    <h1 class="text-center">Système de gestion de AubergeInn</h1>
+    <h1 class="text-center mb-3">Gestion de AubergeInn: Vue d'ensemble</h1>
 <%--Statistiques generales--%>
-    <h2 class="text-center"> Vue d'ensemble</h2>
-    <div class="container">
-        <h3>Info utilisateurs logiciel</h3>
-        <table class="table-dark">
+    <div class="container mb-5">
+        <h3 class="text-center">Info utilisateurs logiciel</h3>
+        <div class="d-flex justify-content-center">
+        <table class="table" style="width: 50%;">
             <thead>
             <tr>
                 <th>Type de Privilege</th>
@@ -62,35 +65,106 @@
                 </tr>
             </tbody>
         </table>
+        </div>
     </div>
         <div class="container">
             <div class="row">
+<%--                Sommaire clients--%>
                 <div class="col-md-4">
-                    <h3>Clients</h3>
-                    <table class="table">
+                    <h3 class="text-center">Clients</h3>
+                    <table class="table text-center">
                         <thead class="thead-dark">
                             <tr>
                                 <th>Parametre</th>
-                                <th>valeur</th>
+                                <th>Valeur</th>
                             </tr>
                         </thead>
-<%--                        <% List<TupleClient> clients = AubergeInnHelper--%>
-<%--                                .getAubergeInnInterro(session)--%>
-<%--                                .getManagerClient();--%>
-
-<%--                        %>--%>
+                        <%
+                            MainManager aubInterro = AubergeInnHelper.getAubergeInnInterro(session);
+                            List<TupleClient> clients = aubInterro
+                                .getManagerClient()
+                                .getListClients();
+                            int nbTotalClients = clients.size();
+                            double ageMoyenClients = 0;
+                            for (TupleClient client : clients) {
+                                ageMoyenClients += client.getAge();
+                            }
+                            ageMoyenClients = Math.round(ageMoyenClients/nbTotalClients);
+                        %>
                         <tbody>
+                        <tr>
+                            <td>Nb total de clients</td>
+                            <td><%=nbTotalClients%></td>
+                        </tr>
+                        <tr>
+                            <td>Age moyen</td>
+                            <td><%=ageMoyenClients%></td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
+<%--    Sommaire chambres/commodite--%>
+                <%
+                    List<TupleChambre> chambres = aubInterro.getManagerChambre().getListChambres();
+                    Set<String> typePossibles = new HashSet<String>();
+                    double prixBaseMoyen = 0;
+                    for (TupleChambre chambre : chambres) {
+                        typePossibles.add(chambre.getTypeLit());
+                        prixBaseMoyen += chambre.getPrixBase();
+                    }
+                    prixBaseMoyen = Math.round(prixBaseMoyen/chambres.size());
+                %>
                 <div class="col-md-4">
-                    <table class="table">
-<%--                        TODO TABLE CHAMBRECOMM--%>
+                    <h3 class="text-center">Chambres</h3>
+                    <table class="table text-center">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>Parametre</th>
+                            <th>Valeur</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Nb de chambres total</td>
+                            <td><%chambres.size();%></td>
+                        </tr>
+                        <tr>
+                            <td>Types de lit possible</td>
+                            <td><%=typePossibles%></td>
+                        </tr>
+                        <tr>
+                            <td>Prix de base moyen</td>
+                            <td><%=prixBaseMoyen%></td>
+                        </tr>
+                        </tbody>
                     </table>
                 </div>
+<%--    Sommaire reservations--%>
                 <div class="col-md-4">
-                    <table class="table">
-                        <%--                        TODO TABLE RESERV--%>
+                    <h3 class="text-center">Reservations</h3>
+                    <table class="table text-center">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>Parametre</th>
+                            <th>Valeur</th>
+                        </tr>
+                        </thead>
+                        <%
+                            List<TupleReservation> reservations = aubInterro.getManagerReservation().getListReservations();
+
+                            Date maintenant = new Date(System.currentTimeMillis());
+                            List<TupleChambre> chambresLibres = aubInterro.getManagerChambre().getListChambresLibres(maintenant, maintenant);
+                        %>
+                        <tbody>
+                        <tr>
+                            <td>Nb de reservations (total historique)</td>
+                            <td><%=reservations.size()%></td>
+                        </tr>
+                        <tr>
+                            <td>Nb de chambres libres ajourd'hui</td>
+                            <td><%=chambresLibres.size()%></td>
+                        </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>

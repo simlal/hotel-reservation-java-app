@@ -1,6 +1,8 @@
 package AubergeInn;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ManagerClient {
     
@@ -88,6 +90,19 @@ public class ManagerClient {
         } catch (SQLException se) {
             se.printStackTrace();
             throw new SQLException("Erreur afficherClient dans ManagerClient");
+        }
+    }
+
+    public List<TupleClient> getListClients() throws SQLException {
+        List<TupleClient> clients = new ArrayList<>();
+        try {
+            clients = tableClient.getListClients();
+            cx.commit();
+            return clients;
+        } catch (SQLException e) {
+            cx.rollback();
+            e.printStackTrace();
+            throw new SQLException("Erreur getListClients dans ManagerClient");
         }
     }
 }

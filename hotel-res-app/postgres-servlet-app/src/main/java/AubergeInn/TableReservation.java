@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TableReservation {
 
@@ -16,10 +18,12 @@ public class TableReservation {
     "values (?,?,?,?)";
     private final static String sqlSupprimerReservationChambre = 
     "delete from Reservation where idChambre = ?";
+    private final static String sqlGetListReservations = "select * from Reservation";
     
     private final PreparedStatement stmtCheckChambreReserve;
     private final PreparedStatement stmtFaireReservation;
     private final PreparedStatement stmtSupprimerReservationChambre;
+    private final PreparedStatement stmtGetListReservations;
 
     public TableReservation (Connexion cx) throws SQLException {
         this.cx = cx;
@@ -27,6 +31,7 @@ public class TableReservation {
             this.stmtCheckChambreReserve = cx.getConnection().prepareStatement(sqlCheckChambreReserve);
             this.stmtFaireReservation = cx.getConnection().prepareStatement(sqlFaireReservation);
             this.stmtSupprimerReservationChambre = cx.getConnection().prepareStatement(sqlSupprimerReservationChambre);
+            this.stmtGetListReservations = cx.getConnection().prepareStatement(sqlGetListReservations);
         } catch (SQLException se) {
             se.printStackTrace();
             throw new SQLException("Erreur prepareStatement dans TableReservation");
@@ -111,6 +116,26 @@ public class TableReservation {
         } catch (SQLException se) {
             se.printStackTrace();
             throw new SQLException("Erreur supprimerReservationChambre dans TableReservation");
+        }
+    }
+
+    public List<TupleReservation> getListReservations() throws SQLException {
+        List<TupleReservation> reservations = new ArrayList<>();
+        try {
+            ResultSet rs = stmtGetListReservations.executeQuery();
+            while (rs.next()) {
+                Date dateDebut = rs.getDate(1);
+                Date dateFin = rs.getDate(2);
+                int idClient = rs.getInt(3);
+                int idChambre = rs.getInt(4);
+
+                TupleReservation reservation = new TupleReservation(dateDebut, dateFin, idClient, idChambre);
+                reservations.add(reservation);
+            }
+            return reservations;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Erreur getListReservations dans TableReservation");
         }
     }
 }

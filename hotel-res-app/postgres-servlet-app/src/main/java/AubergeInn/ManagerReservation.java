@@ -1,6 +1,8 @@
 package AubergeInn;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ManagerReservation {
     
@@ -74,6 +76,19 @@ public class ManagerReservation {
             cx.rollback();
             se.printStackTrace();
             throw new SQLException("Erreur faireReservation dans ManagerReservation");
+        }
+    }
+
+    public List<TupleReservation> getListReservations() throws SQLException {
+        List<TupleReservation> reservations = new ArrayList<>();
+        try {
+            reservations = tableReservation.getListReservations();
+            cx.commit();
+            return reservations;
+        } catch (SQLException e) {
+            cx.rollback();
+            e.printStackTrace();
+            throw new SQLException("Erreur getListReservations dans ManagerReservation");
         }
     }
 }

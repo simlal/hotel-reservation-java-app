@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.ResultSet;
 import java.sql.Date;
+import java.util.List;
 
 // Interactions avec table Chambre
 public class TableChambre {
@@ -37,7 +38,13 @@ public class TableChambre {
     "where Chambre.idChambre = ? " +
     "group by Chambre.idChambre, Commodite.idCommodite";
 
-    
+    private static final String sqlGetListChambres = "select * from Chambre";
+    private static final String sqlGetListChambresLibres =
+        "select Chambre.* from Chambre " +
+        "LEFT JOIN ChambreCommodite ON Chambre.idChambre = ChambreCommodite.idChambre " +
+        "LEFT JOIN Commodite ON ChambreCommodite.idCommodite = Commodite.idCommodite " +
+        "WHERE Chambre.idChambre NOT IN (SELECT idChambre FROM Reservation WHERE (dateDebut < ? AND dateFin > ?))";
+
     private Connexion cx;
     private final PreparedStatement stmtCheckChambre;
     private final PreparedStatement stmtAjouterChambre;
@@ -46,6 +53,8 @@ public class TableChambre {
     private final PreparedStatement stmtCheckChambreReservation;
     private final PreparedStatement stmtAfficherChambresLibres;
     private final PreparedStatement stmtAfficherChambre;
+    private final PreparedStatement stmtGetListChambres;
+    private final PreparedStatement stmtGetListChambresLibres;
 
     public TableChambre(Connexion cx) throws SQLException {
         this.cx = cx;
@@ -57,6 +66,8 @@ public class TableChambre {
             this.stmtCheckChambreReservation = cx.getConnection().prepareStatement(sqlCheckChambreReservation);
             this.stmtAfficherChambresLibres = cx.getConnection().prepareStatement(sqlAfficherChambresLibres);
             this.stmtAfficherChambre = cx.getConnection().prepareStatement(sqlAfficherChambre);
+            this.stmtGetListChambres = cx.getConnection().prepareStatement(sqlGetListChambres);
+            this.stmtGetListChambresLibres = cx.getConnection().prepareStatement(sqlGetListChambresLibres);
         } catch (SQLException se) {
             System.out.println(se.getMessage());
             throw new SQLException("Erreur prepareStatement dans TableChambre");
@@ -190,10 +201,8 @@ public class TableChambre {
                 "\nChambres libres pour la periode: " + dateDebut.toString() +
                 " - " + dateFin.toString() + ":\n"
                 );
-                // List<Map<String, String>> chambresLibres = new ArrayList<Map<String, String>>();
+
                 while (rs.next()) {
-                    // Ajout dans container map
-                    // HashMap<String, String> chambreLibre = new HashMap<String, String>();
                     int idChambre = rs.getInt("idChambre");
                     String nom = rs.getString("nom");
                     String typeLit = rs.getString("typeLit");
@@ -201,27 +210,12 @@ public class TableChambre {
                     int surplusPrix = rs.getInt("prixTotalCommodite");
                     int prixTotal = prixBase + surplusPrix;
                     System.out.println(
-                        "idChambre: " + idChambre + "\n" +
-                        "nom de chambre: " + nom + "\n" +
-                        "Type de lit: " + typeLit + "\n" +
-                        "Prix total par nuit: " + prixTotal + "\n"
+                            "idChambre: " + idChambre + "\n" +
+                                    "nom de chambre: " + nom + "\n" +
+                                    "Type de lit: " + typeLit + "\n" +
+                                    "Prix total par nuit: " + prixTotal + "\n"
                     );
-                    
-                    // chambreLibre.put("idChambre", Integer.toString(idChambre));
-                    // chambreLibre.put("nom", nom);
-                    // chambreLibre.put("typeLit", typeLit);
-                    // chambreLibre.put("description", description);
-                    // chambreLibre.put("prixTotal", Integer.toString(prixTotal));
                 }
-                // for (HashMap chambre: chambresLibres) {
-                //     System.out.println(
-                //         "idChambre: " + chambre.get("idChambre") + "\n" +
-                //         "nom: " + chambre.get("nom") + "\n" +
-                //         "typeLit: " + chambre.get("typeLit") + "\n" +
-                //         "description: " + chambre.get("description") + "\n" +
-                //         "prixTotal: " + chambre.get("prixTotal") + "\n"
-                //     );
-                // }
             }
 
         } catch (SQLException se) {
@@ -277,5 +271,51 @@ public class TableChambre {
             se.printStackTrace();
             throw new SQLException("Erreur afficherChambre dans TableChambre");
         } 
+    }
+
+    public List<TupleChambre> getListChambres() throws SQLException {
+        List<TupleChambre> chambres = new ArrayList<>();
+        try {
+            ResultSet rs = stmtGetListChambres.executeQuery();
+
+            while (rs.next()) {
+                int idChambre = rs.getInt(1);
+                String nom = rs.getString(2);
+                String typeLit = rs.getString(3);
+                int prixBase = rs.getInt(4);
+
+                TupleChambre chambre = new TupleChambre(idChambre, nom, typeLit, prixBase);
+                chambres.add(chambre);
+            }
+            return chambres;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Erreur getListChambres dans TableChambre");
+        }
+    }
+
+    public List<TupleChambre> getListChambresLibres(Date dateDebut, Date dateFin) throws SQLException {
+        List<TupleChambre> chambresLibres = new ArrayList<>();
+        try {
+            // Modif ps avec info chambre
+            stmtGetListChambresLibres.setDate(1, dateFin);
+            stmtGetListChambresLibres.setDate(2, dateDebut);
+
+            // ajout dans list
+            ResultSet rs = stmtGetListChambresLibres.executeQuery();
+            while (rs.next()) {
+                int idChambre = rs.getInt(1);
+                String nom = rs.getString(2);
+                String typeLit = rs.getString(3);
+                int prixBase = rs.getInt(4);
+                TupleChambre chambre = new TupleChambre(idChambre, nom, typeLit, prixBase);
+
+                chambresLibres.add(chambre);
+            }
+            return chambresLibres;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Erreur getListChambresLibres dans TableChambre");
+        }
     }
 }
