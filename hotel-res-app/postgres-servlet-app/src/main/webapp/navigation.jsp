@@ -1,6 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
+            <li><a class="nav-item nav-link" href="Accueil">Accueil</a></li>
             <%
                 if (session.getAttribute("admin") != null)    // Lien vers operations utilisateurs
                 {

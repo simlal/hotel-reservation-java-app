@@ -149,7 +149,7 @@ public class Accueil extends HttpServlet
                     else
                     {
                         // Vers gestionMembre?
-                        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/accueil.jsp");
+                        RequestDispatcher dispatcher = request.getRequestDispatcher("/accueil.jsp");
                         dispatcher.forward(request, response);
                     }
                 }
@@ -158,7 +158,7 @@ public class Accueil extends HttpServlet
                     List<String> listeMessageErreur = new LinkedList<String>();
                     listeMessageErreur.add(e.getMessage());
                     request.setAttribute("listeMessageErreur", listeMessageErreur);
-                    RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/creerCompte.jsp");
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("/creerCompte.jsp");
                     dispatcher.forward(request, response);
                     // pour déboggage seulement : afficher tout le contenu de l'exception
                     e.printStackTrace();
@@ -170,7 +170,7 @@ public class Accueil extends HttpServlet
             List<String> listeMessageErreur = new LinkedList<String>();
             listeMessageErreur.add(e.getMessage());
             request.setAttribute("listeMessageErreur", listeMessageErreur);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/login.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/login.jsp");
             dispatcher.forward(request, response);
             // pour déboggage seulement : afficher tout le contenu de l'exception
             e.printStackTrace();

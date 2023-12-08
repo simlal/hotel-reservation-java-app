@@ -29,6 +29,9 @@
 <div class="container">
     <h1 class="text-center mb-3">Gestion de AubergeInn: Vue d'ensemble</h1>
 <%--Statistiques generales--%>
+    <%
+        if (session.getAttribute("admin") != null) {
+    %>
     <div class="container mb-5">
         <h3 class="text-center">Info utilisateurs logiciel</h3>
         <div class="d-flex justify-content-center">
@@ -67,6 +70,7 @@
         </table>
         </div>
     </div>
+    <% } %>
         <div class="container">
             <div class="row">
 <%--                Sommaire clients--%>

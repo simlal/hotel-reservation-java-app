@@ -9,23 +9,11 @@
         <param-name>exempleParam1</param-name>
         <param-value>valeurDeExempleParam1</param-value>
     </context-param>
-<!--    <servlet>-->
-<!--        <servlet-name>jsp</servlet-name>-->
-<!--        <servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>-->
-<!--        <init-param>-->
-<!--            <param-name>fork</param-name>-->
-<!--            <param-value>false</param-value>-->
-<!--        </init-param>-->
-<!--        <init-param>-->
-<!--            <param-name>xpoweredBy</param-name>-->
-<!--            <param-value>false</param-value>-->
-<!--        </init-param>-->
-<!--        <init-param>-->
-<!--            <param-name>javaEncoding</param-name>-->
-<!--            <param-value>UTF-8</param-value>-->
-<!--        </init-param>-->
-<!--        <load-on-startup>3</load-on-startup>-->
-<!--    </servlet>-->
+<!--    Error page 404 redirect-->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/notFound.jsp</location>
+    </error-page>
 
     <!--    Listeners-->
     <listener>
@@ -51,6 +39,10 @@
         <servlet-name>Logout</servlet-name>
         <servlet-class>AubServlet.Logout</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Utilisateurs</servlet-name>
+        <servlet-class>AubServlet.Utilisateurs</servlet-class>
+    </servlet>
 <!--    Mappings-->
     <servlet-mapping>
         <servlet-name>Index</servlet-name>
@@ -67,5 +59,9 @@
     <servlet-mapping>
         <servlet-name>Logout</servlet-name>
         <url-pattern>/tp5/Logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Utilisateurs</servlet-name>
+        <url-pattern>/tp5/Utilisateurs</url-pattern>
     </servlet-mapping>
 </web-app>
