@@ -44,6 +44,7 @@ public class TableCommodite {
             stmtCheckCommodite.setInt(1, idCommodite);
             ResultSet rs = stmtCheckCommodite.executeQuery();
             boolean commoditeExiste = rs.next();
+            rs.close();
             return commoditeExiste;
         } catch (SQLException se) {
             se.printStackTrace();

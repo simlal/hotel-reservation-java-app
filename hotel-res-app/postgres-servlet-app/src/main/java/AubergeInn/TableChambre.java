@@ -217,6 +217,7 @@ public class TableChambre {
                     );
                 }
             }
+            rs.close();
 
         } catch (SQLException se) {
             se.printStackTrace();
@@ -266,6 +267,7 @@ public class TableChambre {
                         );
                     }
                 } while (rs.next());
+                rs.close();
             }
         } catch (SQLException se) {
             se.printStackTrace();
@@ -287,6 +289,7 @@ public class TableChambre {
                 TupleChambre chambre = new TupleChambre(idChambre, nom, typeLit, prixBase);
                 chambres.add(chambre);
             }
+            rs.close();
             return chambres;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -312,6 +315,7 @@ public class TableChambre {
 
                 chambresLibres.add(chambre);
             }
+            rs.close();
             return chambresLibres;
         } catch (SQLException e) {
             e.printStackTrace();

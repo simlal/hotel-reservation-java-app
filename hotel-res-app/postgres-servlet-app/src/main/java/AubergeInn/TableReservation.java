@@ -63,6 +63,7 @@ public class TableReservation {
                 // Verif si chambre est reservee
                 ResultSet rs = stmtCheckChambreReserve.executeQuery();
                 boolean chambreReservee = rs.next();
+                rs.close();
                 return chambreReservee;
             } catch (SQLException se) {
                 se.printStackTrace();
@@ -132,6 +133,7 @@ public class TableReservation {
                 TupleReservation reservation = new TupleReservation(dateDebut, dateFin, idClient, idChambre);
                 reservations.add(reservation);
             }
+            rs.close();
             return reservations;
         } catch (SQLException e) {
             e.printStackTrace();

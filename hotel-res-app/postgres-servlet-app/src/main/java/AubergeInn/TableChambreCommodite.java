@@ -61,6 +61,7 @@ public class TableChambreCommodite {
             // Verif si chambreCommodite existe
             ResultSet rs = stmtCheckChambreCommodite.executeQuery();
             boolean chambreCommoditeExiste = rs.next();
+            rs.close();
             return chambreCommoditeExiste;
         } catch (SQLException se) {
             se.printStackTrace();
@@ -133,6 +134,7 @@ public class TableChambreCommodite {
 
                 commoditesDeChambre.add(commodite);
             }
+            rs.close();
             return commoditesDeChambre;
         } catch (SQLException e) {
             e.printStackTrace();

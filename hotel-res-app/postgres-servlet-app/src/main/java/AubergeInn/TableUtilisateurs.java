@@ -112,39 +112,40 @@ public class TableUtilisateurs
 
     public List<TupleUtilisateur> getListUtilisateurs(boolean avecAdmin) throws SQLException
     {
-        List<TupleUtilisateur> utilisateurs = new ArrayList<TupleUtilisateur>();
-        stmtListeUtilisateur.setInt(1, 1);
-        ResultSet rset = stmtListeUtilisateur.executeQuery();
-        while (rset.next())
-        {
-            String utilisateurName = rset.getString(1);
-            String motDePasse = rset.getString(2);
-            int acces = rset.getInt(3);
-            String nom = rset.getString(4);
-            long telephone = rset.getLong(5);
-
-
-
-            TupleUtilisateur tupleUtilisateur = new TupleUtilisateur(utilisateurName, motDePasse, acces, nom, telephone);
-            utilisateurs.add(tupleUtilisateur);
-        }
-        if (avecAdmin)
-        {
-            stmtListeUtilisateur.setInt(1, 0);
-            rset = stmtListeUtilisateur.executeQuery();
-            while (rset.next())
-            {
+        try {
+            List<TupleUtilisateur> utilisateurs = new ArrayList<TupleUtilisateur>();
+            stmtListeUtilisateur.setInt(1, 1);
+            ResultSet rset = stmtListeUtilisateur.executeQuery();
+            while (rset.next()) {
                 String utilisateurName = rset.getString(1);
                 String motDePasse = rset.getString(2);
                 int acces = rset.getInt(3);
                 String nom = rset.getString(4);
                 long telephone = rset.getLong(5);
 
+
                 TupleUtilisateur tupleUtilisateur = new TupleUtilisateur(utilisateurName, motDePasse, acces, nom, telephone);
                 utilisateurs.add(tupleUtilisateur);
             }
+            if (avecAdmin) {
+                stmtListeUtilisateur.setInt(1, 0);
+                rset = stmtListeUtilisateur.executeQuery();
+                while (rset.next()) {
+                    String utilisateurName = rset.getString(1);
+                    String motDePasse = rset.getString(2);
+                    int acces = rset.getInt(3);
+                    String nom = rset.getString(4);
+                    long telephone = rset.getLong(5);
+
+                    TupleUtilisateur tupleUtilisateur = new TupleUtilisateur(utilisateurName, motDePasse, acces, nom, telephone);
+                    utilisateurs.add(tupleUtilisateur);
+                }
+            }
+            rset.close();
+            return utilisateurs;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Erreur getListUtilisateurs dans TableUtilisateur");
         }
-        rset.close();
-        return utilisateurs;
     }
 }

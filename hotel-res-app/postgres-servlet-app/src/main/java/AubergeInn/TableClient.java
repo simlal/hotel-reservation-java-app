@@ -155,6 +155,7 @@ public class TableClient {
 
                 clients.add(client);
             }
+            rs.close();
             return clients;
         } catch (SQLException e) {
                 e.printStackTrace();

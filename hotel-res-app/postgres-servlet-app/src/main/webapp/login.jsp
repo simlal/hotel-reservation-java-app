@@ -32,7 +32,7 @@
                     <input class="btn btn-primary" type="SUBMIT" name="connecter" value="Se connecter">
                 </div>
                 <div class="col-md-6 text-right">
-                    <input class="btn btn-outline-primary" type="SUBMIT" name="inscrire" value="S'inscrire" onclick="form.action='tp5/Inscription';">
+                    <input class="btn btn-outline-primary" type="SUBMIT" name="inscrire" value="S'inscrire" onclick="form.action='Inscription';">
                 </div>
             </div>
         </form>

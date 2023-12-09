@@ -149,7 +149,7 @@ public class ManagerUtilisateurs
         }
     }
 
-    public List<TupleUtilisateur> getListeUtilisateurs(boolean avecAdmin) throws SQLException, IFT287Exception
+    public List<TupleUtilisateur> getListeUtilisateurs(boolean avecAdmin) throws SQLException
     {
         try
         {
@@ -157,10 +157,11 @@ public class ManagerUtilisateurs
             cx.commit();
             return listUtilisateurs;
         }
-        catch(Exception e)
+        catch(SQLException e)
         {
             cx.rollback();
-            throw e;
+            e.printStackTrace();
+            throw new SQLException("Erreur getListeUtilisateurs dans ManagerUtilisateur");
         }
     }
 }// class
