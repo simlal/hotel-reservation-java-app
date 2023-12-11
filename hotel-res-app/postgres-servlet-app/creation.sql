@@ -1,7 +1,7 @@
 -- Creation toutes les tables de la bd
 -- Table Client
 CREATE TABLE Client (
-    idClient int PRIMARY KEY,
+    idClient serial PRIMARY KEY,
     prenom varchar(255) NOT NULL,
     nom varchar(255) NOT NULL,
     age int CHECK(age > 0)
@@ -9,7 +9,7 @@ CREATE TABLE Client (
 
 -- Table Chambre
 CREATE TABLE Chambre(
-    idChambre int PRIMARY KEY,
+    idChambre serial PRIMARY KEY,
     nom varchar(255) NOT NULL,
     typeLit varchar(255) NOT NULL,
     prixBase int CHECK(prixBase > 0) NOT NULL
@@ -28,7 +28,7 @@ CREATE TABLE Reservation(
 
 -- Table Commodite
 CREATE TABLE Commodite(
-    idCommodite int PRIMARY KEY,
+    idCommodite serial PRIMARY KEY,
     description varchar(255),
     surplusPrix int CHECK(surplusPrix > 0) NOT NULL
 );
@@ -52,3 +52,7 @@ CREATE TABLE Utilisateurs(
 );
 INSERT INTO Utilisateurs (utilisateurName, motDePasse, acces, nom, telephone) values ('AubergeInnAdmin', 'admin', 0, 'Administrateur', 5551234567);
 INSERT INTO Utilisateurs (utilisateurName, motDePasse, acces, nom, telephone) values ('usertest', 'test', 1, 'user1', 8191112222);
+
+-- test
+INSERT INTO Client (prenom, nom, age) VALUES ('sim', 'lal', 25);
+INSERT INTO Client (prenom, nom, age) VALUES ('ve', 'Getal', 32);

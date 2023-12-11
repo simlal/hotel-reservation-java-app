@@ -22,20 +22,12 @@ public class ManagerClient {
     /**
      * Ajout client si n'existe pas dans db
      * 
-     * @param client
+     * @param prenom nom age
      * @throws SQLException
      */
-    public void ajouterClient(TupleClient client) throws SQLException{
+    public void ajouterClient(String prenom, String nom, int age) throws SQLException{
             try {
-                // Check si client existe et maj db
-                if (!tableClient.checkClient(client.getIdClient())) {
-                    tableClient.ajouterClient(client);   
-                }
-                else {    
-                    throw new SQLException(
-                        "Impossible ajouter client avec idClient=" + client.getIdClient() + ": existe deja dans db."
-                    );
-                }
+                tableClient.ajouterClient(prenom, nom, age);
                 cx.commit();
             }
             catch (SQLException se) {
@@ -103,6 +95,34 @@ public class ManagerClient {
             cx.rollback();
             e.printStackTrace();
             throw new SQLException("Erreur getListClients dans ManagerClient");
+        }
+    }
+    public List<TupleClient> getListClientsReservEnCours() throws SQLException {
+        List<TupleClient> clientsReservEnCours = new ArrayList<>();
+        try {
+            clientsReservEnCours = tableClient.getListClientsReservEnCours();
+            cx.commit();
+            return clientsReservEnCours;
+        } catch (SQLException e) {
+            cx.rollback();
+            e.printStackTrace();
+            throw new SQLException("Erreur clientsReservEnCours dans ManagerClient");
+        }
+    }
+
+    public TupleClient getClient(int idClient) throws SQLException {
+        try {
+            if (!tableClient.checkClient(idClient)) {
+                throw new SQLException("Client avec idClient=" + idClient + " n'existe pas");
+            }
+
+            TupleClient client = tableClient.getClient(idClient);
+            cx.commit();
+            return client;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            cx.rollback();
+            throw new SQLException("Erreur getClient dans ManagerClient");
         }
     }
 }

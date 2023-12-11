@@ -91,4 +91,21 @@ public class ManagerReservation {
             throw new SQLException("Erreur getListReservations dans ManagerReservation");
         }
     }
+
+    public List<TupleReservation> getReservationsDeClient(int idClient) throws SQLException {
+        List<TupleReservation> reservationsDeClient = new ArrayList<>();
+        try {
+
+            if (!tableClient.checkClient(idClient)) {
+                throw new SQLException("Client avec idClient=" + idClient + " n'existe pas");
+            }
+            reservationsDeClient = tableReservation.getReservationsClient(idClient);
+            cx.commit();
+            return reservationsDeClient;
+        } catch (SQLException e) {
+            cx.rollback();
+            e.printStackTrace();
+            throw new SQLException("Erreur getReservationsDeClient dans ManagerReservation");
+        }
+    }
 }

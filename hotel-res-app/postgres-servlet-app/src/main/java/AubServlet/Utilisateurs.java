@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -73,8 +72,23 @@ public class Utilisateurs extends HttpServlet {
                 dispatcher.forward(request, response);
 
             } else if (request.getParameter("supprimerUtilisateur") != null) {
-                System.out.printf("Servet Utilisateurs : POST - Ajouter un Utilisateur");
+                System.out.printf("Servet Utilisateurs : POST - Supprimer un Utilisateur");
                 String utilisateurNameSelection = request.getParameter("selectionUtilisateur");
+
+//                empecher supprimer Admin maitre
+                System.out.println(utilisateurNameSelection);
+                MainManager aubergeInnInterro = AubergeInnHelper.getAubergeInnInterro(session);
+                if (utilisateurNameSelection.equals("AubergeInnAdmin")) {
+                    throw new IFT287Exception("Impossible de supprimer l'admin principal");
+                }
+
+                if (!aubergeInnInterro.getManagerUtilisateurs().existe(utilisateurNameSelection)) {
+                    throw new IFT287Exception("Utilisateur avec id=" + utilisateurNameSelection + " n'existe pas");
+                }
+//              empecher supprimer user connecte
+                if (session.getAttribute("userID").equals(utilisateurNameSelection)) {
+                    throw new IFT287Exception("Impossible de supprimer l'utilisateur qui est connecte.");
+                }
 
                 MainManager aubergeInnUpdate = AubergeInnHelper.getAubergeInnUpdate(session);
                 synchronized (aubergeInnUpdate) {
@@ -87,7 +101,7 @@ public class Utilisateurs extends HttpServlet {
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/gestionUtilisateurs.jsp");
                 dispatcher.forward(request, response);
             }
-        } catch (Exception e) {
+        } catch (IFT287Exception e) {
             List<String> listeMessageErreur = new LinkedList<String>();
             listeMessageErreur.add(e.getMessage());
             request.setAttribute("listeMessageErreur", listeMessageErreur);
@@ -95,6 +109,9 @@ public class Utilisateurs extends HttpServlet {
             dispatcher.forward(request, response);
             // pour déboggage seulement : afficher tout le contenu de l'exception
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.toString());
         }
     }
 

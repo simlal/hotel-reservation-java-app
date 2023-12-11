@@ -25,7 +25,7 @@
 <body>
 <jsp:include page="/navigation.jsp" />
 <div class="container">
-    <h1 class="text-center mb-3">Gestion des utilisateurs de AubergeInn</h1>
+    <h1 class="text-center mb-3">SGA: Gestion des utilisateurs</h1>
 
     <div class="container">
         <div class="row">
@@ -130,11 +130,13 @@
                         </form>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
     <%-- inclusion d'une autre page pour l'affichage des messages d'erreur--%>
     <br>
     <jsp:include page="/messageErreur.jsp" />
     <br>
-</div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>

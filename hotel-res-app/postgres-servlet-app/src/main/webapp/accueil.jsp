@@ -27,7 +27,7 @@
 <body>
 <jsp:include page="/navigation.jsp" />
 <div class="container">
-    <h1 class="text-center mb-3">Gestion de AubergeInn: Vue d'ensemble</h1>
+    <h1 class="text-center mb-3">Systeme de Gestion de AubergeInn (SGA)</h1>
 <%--Statistiques generales--%>
     <%
         if (session.getAttribute("admin") != null) {

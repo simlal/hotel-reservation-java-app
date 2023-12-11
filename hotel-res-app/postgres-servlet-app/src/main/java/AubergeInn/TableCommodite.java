@@ -9,7 +9,7 @@ public class TableCommodite {
     
     private Connexion cx;
     private final static String sqlCheckCommodite = "select * from Commodite where idCommodite = ?";
-    private final static String sqlAjouterCommodite = "insert into Commodite (idCommodite, description, surplusPrix) values(?,?,?)";
+    private final static String sqlAjouterCommodite = "insert into Commodite (description, surplusPrix) values(?,?)";
     private final static String sqlSupprimerCommodite = "delete from Commodite where idCommodite = ?";
 
     private final PreparedStatement stmtCheckCommodite;
@@ -62,9 +62,8 @@ public class TableCommodite {
     public int ajouterCommodite(TupleCommodite commodite) throws SQLException {
         try {
             // maj ps avec attributs de commodite
-            stmtAjouterCommodite.setInt(1, commodite.getIdCommodite());
-            stmtAjouterCommodite.setString(2, commodite.getDescription());
-            stmtAjouterCommodite.setInt(3, commodite.getSurplusPrix());
+            stmtAjouterCommodite.setString(1, commodite.getDescription());
+            stmtAjouterCommodite.setInt(2, commodite.getSurplusPrix());
 
             // execution du insert
             int nbCommoditeAj = stmtAjouterCommodite.executeUpdate();

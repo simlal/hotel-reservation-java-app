@@ -149,4 +149,19 @@ public class ManagerChambre {
             throw new SQLException("Erreur getListChambresLibres dans ManagerChambre");
         }
     }
+
+    public TupleChambre getChambre(int idChambre) throws SQLException {
+        try {
+            if (!tableChambre.checkChambre(idChambre)) {
+                throw new SQLException("Chambre avec idChambre=" + idChambre + " n'existe pas");
+            }
+            TupleChambre chambre = tableChambre.getChambre(idChambre);
+            cx.commit();
+            return chambre;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            cx.rollback();
+            throw new SQLException("Erreur getChambre dans ManagerChambre");
+        }
+    }
 }

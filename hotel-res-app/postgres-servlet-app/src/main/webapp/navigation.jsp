@@ -6,14 +6,14 @@
                 if (session.getAttribute("admin") != null)    // Lien vers operations utilisateurs
                 {
             %>
-            <li><a class="nav-item nav-link" href="Utilisateurs">Gestion Utilisateurs</a></li>
+            <li><a class="nav-item nav-link" href="Utilisateurs">Utilisateurs SGA</a></li>
 
             <%
                 }
             %>
-            <li><a class="nav-item nav-link" href="#">Gestion Clients</a></li>
-            <li><a class="nav-item nav-link" href="#">Gestion Chambres + Commodites</a></li>
-            <li><a class="nav-item nav-link" href="#">Faire une reservation</a></li>
+            <li><a class="nav-item nav-link" href="Clients">Clients</a></li>
+            <li><a class="nav-item nav-link" href="ChambresCommodites">Chambres + Commodites</a></li>
+            <li><a class="nav-item nav-link" href="Reservations">Faire une reservation</a></li>
         </ul>
     </div>
     <%String statut = null;

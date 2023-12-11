@@ -12,7 +12,7 @@ import java.util.List;
 public class TableClient {
 
     private static final String sqlCheckClient = "select * from Client where idClient = ?";
-    private static final String sqlAjouterClient = "insert into Client (idClient, prenom, nom, age) values(?,?,?,?)";
+    private static final String sqlAjouterClient = "insert into Client (prenom, nom, age) values(?,?,?)";
     private static final String sqlSupprimerClient = "delete from Client where idClient = ?";
     private static final String sqlAfficherClient = 
     "SELECT Client.*, Reservation.dateDebut, Reservation.dateFin, Chambre.*, Commodite.*, Chambre.prixBase + COALESCE(SUM(Commodite.surplusPrix), 0) AS prixTotalCommodites " +
@@ -80,6 +80,23 @@ public class TableClient {
         }
     }
 
+    public TupleClient getClient(int idClient) throws SQLException {
+        try {
+            stmtCheckClient.setInt(1, idClient);
+            ResultSet rs = stmtCheckClient.executeQuery();
+            rs.next();
+            String prenom = rs.getString(2);
+            String nom = rs.getString(3);
+            int age = rs.getInt(4);
+            TupleClient client = new TupleClient(idClient, prenom, nom, age);
+            return client;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Erreur getClient dans TableClient");
+        }
+    }
+
     /**
      * Ajout client dans bd
      * 
@@ -87,13 +104,12 @@ public class TableClient {
      * @return nbClientAj
      * @throws SQLException
      */
-    public int ajouterClient(TupleClient client) throws SQLException{
+    public int ajouterClient(String prenom, String nom, int age) throws SQLException{
         try {
             // Modif ps avec info client
-            stmtAjouterClient.setInt(1, client.getIdClient());
-            stmtAjouterClient.setString(2, client.getPrenom());
-            stmtAjouterClient.setString(3, client.getNom());
-            stmtAjouterClient.setInt(4, client.getAge());
+            stmtAjouterClient.setString(1, prenom);
+            stmtAjouterClient.setString(2, nom);
+            stmtAjouterClient.setInt(3, age);
 
             // Ajout client si existe pas
             int nbClientAj = stmtAjouterClient.executeUpdate();
@@ -161,6 +177,30 @@ public class TableClient {
                 e.printStackTrace();
                 throw new SQLException("Erreur getListClients dans TableClient");
             }
+    }
+
+    public List<TupleClient> getListClientsReservEnCours() throws SQLException{
+        try {
+            ResultSet rs = stmtGetClients.executeQuery();
+            List<TupleClient> clientsResEnCours = new ArrayList<TupleClient>();
+            while (rs.next()) {
+                Integer idClient = rs.getInt(1);
+                String prenom = rs.getString(2);
+                String nom = rs.getString(3);
+                Integer age = rs.getInt(4);
+                TupleClient client = new TupleClient(idClient, prenom, nom, age);
+
+//                reservation check
+                if (checkClientReservationEnCours(client.getIdClient())) {
+                    clientsResEnCours.add(client);
+                }
+            }
+            rs.close();
+            return clientsResEnCours;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Erreur getListClientsReservEnCours dans TableClient");
+        }
     }
     public void afficherClient(int idClient) throws SQLException {
         try {

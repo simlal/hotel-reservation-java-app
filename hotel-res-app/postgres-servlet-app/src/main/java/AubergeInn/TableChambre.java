@@ -11,7 +11,7 @@ import java.util.List;
 public class TableChambre {
     private static final String sqlCheckChambre = "select * from Chambre where idChambre = ?";
     private static final String sqlAjouterChambre = 
-    "insert into Chambre (idChambre, nom, typeLit, prixBase) values(?,?,?,?)";
+    "insert into Chambre (nom, typeLit, prixBase) values(?,?,?)";
     private static final String sqlSupprimerChambre = "delete from Chambre where idChambre = ?";
     private static final String sqlCheckChambreResFuture = 
     "select * from Chambre " +
@@ -98,6 +98,25 @@ public class TableChambre {
         }
     }
 
+    public TupleChambre getChambre(int idChambre) throws SQLException {
+        try {
+            stmtCheckChambre.setInt(1, idChambre);
+            ResultSet rs = stmtCheckChambre.executeQuery();
+            rs.next();
+            int idChambreRs = rs.getInt(1);
+            String nom = rs.getString(2);
+            String typeLit = rs.getString(3);
+            int prixBase = rs.getInt(4);
+
+            TupleChambre chambre = new TupleChambre(idChambreRs, nom, typeLit, prixBase);
+            rs.close();
+            return chambre;
+        } catch (SQLException se) {
+            se.printStackTrace();
+            throw new SQLException("Erreur getChambre dans TableChambre");
+        }
+    }
+
     public boolean checkChambreResFuture(int idChambre) throws SQLException {
         try {
             // update ps avec idchambre et date du query
@@ -140,10 +159,9 @@ public class TableChambre {
     public int ajouterChambre(TupleChambre chambre) throws SQLException {
         try {
             // Modif ps avec info chambre
-            stmtAjouterChambre.setInt(1, chambre.getIdChambre());
-            stmtAjouterChambre.setString(2, chambre.getNom());
-            stmtAjouterChambre.setString(3, chambre.getTypeLit());
-            stmtAjouterChambre.setInt(4, chambre.getPrixBase());
+            stmtAjouterChambre.setString(1, chambre.getNom());
+            stmtAjouterChambre.setString(2, chambre.getTypeLit());
+            stmtAjouterChambre.setInt(3, chambre.getPrixBase());
             
             // Ajout chambre
             int nbChambreAj = stmtAjouterChambre.executeUpdate();
