@@ -91,6 +91,11 @@
         </table>
     </div>
     <% } %>
+        <form class="text-center" action="Clients" method="GET">
+            <input class="btn btn-primary" type="SUBMIT" name="retourClients" value="Retour vers page clients">
+
+        </form>
+    </div>
 </div>
 <%-- inclusion d'une autre page pour l'affichage des messages d'erreur--%>
 <br>

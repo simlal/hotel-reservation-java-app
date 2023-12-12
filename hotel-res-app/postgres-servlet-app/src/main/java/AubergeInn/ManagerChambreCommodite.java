@@ -128,4 +128,22 @@ public class ManagerChambreCommodite {
             throw new SQLException("Erreur getCommoditesDeChambre dans ManagerCommodite");
         }
     }
+
+    public List<TupleChambre> getChambresDeCommodite(TupleCommodite commodite) throws SQLException {
+        List<TupleChambre> chambresDeCommodite = new ArrayList<>();
+        try {
+            if (!tableCommodite.checkCommodite(commodite.getIdCommodite())) {
+                throw new SQLException(
+                        "idCommodite = " + commodite.getIdCommodite() + " n'existe pas"
+                );
+            }
+            chambresDeCommodite = tableChambreCommodite.getChambresDeCommodite(commodite);
+            cx.commit();
+            return chambresDeCommodite;
+        } catch (SQLException e) {
+            cx.rollback();
+            e.printStackTrace();
+            throw new SQLException("Erreur getChambresDeCommodite dans ManagerCommodite");
+        }
+    }
 }

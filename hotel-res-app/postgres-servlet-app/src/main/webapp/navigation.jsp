@@ -13,7 +13,7 @@
             %>
             <li><a class="nav-item nav-link" href="Clients">Clients</a></li>
             <li><a class="nav-item nav-link" href="ChambresCommodites">Chambres + Commodites</a></li>
-            <li><a class="nav-item nav-link" href="Reservations">Faire une reservation</a></li>
+            <li><a class="nav-item nav-link" href="Reservation">Faire une reservation</a></li>
         </ul>
     </div>
     <%String statut = null;

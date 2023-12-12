@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>IFT287 - Système de gestion de AubergeInn</title>
+  <title>IFT287 - Systeme de gestion de AubergeInn</title>
   <meta name="author" content="Vincent Ducharme">
   <meta name="description"
-        content="Page d'accueil du système de gestion de AubergeInn.">
+        content="Page non trouve pour le systeme gestion de AubergeInn.">
 
   <!-- Required meta tags -->
   <meta charset="utf-8">

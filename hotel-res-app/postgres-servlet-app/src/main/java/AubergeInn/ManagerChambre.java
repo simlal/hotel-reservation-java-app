@@ -26,19 +26,13 @@ public class ManagerChambre {
      * @throws SQLException
      */
     public void ajouterChambre(
-        TupleChambre chambre
+        String nom,
+        String description,
+        int prixBase
         ) throws SQLException {
         try {
-            // Check si chambre existe pas et maj db
-            if (!tableChambre.checkChambre(chambre.getIdChambre())) {
-                tableChambre.ajouterChambre(chambre);
-                cx.commit();
-            }
-            else {    
-                throw new SQLException(
-                    "Impossible ajouter chambre avec idChambre=" + chambre.getIdChambre() + ": existe deja dans db."
-                );
-            }
+            tableChambre.ajouterChambre(nom, description, prixBase);
+            cx.commit();
         } catch (SQLException se) {
             cx.rollback();
             se.printStackTrace();
@@ -53,19 +47,21 @@ public class ManagerChambre {
             // Check si chambre existe et maj db
             if (!tableChambre.checkChambre(idChambre)) {
                 throw new SQLException(
-                    "Impossible supprimer chambre avec idChambre=" + idChambre + ": n'existe pas dans db."
+                        "Impossible supprimer chambre avec idChambre=" + idChambre + ": n'existe pas dans db."
                 );
-            } else if (tableChambre.checkChambreResFuture(idChambre)) {
-                throw new SQLException(
-                    "Impossible supprimer chambre avec idChambre=" + idChambre + ": chambre est reservee dans le futur."
-                );
-            } else {    
-                // if (tableChambre.checkChambreReservation(idChambre)) {
-                //     tableReservation.supprimerReservationChambre(idChambre);
-                // }
-                tableChambre.supprimerChambre(idChambre);
-                cx.commit();
             }
+            if (tableChambre.checkChambreResFuture(idChambre)) {
+                throw new SQLException(
+                        "Impossible supprimer chambre avec idChambre=" + idChambre + ": chambre est reservee dans le futur."
+                );
+            }
+            if (tableChambre.checkChambreResEnCours(idChambre)) {
+                throw new SQLException(
+                        "Impossible supprimer chambre avec idChambre=" + idChambre + ": chambre est reservee en se moment."
+                );
+            }
+            tableChambre.supprimerChambre(idChambre);
+            cx.commit();
 
         } catch (SQLException se) {
             cx.rollback();

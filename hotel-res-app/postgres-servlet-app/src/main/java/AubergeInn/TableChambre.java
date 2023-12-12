@@ -17,6 +17,10 @@ public class TableChambre {
     "select * from Chambre " +
     "join Reservation on Chambre.idChambre = Reservation.idChambre " +
     "where Chambre.idChambre = ? and Reservation.dateDebut >= ?";
+    private static final String sqlCheckChambreResEnCours =
+            "select * from Chambre " +
+            "join Reservation on Chambre.idChambre = Reservation.idChambre " +
+            "where Chambre.idChambre = ? and Reservation.dateDebut < ? and Reservation.dateFin > ?";
     private static final String sqlCheckChambreReservation = 
     "select * from Chambre " +
     "join Reservation on Chambre.idChambre = Reservation.idChambre " +
@@ -40,10 +44,8 @@ public class TableChambre {
 
     private static final String sqlGetListChambres = "select * from Chambre";
     private static final String sqlGetListChambresLibres =
-        "select Chambre.* from Chambre " +
-        "LEFT JOIN ChambreCommodite ON Chambre.idChambre = ChambreCommodite.idChambre " +
-        "LEFT JOIN Commodite ON ChambreCommodite.idCommodite = Commodite.idCommodite " +
-        "WHERE Chambre.idChambre NOT IN (SELECT idChambre FROM Reservation WHERE (dateDebut < ? AND dateFin > ?))";
+            "select Chambre.* from Chambre " +
+            "where Chambre.idChambre not in (select idChambre from Reservation where (dateDebut < ? and dateFin > ?))";
 
     private Connexion cx;
     private final PreparedStatement stmtCheckChambre;
@@ -55,6 +57,7 @@ public class TableChambre {
     private final PreparedStatement stmtAfficherChambre;
     private final PreparedStatement stmtGetListChambres;
     private final PreparedStatement stmtGetListChambresLibres;
+    private final PreparedStatement stmtCheckChambreResEnCours;
 
     public TableChambre(Connexion cx) throws SQLException {
         this.cx = cx;
@@ -68,6 +71,7 @@ public class TableChambre {
             this.stmtAfficherChambre = cx.getConnection().prepareStatement(sqlAfficherChambre);
             this.stmtGetListChambres = cx.getConnection().prepareStatement(sqlGetListChambres);
             this.stmtGetListChambresLibres = cx.getConnection().prepareStatement(sqlGetListChambresLibres);
+            this.stmtCheckChambreResEnCours = cx.getConnection().prepareStatement(sqlCheckChambreResEnCours);
         } catch (SQLException se) {
             System.out.println(se.getMessage());
             throw new SQLException("Erreur prepareStatement dans TableChambre");
@@ -133,6 +137,23 @@ public class TableChambre {
             throw new SQLException("Erreur checkChambreResFuture dans TableChambre");
         }
     }
+    public boolean checkChambreResEnCours(int idChambre) throws SQLException {
+        try {
+            // update ps avec idchambre et date du query
+            Date maintenant = new Date(System.currentTimeMillis());
+            stmtCheckChambreResFuture.setInt(1, idChambre);
+            stmtCheckChambreResFuture.setDate(2, maintenant);
+            stmtCheckChambreResFuture.setDate(2, maintenant);
+
+            ResultSet rs = stmtCheckChambreResFuture.executeQuery();
+            boolean chambreResEnCours = rs.next();
+            rs.close();
+            return chambreResEnCours;
+        } catch (SQLException se) {
+            se.printStackTrace();
+            throw new SQLException("Erreur checkChambreResEnCours dans TableChambre");
+        }
+    }
 
     public boolean checkChambreReservation(int idChambre) throws SQLException {
         try {
@@ -156,12 +177,12 @@ public class TableChambre {
      * @return nbChambreAj
      * @throws SQLException
      */
-    public int ajouterChambre(TupleChambre chambre) throws SQLException {
+    public int ajouterChambre(String nom, String typeLit, int prixBase) throws SQLException {
         try {
             // Modif ps avec info chambre
-            stmtAjouterChambre.setString(1, chambre.getNom());
-            stmtAjouterChambre.setString(2, chambre.getTypeLit());
-            stmtAjouterChambre.setInt(3, chambre.getPrixBase());
+            stmtAjouterChambre.setString(1, nom);
+            stmtAjouterChambre.setString(2, typeLit);
+            stmtAjouterChambre.setInt(3, prixBase);
             
             // Ajout chambre
             int nbChambreAj = stmtAjouterChambre.executeUpdate();

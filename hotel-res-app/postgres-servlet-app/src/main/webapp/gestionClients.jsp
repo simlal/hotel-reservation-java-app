@@ -121,13 +121,17 @@
                                 <label for="listeClients">Liste des clients</label>
                                 <select class="form-control" name="selectionClientSup">
                                     <%
-                                        for (TupleClient client : clients) { %>
+
+                                        for (TupleClient client : clients) {
+                                            if (!aubInterro.getTableClient().checkClientReservationEnCours(client.getIdClient())) {
+                                    %>
                                     <option value="<%=client.getIdClient()%>">
                                         <%=client.getIdClient()%> /
                                         <%=client.getPrenom()%>
                                         <%=client.getNom()%> /
                                         <%=client.getAge()%> ans
                                     </option>
+                                        <% } %>
                                     <% } %>
                                 </select>
                             </div>

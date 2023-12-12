@@ -1,6 +1,8 @@
 package AubergeInn;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ManagerCommodite {
     
@@ -19,18 +21,12 @@ public class ManagerCommodite {
      * @throws SQLException
      */
     public void ajouterCommodite(
-        TupleCommodite commodite
+        String description,
+        int surplusPrix
         ) throws SQLException {
         try {
-            // Check si commodite existe pas et maj db
-            if (!tableCommodite.checkCommodite(commodite.getIdCommodite())) {
-                tableCommodite.ajouterCommodite(commodite);
-                cx.commit();
-            } else {    
-                throw new SQLException(
-                    "Impossible ajouter commodite avec idCommodite=" + commodite.getIdCommodite() + ": existe deja dans db."
-                );
-            }
+            tableCommodite.ajouterCommodite(description, surplusPrix);
+            cx.commit();
         } catch (SQLException se) {
             cx.rollback();
             se.printStackTrace();
@@ -64,4 +60,33 @@ public class ManagerCommodite {
                 throw new SQLException("Erreur supprimerCommodite dans ManagerCommodite");
             }
         }
+    public List<TupleCommodite> getListCommodites() throws SQLException {
+        List<TupleCommodite> commodites = new ArrayList<>();
+        try {
+            commodites = tableCommodite.getListCommodites();
+            cx.commit();
+            return commodites;
+        } catch (SQLException e) {
+            cx.rollback();
+            e.printStackTrace();
+            throw new SQLException("Erreur getListCommodites dans ManagerCommodite");
+        }
+    }
+
+    public TupleCommodite getCommodite(int idCommodite) throws SQLException {
+        try {
+            if (!tableCommodite.checkCommodite(idCommodite)) {
+                throw new SQLException(
+                        "Impossible supprimer commodite avec idCommodite=" + idCommodite + ": n'existe pas dans db."
+                );
+            }
+            TupleCommodite commodite = tableCommodite.getCommodite(idCommodite);
+            cx.commit();
+            return commodite;
+        } catch (SQLException e) {
+            cx.rollback();
+            e.printStackTrace();
+            throw new SQLException("Erreur getCommodite dans ManagerCommodite");
+        }
+    }
 }

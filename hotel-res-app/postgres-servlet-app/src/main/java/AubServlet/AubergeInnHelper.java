@@ -2,6 +2,7 @@ package AubServlet;
 import AubergeInn.*;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
@@ -137,6 +138,14 @@ public class AubergeInnHelper {
         catch(Exception e)
         {
             throw new IFT287Exception(nom + " ne doit être composé que de chiffre.");
+        }
+    }
+
+    public static Date convertirDate(String v, String nom) throws IFT287Exception {
+        try {
+            return Date.valueOf(v);
+        } catch (Exception e) {
+            throw new IFT287Exception(nom + " doit etre une date");
         }
     }
 

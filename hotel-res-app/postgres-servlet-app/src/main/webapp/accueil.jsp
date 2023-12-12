@@ -4,6 +4,7 @@
 <%@ page import="java.util.HashSet" %>
 <%@ page import="java.util.Set" %>
 <%@ page import="java.sql.Date" %>
+<%@ page import="java.time.LocalDate" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -130,7 +131,7 @@
                         <tbody>
                         <tr>
                             <td>Nb de chambres total</td>
-                            <td><%chambres.size();%></td>
+                            <td><%=chambres.size()%></td>
                         </tr>
                         <tr>
                             <td>Types de lit possible</td>
@@ -157,7 +158,9 @@
                             List<TupleReservation> reservations = aubInterro.getManagerReservation().getListReservations();
 
                             Date maintenant = new Date(System.currentTimeMillis());
-                            List<TupleChambre> chambresLibres = aubInterro.getManagerChambre().getListChambresLibres(maintenant, maintenant);
+                            Date demain;
+                            demain = Date.valueOf(LocalDate.now().plusDays(1));
+                            List<TupleChambre> chambresLibres = aubInterro.getManagerChambre().getListChambresLibres(maintenant, demain);
                         %>
                         <tbody>
                         <tr>

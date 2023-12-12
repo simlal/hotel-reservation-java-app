@@ -20,10 +20,18 @@ public class TableChambreCommodite {
                     "where Chambre.idChambre = ? " +
                     "order by Commodite.idCommodite";
 
+    private final static String sqlGetChambresDeCommodite =
+            "select Chambre.* from Commodite " +
+            "join ChambreCommodite on Commodite.idCommodite = ChambreCommodite.idCommodite " +
+            "join Chambre on Chambre.idChambre = ChambreCommodite.idChambre " +
+            "where Commodite.idCommodite = ? " +
+            "order by Chambre.idChambre";
+
     private final PreparedStatement stmtCheckChambreCommodite;
     private final PreparedStatement stmtInclureChambreCommodite;
     private final PreparedStatement stmtEnleverChambreCommodite;
     private final PreparedStatement stmtGetCommoditesDeChambre;
+    private final PreparedStatement stmtGetChambresDeCommodite;
 
     public TableChambreCommodite(Connexion cx) throws SQLException {
         this.cx = cx;
@@ -32,6 +40,7 @@ public class TableChambreCommodite {
             this.stmtInclureChambreCommodite = cx.getConnection().prepareStatement(sqlInclureChambreCommodite);
             this.stmtEnleverChambreCommodite = cx.getConnection().prepareStatement(sqlEnleverChambreCommodite);
             this.stmtGetCommoditesDeChambre = cx.getConnection().prepareStatement(sqlGetCommmoditesDeChambre);
+            this.stmtGetChambresDeCommodite = cx.getConnection().prepareStatement(sqlGetChambresDeCommodite);
         } catch (SQLException se) {
             se.printStackTrace();
             throw new SQLException("Erreur prepareStatement dans TableChambreCommodite");
@@ -139,6 +148,30 @@ public class TableChambreCommodite {
         } catch (SQLException e) {
             e.printStackTrace();
             throw new SQLException("Erreur getCommoditesDeChambre dans TableChambreCommodite");
+        }
+    }
+
+    public List<TupleChambre> getChambresDeCommodite(TupleCommodite commodite) throws SQLException {
+        List<TupleChambre> chambresDeCommodite = new ArrayList<>();
+
+        try {
+            stmtGetChambresDeCommodite.setInt(1, commodite.getIdCommodite());
+            ResultSet rs = stmtGetChambresDeCommodite.executeQuery();
+
+            while (rs.next()) {
+                int idChambre = rs.getInt(1);
+                String nomChambre = rs.getString(2);
+                String typeLit = rs.getString(3);
+                int prixBase = rs.getInt(4);
+                TupleChambre chambre = new TupleChambre(idChambre, nomChambre, typeLit, prixBase);
+
+                chambresDeCommodite.add(chambre);
+            }
+            rs.close();
+            return chambresDeCommodite;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Erreur getChambresDeCommodite dans TableChambreCommodite");
         }
     }
 }

@@ -51,6 +51,14 @@
         <servlet-name>Clients</servlet-name>
         <servlet-class>AubServlet.Clients</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ChambresCommodites</servlet-name>
+        <servlet-class>AubServlet.ChambresCommodites</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Reservation</servlet-name>
+        <servlet-class>AubServlet.Reservation</servlet-class>
+    </servlet>
 <!--    Mappings-->
     <servlet-mapping>
         <servlet-name>Index</servlet-name>
@@ -79,5 +87,13 @@
     <servlet-mapping>
         <servlet-name>Clients</servlet-name>
         <url-pattern>/tp5/Clients</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChambresCommodites</servlet-name>
+        <url-pattern>/tp5/ChambresCommodites</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Reservation</servlet-name>
+        <url-pattern>/tp5/Reservation</url-pattern>
     </servlet-mapping>
 </web-app>

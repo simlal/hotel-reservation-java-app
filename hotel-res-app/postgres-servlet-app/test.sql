@@ -10,4 +10,4 @@ insert into ChambreCommodite (idChambre, idCommodite) values ('1', '1');
 insert into ChambreCommodite (idChambre, idCommodite) values ('1', '2');
 insert into ChambreCommodite (idChambre, idCommodite) values ('2', '2');
 
-insert into Reservation (dateDebut, dateFin, idClient, idChambre) values ('2019-05-25', '2019-07-31', '3', '1');
+insert into Reservation (dateDebut, dateFin, idClient, idChambre) values ('2019-05-25', '2019-07-31', '7', '1');

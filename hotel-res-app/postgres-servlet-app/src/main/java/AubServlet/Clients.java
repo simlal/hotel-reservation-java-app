@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -57,8 +58,22 @@ public class Clients extends HttpServlet {
                 System.out.printf("Servet Clients : POST - Supprimer un client");
                 String idClientSupS = request.getParameter("selectionClientSup");
                 int idClientSup = AubergeInnHelper.ConvertirInt(idClientSupS, "idClient a supprimer");
-                MainManager aubergeInnUpdate = AubergeInnHelper.getAubergeInnUpdate(session);
 
+                MainManager aubInterro = AubergeInnHelper.getAubergeInnInterro(session);
+
+                if (!aubInterro.getTableClient().checkClient(idClientSup)) {
+                    throw new SQLException(
+                            "Impossible supprimer client avec idClient=" + idClientSup + ": n'existe pas dans db."
+                    );
+                }
+
+                if (aubInterro.getTableClient().checkClientReservationEnCours(idClientSup)) {
+                    throw new IFT287Exception(
+                            "Impossible supprimer client avec idClient=" + idClientSup + ": a des reservations en cours."
+                    );
+                }
+
+                MainManager aubergeInnUpdate = AubergeInnHelper.getAubergeInnUpdate(session);
                 synchronized (aubergeInnUpdate) {
                     aubergeInnUpdate.getManagerClient().supprimerClient(idClientSup);
                 }
@@ -90,6 +105,7 @@ public class Clients extends HttpServlet {
                 dispatcher.forward(request, response);
 
 //          Si on fait un post request (avec postman par exemple) sans action disponible sur le .jsp
+//                Ou on click sur le boutton de retours
             } else {
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/gestionClients.jsp");
                 dispatcher.forward(request, response);
